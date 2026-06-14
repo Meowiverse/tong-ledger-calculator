@@ -80,8 +80,9 @@ describe('App paper-template UI flow', () => {
 
     const main = screen.getByRole('main')
     expect(within(main).getByText('固定账本格式')).toBeTruthy()
-    expect(within(main).getByRole('button', { name: '拍照或选择图片' })).toBeTruthy()
-    expect(within(main).getByRole('button', { name: /开始计算/ })).toBeTruthy()
+    expect(within(main).getByText(/拍完整单页账本/)).toBeTruthy()
+    expect(within(main).getByRole('button', { name: '拍照或选择整页图片' })).toBeTruthy()
+    expect(within(main).getByRole('button', { name: /识别整页账本/ })).toBeTruthy()
   })
 
   it('shows multiple sample image cases in lab mode', () => {
@@ -102,12 +103,13 @@ describe('App paper-template UI flow', () => {
     const input = document.querySelector('input[type="file"]') as HTMLInputElement
     await user.upload(input, file)
 
-    const previewButton = screen.getByRole('button', { name: '本地切割预览' })
+    const previewButton = screen.getByRole('button', { name: '单页切割预览' })
     await waitFor(() => expect(previewButton.hasAttribute('disabled')).toBe(false))
     await user.click(previewButton)
 
     expect(await screen.findByRole('region', { name: '重绘表格对照' })).toBeTruthy()
-    expect(screen.getByText(/已生成本地切割预览/)).toBeTruthy()
+    expect(screen.getByText(/已从这一张图生成 31 行切割预览/)).toBeTruthy()
+    expect(screen.getByText(/217 处待确认/)).toBeTruthy()
     expect(screen.getByLabelText('原图固定格子切割对照')).toBeTruthy()
     expect(screen.getByRole('alert').textContent).toContain('系统不会把它当成可靠切割')
     expect(screen.getAllByRole('button', { name: /空白/ }).length).toBeGreaterThan(0)

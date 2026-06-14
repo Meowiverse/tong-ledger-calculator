@@ -22,6 +22,25 @@ describe('ledger cells', () => {
     )
   })
 
+  it('creates the full single-page review grid even before recognition', () => {
+    const cells = buildLedgerCells(
+      {
+        ...SAMPLE_RECOGNITION,
+        sourceType: '固定账本本地预览',
+        entries: [],
+        uncertainMarks: [],
+      },
+      DEFAULT_PAPER_TEMPLATE,
+    )
+    const reviewableCells = cells.filter(
+      (cell) => cell.columnKind !== 'date' && cell.columnKind !== 'dailyTotal',
+    )
+
+    expect(cells).toHaveLength(31 * 9)
+    expect(reviewableCells).toHaveLength(31 * 7)
+    expect(cells.find((cell) => cell.id === 'r31-deduction')?.cropRef).toBe('cell:r31-deduction')
+  })
+
   it('keeps the calibrated sample total after attaching cell evidence', () => {
     const result = normalizeResultCells(SAMPLE_RECOGNITION, DEFAULT_PAPER_TEMPLATE)
 

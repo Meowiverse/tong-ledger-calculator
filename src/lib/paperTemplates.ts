@@ -287,6 +287,8 @@ export function buildPaperTemplateInstruction(template: PaperTemplate) {
 
   return [
     `当前纸张模板：${template.name}`,
+    '输入必须是一张完整单页账本照片：表格四角、表头单价行、日期列和 1日至31日都应在同一张图内。',
+    '如果只看到局部页面、缺四角、缺表头或缺日期行，必须标记 cuttingRisk/pageIncomplete，不能静默输出局部总额。',
     `固定为 ${template.rowCount} 行月表，第一列是日期，第二列是上班状态。`,
     template.rules.firstColumnIsAttendance
       ? `第二列只表示出勤：${template.rules.absentMarks.join('/')} 是没上班；${template.rules.halfDayMarks.join('/')} 是上半天。这里的 0.5 不能当成整行金额倍率。`
@@ -301,7 +303,7 @@ export function buildPaperTemplateInstruction(template: PaperTemplate) {
     template.rules.deductionsAreSeparateAdjustments
       ? `${template.deductionLabel} 单独列为调整项；写“扣款 10 元”或负数时按负金额计入，不要混到纸类数量里。`
       : '',
-    '采用切割+纸张重构思路：先定位整张表格边界、日期行、表头单价行，再按格子归属读取内容；不要只按文字自然顺序相加。',
+    '采用单页切割+纸张重构思路：先定位整张表格边界、日期行、表头单价行，再按格子归属读取内容；不要只按文字自然顺序相加。',
   ]
     .filter(Boolean)
     .join('\n')

@@ -40,7 +40,7 @@ export function HeroCapture({
         />
         <button type="button" onClick={() => inputRef.current?.click()}>
           <RefreshCw size={18} />
-          计算另一张
+          扫描另一页
         </button>
       </div>
     )
@@ -49,8 +49,8 @@ export function HeroCapture({
   return (
     <div className="hero-panel">
       <div className="hero-copy">
-        <h2>{hasImage ? '照片已准备好' : '拍一张，算清楚'}</h2>
-        <p>{hasImage ? '确认照片清晰后开始计算。' : '支持手写账本、表格和小票。'}</p>
+        <h2>{hasImage ? '整页照片已准备好' : '整页一扫，按格核对'}</h2>
+        <p>{hasImage ? '确认四角和 31 行都清晰后开始。' : '拍完整单页账本，一张图生成 31 行固定格。'}</p>
       </div>
 
       <div className="capture-zone">
@@ -68,7 +68,7 @@ export function HeroCapture({
         <button
           className={`camera-button ${hasImage ? 'has-image' : ''}`}
           type="button"
-          aria-label={hasImage ? '重新拍照' : '拍照或选择图片'}
+          aria-label={hasImage ? '重新扫描整页' : '拍照或选择整页图片'}
           onClick={() => inputRef.current?.click()}
         >
           {hasImage ? (
@@ -80,7 +80,7 @@ export function HeroCapture({
             <FluentEmoji assetName="Camera" fallback="📷" className="camera-emoji" />
           )}
         </button>
-        <p className="camera-caption">{hasImage ? '点照片可更换' : '拍照或从相册选择'}</p>
+        <p className="camera-caption">{hasImage ? '点照片可更换' : '拍整页或从相册选择'}</p>
       </div>
 
       <div className="prompt-picker">

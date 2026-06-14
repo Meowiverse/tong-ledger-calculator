@@ -189,7 +189,7 @@ export function useLedgerApp() {
     } catch {
       setPreprocessedImageDataUrl(dataUrl)
       setPreprocessedImageUrl(dataUrl)
-      setError('图片预处理失败，已使用原图继续；仍可先做本地切割预览。')
+      setError('图片预处理失败，已使用原图继续；仍可先做单页切割预览。')
     }
     setResult(null)
     setOverlayMode('low')
@@ -222,14 +222,14 @@ export function useLedgerApp() {
 
   function previewLocalCutting() {
     if (!imageUrl) {
-      setError('先拍照或选择图片，再查看切割预览。')
+      setError('先拍完整单页账本或选择整页图片，再查看切割预览。')
       return
     }
 
     const previewResult = normalizeLedgerResult({
       title: '本地切割预览',
       sourceType: '固定账本本地预览',
-      summary: '未调用模型识别；当前只按固定账本模板生成格子、裁剪证据和原图定位。',
+      summary: '未调用模型识别；当前按单张完整账本页生成 31 行固定格、裁剪证据和原图定位。',
       currency: 'CNY',
       overallConfidence: 0.35,
       computedTotal: null,
@@ -237,9 +237,10 @@ export function useLedgerApp() {
       columnRules: [],
       entries: [],
       uncertainMarks: [],
-      extractedText: ['本地切割预览：没有上传图片，也没有识别手写数字。'],
+      extractedText: ['单页切割预览：已从这一张图片生成完整固定格；尚未识别手写数字。'],
       auditNotes: [
-        '这是纯本地模板切割预览，用于检查格子是否对准原图。',
+        '这是纯本地单页模板切割预览，用于检查整页格子是否对准原图。',
+        '如果照片不是完整账本页，不能静默按局部结果通过。',
         '所有可计算格会进入核查队列；确认或补录后才会计入金额。',
       ],
     })
@@ -254,7 +255,7 @@ export function useLedgerApp() {
     setVerificationState({})
     setVerificationQueue(buildVerificationQueue(previewResult))
     setReviewHistory([])
-    setReviewNotice('已生成本地切割预览；未调用模型，图片没有离开浏览器。')
+    setReviewNotice('已从这一张图生成 31 行切割预览；未调用模型，图片没有离开浏览器。')
     if (!activeSampleCase) saveLastResult(previewResult)
   }
 

@@ -46,10 +46,10 @@ export function evaluateMobileAuditUx(
   const criteria: UxScoreCriterion[] = [
     {
       id: 'complete-fixed-grid',
-      label: '固定格不漏格',
+      label: '单页固定格不漏格',
       weight: 20,
-      passed: reviewableCells.length >= 31 * 6,
-      detail: `${reviewableCells.length} 个可核查格子`,
+      passed: reviewableCells.length >= template.rowCount * 7,
+      detail: `单张图生成 ${reviewableCells.length} 个可核查格子`,
     },
     {
       id: 'blank-audit',

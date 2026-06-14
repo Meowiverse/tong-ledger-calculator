@@ -404,13 +404,15 @@ function buildRecognitionInstruction(prompt: SmartPrompt, includeSchema: boolean
   const lines = [
     '你是 tong账本计算器 的票据识别引擎。',
     '请严格基于图片内容输出 JSON，不要编造看不见的内容。',
+    '本产品当前只处理一张完整单页账本照片，不做多页拼接，也不接受半页/局部图作为最终结果。',
+    '识别前先检查整页条件：表格四角、表头单价行、日期列、1日至31日应在同一张图片中可见。若不完整，在 auditNotes 写 pageIncomplete/cuttingRisk，overallConfidence 不得高于 0.55，并说明缺失区域。',
     '在计算前，必须先识别表头/列头/第一行单价/倍率/单位。手写账本里写在列上方的小数通常是该列纸类的单价或倍率，具体按用户纸张模板解释。',
     'entries.amount 保留原始可读数值；entries.rawValue 同样保留原始数值；entries.multiplier 写该列单价或倍率；entries.calculatedAmount 写 rawValue * multiplier 后的入账金额。',
     'computedTotal 必须是所有应计入 entries.calculatedAmount 的合计。若图片本身没有倍率，则 multiplier 用 1。',
     '所有 region 坐标使用相对百分比：x/y/width/height 均为 0-100。region 是粗定位参考，不要假装像素级精确；如果图片透视明显，请尽量标在该数字所在单元格中心附近，并用足够小的区域表示不确定定位。',
     '图片上已经覆盖蓝色定位锚点，锚点编号形如 A1、B7、F10。每个 entries 和 uncertainMarks 必须尽量填写最近的 anchor：anchorId 是最近锚点编号，offsetX/offsetY 是相对该锚点的百分比偏移，范围 -8 到 8。不能判断时 anchor 用 null。',
     '定位优先级：先用锚点编号描述目标位置，再用 region 给粗略备用位置。不要把蓝色锚点本身当成账本内容。',
-    '如果是表格账本，优先按行列关系理解数字：先确定表头倍率、列位置、日期行，再输出每个数字的大致单元格位置。',
+    '如果是表格账本，优先按行列关系理解数字：先确定表头倍率、列位置、日期行，再从上到下扫描完整 31 个日期行，输出每个数字的大致单元格位置。',
     '固定账本默认列为：日期、上班、纸类1、纸类2、纸类3、纸类4、上下货、扣款、日合计。能判断格子时，entries.cellId 使用 r{日期}-{列id}，列 id 可用 attendance、paper-1、paper-2、paper-3、paper-4、unloading、deduction。',
     '程序会根据固定网格重新切格；你负责给数字 token 的位置、语义和格子归属，不要用整行大框代替单个数字或格子。',
     '表格账本必须先找日期/行号列和横线网格，按每个日期行的上下边界分配数字；不要因为手写数字靠近上一行或下一行就把它错配到相邻日期。',
@@ -436,6 +438,7 @@ function buildVisualExtractionInstruction(prompt: SmartPrompt, includeSchema: bo
   const lines = [
     '你是 tong账本计算器 的视觉定位引擎。',
     '这一阶段只做一件事：从图片中抽取“位置 + 可见字符/数字候选”的组合，不要做最终账单计算。',
+    '输入应是一张完整单页账本照片；如果图中缺四角、表头或 1日至31日中的任何连续区域，仍输出可见 token，但必须在 auditNotes 写 pageIncomplete/cuttingRisk。',
     '使用深度复读流程：先识别整张表格结构和行列，再从上到下逐行读数，最后反向从下到上检查是否漏项。只输出最终结构化结果，不输出思考过程。',
     '必须输出所有可见的手写数字、表头倍率、小数、X/划线/非金额标记，以及对理解账本有帮助的打印文字。',
     '每个目标输出为 token：kind、rowLabel、columnLabel、rawText、normalizedText、numericValue、candidates、confidence、region、anchor。',
@@ -499,6 +502,7 @@ function buildAuditInstruction(prompt: SmartPrompt, firstResult: RecognitionResu
   const lines = [
     '你是 tong账本计算器 的第二阶段审计引擎。',
     '你会看到同一张账本图片，以及第一阶段模型输出的 JSON。',
+    '先审查这是否是一张完整单页账本：四角、表头、日期列和 1日至31日是否可见；不完整时必须保留 pageIncomplete/cuttingRisk 审计说明，不能把局部识别包装成完整总额。',
     '任务不是重新随意发挥，而是逐项审查第一阶段结果：表头倍率、每行日期、每列数字、X/空白、computedTotal、region 和 anchor。',
     '先暂时忽略第一阶段具体读数，独立从图片逐行复读；完成后再与第一阶段逐项比较，只修改有图像证据支持的差异。',
     '请特别关注这些高风险错误：行号错位、把右列数字读成中列数字、漏读同一行的第二个数字、把 7/1/9/0 连笔误读、把划线或 X 当金额。',
@@ -534,6 +538,7 @@ function buildReconcileInstruction(
   const lines = [
     '你是 tong账本计算器 的最终一致性复核引擎。',
     '你会看到同一张账本图片，以及上一阶段已经审计过的 JSON。',
+    '最终结果必须仍然满足单页整扫：如果图片缺表头、缺日期行或只拍到局部，保留低置信和 pageIncomplete/cuttingRisk，不要输出静默通过的完整账。',
     '这一步只做最终纠偏：按日期行网格、列倍率和算术一致性复核，不要因为上一阶段给出高置信就放弃检查。',
     '优先复核低置信、候选冲突、相邻行数值相似和会显著影响总额的项目；对这些项目必须重新查看原图笔画。',
     '逐行核对 1日至31日：X/空白不作为金额；每个手写金额必须归入正确日期行和正确倍率列。',

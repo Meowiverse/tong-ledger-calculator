@@ -45,7 +45,10 @@ export function loadSettings(): AppSettings {
       model: parsed.model?.trim() || DEFAULT_SETTINGS.model,
       qualityMode: RECOGNITION_QUALITY,
       prompts,
-      selectedPromptId: parsed.selectedPromptId ?? prompts[0].id,
+      selectedPromptId:
+        parsed.selectedPromptId && prompts.some((prompt) => prompt.id === parsed.selectedPromptId)
+          ? parsed.selectedPromptId
+          : prompts[0].id,
       paperTemplates,
       selectedPaperTemplateId,
     }

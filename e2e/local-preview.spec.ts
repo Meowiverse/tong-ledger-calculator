@@ -8,16 +8,19 @@ const sampleImages = [
 ]
 
 for (const sampleImageName of sampleImages) {
-  test(`mobile local cutting preview keeps evidence and blocks S for ${sampleImageName}`, async ({ page }) => {
+  test(`mobile single-page cutting preview keeps evidence and blocks S for ${sampleImageName}`, async ({ page }) => {
+    await page.goto('/?lab=1')
+    await page.evaluate(() => localStorage.clear())
     await page.goto('/?lab=1')
 
     const sampleImage = path.resolve('public/samples', sampleImageName)
     await page.locator('input[type="file"]').first().setInputFiles(sampleImage)
-    await expect(page.getByRole('heading', { name: '照片已准备好' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: '整页照片已准备好' })).toBeVisible()
 
-    await page.getByRole('button', { name: '本地切割预览' }).click()
+    await page.getByRole('button', { name: '单页切割预览' }).click()
 
     await expect(page.getByRole('region', { name: '重绘表格对照' })).toBeVisible()
+    await expect(page.getByText('217 处待确认，修改后自动重算。')).toBeVisible()
     await expect(page.getByLabel('原图固定格子切割对照')).toBeVisible()
     await expect(page.getByLabel('当前格子裁剪', { exact: true })).toBeVisible()
     await expect(page.getByRole('alert')).toContainText('系统不会把它当成可靠切割')
