@@ -78,6 +78,17 @@
     padding: 10px;
   }
 
+  .reconstructed-feasibility {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    padding: 8px;
+  }
+
+  .reconstructed-feasibility strong {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+
   .mobile-row-strip {
     display: grid;
   }

@@ -3,6 +3,7 @@ import { SAMPLE_RECOGNITION } from '../data/sampleRecognition'
 import { DEFAULT_PAPER_TEMPLATE } from './paperTemplates'
 import {
   buildLedgerCells,
+  getCuttingFeasibility,
   getLedgerTableRegion,
   normalizeResultCells,
   updateLedgerCell,
@@ -49,6 +50,15 @@ describe('ledger cells', () => {
     expect(entryCenter.x).toBeLessThanOrEqual(cell!.bboxOriginal.x + cell!.bboxOriginal.width)
     expect(entryCenter.y).toBeGreaterThanOrEqual(cell!.bboxOriginal.y)
     expect(entryCenter.y).toBeLessThanOrEqual(cell!.bboxOriginal.y + cell!.bboxOriginal.height)
+  })
+
+  it('reports cutting feasibility by comparing fixed and calibrated table regions', () => {
+    const feasibility = getCuttingFeasibility(SAMPLE_RECOGNITION, DEFAULT_PAPER_TEMPLATE)
+
+    expect(feasibility.fixedRegion).toEqual(DEFAULT_PAPER_TEMPLATE.grid.tableRegion)
+    expect(feasibility.calibratedRegion.width).toBeGreaterThan(40)
+    expect(feasibility.maxDelta).toBeGreaterThanOrEqual(0)
+    expect(['good', 'review', 'calibrate']).toContain(feasibility.level)
   })
 
   it('normalizes cells idempotently without duplicating entry evidence', () => {

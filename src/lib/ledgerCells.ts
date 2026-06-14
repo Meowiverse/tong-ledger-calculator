@@ -178,6 +178,40 @@ export function getLedgerTableRegion(result: RecognitionResult, template: PaperT
   return clampRegion({ x, y, width, height })
 }
 
+export function getFixedTemplateTableRegion(template: PaperTemplate): ImageRegion {
+  return getTemplateGrid(template).tableRegion
+}
+
+export function getCuttingFeasibility(result: RecognitionResult, template: PaperTemplate) {
+  const fixedRegion = getFixedTemplateTableRegion(template)
+  const calibratedRegion = getLedgerTableRegion(result, template)
+  const deltas = {
+    x: Math.abs(calibratedRegion.x - fixedRegion.x),
+    y: Math.abs(calibratedRegion.y - fixedRegion.y),
+    width: Math.abs(calibratedRegion.width - fixedRegion.width),
+    height: Math.abs(calibratedRegion.height - fixedRegion.height),
+  }
+  const maxDelta = Math.max(deltas.x, deltas.y, deltas.width, deltas.height)
+  const score = Math.max(0, Math.min(100, Math.round(100 - maxDelta * 12)))
+  const level = maxDelta <= 2.5 ? 'good' : maxDelta <= 5 ? 'review' : 'calibrate'
+  const label =
+    level === 'good'
+      ? '可直接切割'
+      : level === 'review'
+        ? '建议抽查'
+        : '需先校准'
+
+  return {
+    fixedRegion,
+    calibratedRegion,
+    deltas,
+    maxDelta,
+    score,
+    level,
+    label,
+  }
+}
+
 function regionForCell(
   day: number,
   columnIndex: number,

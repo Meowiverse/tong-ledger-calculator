@@ -150,9 +150,7 @@ export function useLedgerApp() {
       return {
         ...current,
         selectedPaperTemplateId: nextTemplate.id,
-        paperTemplates: current.paperTemplates.map((template) =>
-          template.id === currentTemplate.id ? nextTemplate : template,
-        ),
+        paperTemplates: [nextTemplate],
       }
     })
   }

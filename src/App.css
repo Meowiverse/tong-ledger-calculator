@@ -440,6 +440,82 @@
   white-space: nowrap;
 }
 
+.reconstructed-feasibility {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid #c9e3d7;
+  border-radius: 8px;
+  color: #245d48;
+  background: #effaf5;
+  font-size: 12px;
+}
+
+.reconstructed-feasibility span {
+  font-weight: 850;
+}
+
+.reconstructed-feasibility strong {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--green);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.reconstructed-feasibility b {
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #245d48;
+  background: #dff5e9;
+  font-size: 11px;
+}
+
+.reconstructed-feasibility em {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.reconstructed-feasibility.is-review {
+  border-color: #f2d99e;
+  color: #8a5700;
+  background: #fff9ea;
+}
+
+.reconstructed-feasibility.is-review strong,
+.reconstructed-feasibility.is-review b {
+  background: #f0a202;
+}
+
+.reconstructed-feasibility.is-calibrate {
+  border-color: #f2b8c6;
+  color: #a2344b;
+  background: #fff6f8;
+}
+
+.reconstructed-feasibility.is-calibrate strong,
+.reconstructed-feasibility.is-calibrate b {
+  background: #ef476f;
+}
+
+.reconstructed-feasibility.is-review strong,
+.reconstructed-feasibility.is-calibrate strong {
+  color: #fff;
+}
+
+.reconstructed-feasibility.is-review b,
+.reconstructed-feasibility.is-calibrate b {
+  color: #fff;
+}
+
 .reconstructed-scroll {
   overflow-x: auto;
   border: 1px solid var(--line);

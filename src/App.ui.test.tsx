@@ -43,18 +43,10 @@ describe('App paper-template UI flow', () => {
     await user.click(screen.getByRole('button', { name: '打开设置' }))
     await user.click(screen.getByText('纸张与接口设置'))
 
-    expect(screen.getByText('本子格式')).toBeTruthy()
-    expect(screen.getByLabelText('纸张配置名')).toBeTruthy()
-    expect(screen.getByLabelText('日期行数')).toBeTruthy()
+    expect(screen.getByText('固定账本格式')).toBeTruthy()
+    expect(screen.queryByLabelText('纸张配置名')).toBeNull()
+    expect(screen.queryByLabelText('日期行数')).toBeNull()
     expect(screen.getByLabelText('纸类列与单价')).toBeTruthy()
-
-    const nameInput = screen.getByLabelText('纸张配置名')
-    await user.clear(nameInput)
-    await user.type(nameInput, '测试专用账本')
-
-    const rowInput = screen.getByLabelText('日期行数')
-    await user.clear(rowInput)
-    await user.type(rowInput, '30')
 
     const columnsInput = screen.getByLabelText('纸类列与单价')
     await user.clear(columnsInput)
@@ -65,8 +57,9 @@ describe('App paper-template UI flow', () => {
 
     await waitFor(() => {
       const settings = readStoredSettings()
-      expect(settings.paperTemplates[0].name).toBe('测试专用账本')
-      expect(settings.paperTemplates[0].rowCount).toBe(30)
+      expect(settings.paperTemplates).toHaveLength(1)
+      expect(settings.paperTemplates[0].name).toBe('浩伟食品月账本')
+      expect(settings.paperTemplates[0].rowCount).toBe(31)
       expect(settings.paperTemplates[0].productColumns).toEqual([
         { id: 'paper-1', label: '大纸', unitPrice: 2.5 },
         { id: 'paper-2', label: '小纸', unitPrice: 0.5 },
@@ -86,7 +79,7 @@ describe('App paper-template UI flow', () => {
     await user.click(screen.getByText('纸张与接口设置'))
 
     const main = screen.getByRole('main')
-    expect(within(main).getByText('本子格式')).toBeTruthy()
+    expect(within(main).getByText('固定账本格式')).toBeTruthy()
     expect(within(main).getByRole('button', { name: '拍照或选择图片' })).toBeTruthy()
     expect(within(main).getByRole('button', { name: /开始计算/ })).toBeTruthy()
   })

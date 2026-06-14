@@ -238,18 +238,21 @@ export function normalizePaperTemplates(templates: unknown): PaperTemplate[] {
     })
     .filter((template): template is PaperTemplate => Boolean(template))
 
-  return normalized.length ? normalized : [DEFAULT_PAPER_TEMPLATE]
+  const singleTemplate = normalized[0] ?? DEFAULT_PAPER_TEMPLATE
+  return [
+    {
+      ...singleTemplate,
+      id: DEFAULT_PAPER_TEMPLATE_ID,
+      name: DEFAULT_PAPER_TEMPLATE.name,
+    },
+  ]
 }
 
 export function getActivePaperTemplate(settings: {
   paperTemplates: PaperTemplate[]
   selectedPaperTemplateId: string
 }) {
-  return (
-    settings.paperTemplates.find((template) => template.id === settings.selectedPaperTemplateId) ??
-    settings.paperTemplates[0] ??
-    DEFAULT_PAPER_TEMPLATE
-  )
+  return settings.paperTemplates[0] ?? DEFAULT_PAPER_TEMPLATE
 }
 
 export function productColumnsToText(columns: PaperProductColumn[]) {

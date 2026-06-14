@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ChevronDown, ShieldCheck } from 'lucide-react'
 import { productColumnsFromText, productColumnsToText } from '../lib/paperTemplates'
 import { PromptManager } from './PromptManager'
@@ -28,7 +27,6 @@ export function SettingsPanel({
   onUpdateSettings,
 }: SettingsPanelProps) {
   const productColumnText = productColumnsToText(activePaperTemplate.productColumns)
-  const [rowCountDraft, setRowCountDraft] = useState(() => String(activePaperTemplate.rowCount))
 
   return (
     <section className="settings-panel">
@@ -79,37 +77,9 @@ export function SettingsPanel({
         <div className="paper-template-editor">
           <div className="paper-template-head">
             <div>
-              <strong>本子格式</strong>
-              <span>固定月表，按切割后的行列格子复核。</span>
+              <strong>固定账本格式</strong>
+              <span>一种本子，{activePaperTemplate.rowCount} 个日期行，自动切割后重建表格。</span>
             </div>
-          </div>
-          <div className="field">
-            <label htmlFor="paper-name">纸张配置名</label>
-            <input
-              id="paper-name"
-              value={activePaperTemplate.name}
-              onChange={(event) => onUpdatePaperTemplate({ name: event.target.value })}
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="paper-rows">日期行数</label>
-            <input
-              id="paper-rows"
-              inputMode="numeric"
-              type="number"
-              min={1}
-              max={31}
-              value={rowCountDraft}
-              onChange={(event) => {
-                const nextValue = event.target.value
-                setRowCountDraft(nextValue)
-                if (!nextValue) return
-
-                const rowCount = Number(nextValue)
-                if (!Number.isFinite(rowCount)) return
-                onUpdatePaperTemplate({ rowCount: Math.min(31, Math.max(1, rowCount)) })
-              }}
-            />
           </div>
           <div className="field">
             <label htmlFor="paper-columns">纸类列与单价</label>

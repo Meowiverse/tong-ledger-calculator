@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Crosshair, ZoomIn } from 'lucide-react'
 import { getAnchorPosition } from '../lib/anchors'
-import { getLedgerTableRegion } from '../lib/ledgerCells'
+import { getCuttingFeasibility } from '../lib/ledgerCells'
 import type { ImageRegion, PaperTemplate, RecognitionResult } from '../types'
 import './ImageReview.css'
 
@@ -19,6 +19,13 @@ function regionStyle(region: ImageRegion) {
     top: `${region.y}%`,
     width: `${region.width}%`,
     height: `${region.height}%`,
+  }
+}
+
+function regionCenter(region: ImageRegion) {
+  return {
+    x: region.x + region.width / 2,
+    y: region.y + region.height / 2,
   }
 }
 
@@ -90,12 +97,12 @@ export function ImageReview({
   )
   const selectedRegion = selectedCell?.bboxOriginal ?? selectedEntry?.region ?? selectedMark?.region
   const tokenRegion = selectedEntry?.region ?? selectedMark?.region
-  const tableRegion = getLedgerTableRegion(result, paperTemplate)
+  const cutting = getCuttingFeasibility(result, paperTemplate)
   const selectedAnchor = selectedEntry?.anchor ?? selectedMark?.anchor
-  const selectedPosition = tokenRegion
-    ? getAnchorPosition(selectedAnchor, tokenRegion)
-    : selectedRegion
-      ? getAnchorPosition(null, selectedRegion)
+  const selectedPosition = selectedRegion
+    ? regionCenter(selectedRegion)
+    : tokenRegion
+      ? getAnchorPosition(selectedAnchor, tokenRegion)
       : null
   const locationLabel =
     selectedEntry?.label ??
@@ -112,8 +119,17 @@ export function ImageReview({
         <Crosshair size={19} />
         <div>
           <strong>{locationLabel} · 当前第 {currentNumber} 处</strong>
-          <span>字迹较模糊，请核对框线中心</span>
+          <span>
+            自动切割 {cutting.score} 分 · {cutting.label} · 偏差 {cutting.maxDelta.toFixed(1)}%
+          </span>
         </div>
+      </div>
+
+      <div className={`cutting-feasibility is-${cutting.level}`} aria-label="自动切割可行度">
+        <span>模板框</span>
+        <strong>vs</strong>
+        <span>自动校准框</span>
+        <b>{cutting.label}</b>
       </div>
 
       <div
@@ -130,9 +146,14 @@ export function ImageReview({
           }}
         />
         <span
+          className="source-template-frame"
+          aria-hidden="true"
+          style={regionStyle(cutting.fixedRegion)}
+        />
+        <span
           className="source-table-frame"
           aria-hidden="true"
-          style={regionStyle(tableRegion)}
+          style={regionStyle(cutting.calibratedRegion)}
         />
         <span
           className="source-cell-frame"

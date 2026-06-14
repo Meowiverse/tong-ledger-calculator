@@ -1,7 +1,12 @@
 import { useMemo, useState } from 'react'
 import { Check, ChevronLeft, ChevronRight, Edit3, Eye, MinusCircle, ShieldAlert } from 'lucide-react'
 import { formatAmount, getEntryCalculatedAmount, summarizeRecognition } from '../lib/calculation'
-import { buildLedgerCells, columnRuleForCell, getLedgerColumns } from '../lib/ledgerCells'
+import {
+  buildLedgerCells,
+  columnRuleForCell,
+  getCuttingFeasibility,
+  getLedgerColumns,
+} from '../lib/ledgerCells'
 import type { LedgerCell, LedgerCellSemanticType, PaperTemplate, RecognitionResult } from '../types'
 
 interface ReconstructedLedgerTableProps {
@@ -377,6 +382,10 @@ export function ReconstructedLedgerTable({
   const riskyCount = cells.filter(
     (cell) => cell.riskFlags.length && cell.columnKind !== 'date' && cell.columnKind !== 'dailyTotal',
   ).length
+  const cutting = useMemo(
+    () => getCuttingFeasibility(result, paperTemplate),
+    [paperTemplate, result],
+  )
 
   if (!cells.length) return null
 
@@ -385,9 +394,16 @@ export function ReconstructedLedgerTable({
       <div className="reconstructed-head">
         <div>
           <strong>重绘表格对照</strong>
-          <span>{paperTemplate.name} · 固定格子切割对照</span>
+          <span>{paperTemplate.name} · 自动切割 + 原图定位</span>
         </div>
         <b>{riskyCount} 格需核</b>
+      </div>
+
+      <div className={`reconstructed-feasibility is-${cutting.level}`}>
+        <span>切割可行度</span>
+        <strong>{cutting.score}</strong>
+        <b>{cutting.label}</b>
+        <em>模板/校准偏差 {cutting.maxDelta.toFixed(1)}%</em>
       </div>
 
       <MobileRowStrip
