@@ -55,6 +55,7 @@ function App() {
             <ActionBar
               hasImage={hasImage}
               isRecognizing={app.isRecognizing}
+              onPreviewCutting={app.previewLocalCutting}
               onRunRecognition={app.runRecognition}
             />
           ) : null}
@@ -186,7 +187,7 @@ function App() {
                   runs={app.modelRuns}
                   onRunModelSuite={app.runModelBenchmarkSuite}
                 />
-                <UxScorePanel result={app.result} />
+                <UxScorePanel paperTemplate={app.activePaperTemplate} result={app.result} />
               </>
             ) : null}
           </aside>

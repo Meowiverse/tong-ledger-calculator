@@ -29,6 +29,10 @@ function regionCenter(region: ImageRegion) {
   }
 }
 
+function formatResidual(value: number | null) {
+  return typeof value === 'number' ? `${value.toFixed(1)}%` : '证据不足'
+}
+
 function growRegion(region: ImageRegion, paddingRatio = 0.18): ImageRegion {
   const padX = region.width * paddingRatio
   const padY = region.height * paddingRatio
@@ -120,54 +124,59 @@ export function ImageReview({
         <div>
           <strong>{locationLabel} · 当前第 {currentNumber} 处</strong>
           <span>
-            自动切割 {cutting.score} 分 · {cutting.label} · 偏差 {cutting.maxDelta.toFixed(1)}%
+            自动切割 {cutting.score} 分 · {cutting.label} · {cutting.support.distinctRows} 行/
+            {cutting.support.distinctColumns} 列证据
           </span>
         </div>
       </div>
 
       <div className={`cutting-feasibility is-${cutting.level}`} aria-label="自动切割可行度">
-        <span>模板框</span>
+        <span>固定模板</span>
         <strong>vs</strong>
-        <span>自动校准框</span>
+        <span>识别校准</span>
         <b>{cutting.label}</b>
+        <em>
+          偏差 {cutting.maxDelta.toFixed(1)}% · 残差 {formatResidual(cutting.residuals.max)} · 证据
+          {cutting.support.rowPoints}/{cutting.support.columnPoints}
+          {cutting.fallback.x || cutting.fallback.y ? ' · 已回退模板' : ''}
+        </em>
       </div>
 
-      <div
-        className="source-grid-stage"
-        aria-label="原图固定格子切割对照"
-      >
-        <img
-          src={imageUrl}
-          alt=""
-          aria-hidden="true"
-          onLoad={(event) => {
-            const image = event.currentTarget
-            if (image.naturalWidth) setImageRatio(image.naturalHeight / image.naturalWidth)
-          }}
-        />
-        <span
-          className="source-template-frame"
-          aria-hidden="true"
-          style={regionStyle(cutting.fixedRegion)}
-        />
-        <span
-          className="source-table-frame"
-          aria-hidden="true"
-          style={regionStyle(cutting.calibratedRegion)}
-        />
-        <span
-          className="source-cell-frame"
-          aria-hidden="true"
-          style={regionStyle(selectedRegion)}
-        />
-        {tokenRegion ? (
+      <div className="source-grid-stage" aria-label="原图固定格子切割对照">
+        <div className="source-image-frame">
+          <img
+            src={imageUrl}
+            alt=""
+            aria-hidden="true"
+            onLoad={(event) => {
+              const image = event.currentTarget
+              if (image.naturalWidth) setImageRatio(image.naturalHeight / image.naturalWidth)
+            }}
+          />
+          <span
+            className="source-template-frame"
+            aria-hidden="true"
+            style={regionStyle(cutting.fixedRegion)}
+          />
+          <span
+            className="source-table-frame"
+            aria-hidden="true"
+            style={regionStyle(cutting.calibratedRegion)}
+          />
+          <span
+            className="source-cell-frame"
+            aria-hidden="true"
+            style={regionStyle(selectedRegion)}
+          />
+          {tokenRegion ? (
           <span
             className="source-token-frame"
             aria-hidden="true"
             style={regionStyle(tokenRegion)}
           />
-        ) : null}
-        <b>{selectedCell?.id ?? selectedEntryId}</b>
+          ) : null}
+          <b>{selectedCell?.id ?? selectedEntryId}</b>
+        </div>
       </div>
 
       {selectedRegion ? (

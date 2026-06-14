@@ -13,4 +13,23 @@ describe('mobile audit UX scoring', () => {
     expect(evaluation.score).toBe(100)
     expect(evaluation.criteria.every((criterion) => criterion.passed)).toBe(true)
   })
+
+  it('does not score local cutting preview as S until cutting is reliable', () => {
+    const result = normalizeResultCells(
+      {
+        ...SAMPLE_RECOGNITION,
+        sourceType: '固定账本本地预览',
+        entries: [],
+        uncertainMarks: [],
+      },
+      DEFAULT_PAPER_TEMPLATE,
+    )
+    const evaluation = evaluateMobileAuditUx(result)
+
+    expect(evaluation.grade).not.toBe('S')
+    expect(evaluation.criteria.find((criterion) => criterion.id === 'traceable-money')?.passed).toBe(false)
+    expect(evaluation.criteria.find((criterion) => criterion.id === 'traceable-money')?.detail).toContain(
+      '需先校准',
+    )
+  })
 })

@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest'
+import { existsSync, readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import path from 'node:path'
 import { SAMPLE_CASES } from '../data/sampleCases'
 import { SAMPLE_RECOGNITION } from '../data/sampleRecognition'
 import { normalizeResultCells } from './ledgerCells'
 import { DEFAULT_PAPER_TEMPLATE } from './paperTemplates'
 import { evaluateSampleBenchmark, evaluateSampleCaseBenchmark } from './benchmark'
 import { evaluateMobileAuditUx } from './uxScore'
+
+function fileHash(filePath: string) {
+  return createHash('sha256').update(readFileSync(filePath)).digest('hex')
+}
 
 describe('evaluateSampleBenchmark', () => {
   it('passes the calibrated sample recognition result', () => {
@@ -21,10 +28,17 @@ describe('evaluateSampleBenchmark', () => {
     expect(new Set(SAMPLE_CASES.map((sampleCase) => sampleCase.imageUrl)).size).toBe(
       SAMPLE_CASES.length,
     )
+    const sampleFilePaths = SAMPLE_CASES.map((sampleCase) =>
+      path.resolve(process.cwd(), 'public', sampleCase.imageUrl),
+    )
+    const sampleHashes = new Set(sampleFilePaths.map(fileHash))
+
+    expect(sampleFilePaths.every((filePath) => existsSync(filePath))).toBe(true)
+    expect(sampleHashes.size).toBe(SAMPLE_CASES.length)
 
     for (const sampleCase of SAMPLE_CASES) {
       expect(sampleCase.imageUrl, `${sampleCase.name} image URL`).toMatch(
-        /^\/samples\/.+\.(png|jpg|jpeg|webp)$/i,
+        /^samples\/.+\.(png|jpg|jpeg|webp)$/i,
       )
 
       const normalizedResult = normalizeResultCells(sampleCase.expectedResult, DEFAULT_PAPER_TEMPLATE)

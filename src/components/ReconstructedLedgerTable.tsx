@@ -46,6 +46,10 @@ function semanticLabel(type: LedgerCellSemanticType) {
   return labels[type]
 }
 
+function formatResidual(value: number | null) {
+  return typeof value === 'number' ? `${value.toFixed(1)}%` : '证据不足'
+}
+
 function amountForCell(cell: LedgerCell, result: RecognitionResult) {
   if (typeof cell.amount === 'number') return cell.amount
   return cell.entryIds.reduce((total, entryId) => {
@@ -132,7 +136,11 @@ function CellInspector({
   const [draftValue, setDraftValue] = useState(cell.rawText)
   const [semanticType, setSemanticType] = useState<LedgerCellSemanticType>(() => defaultTypeForCell(cell))
   const summary = summarizeRecognition(result)
-  const confirmType = cell.semanticType === 'blank' ? 'blank' : semanticType
+  const confirmType = draftValue.trim()
+    ? semanticType
+    : cell.semanticType === 'blank'
+      ? 'blank'
+      : semanticType
   const nextAfterSave = nextRiskCell?.id ?? nextCell?.id ?? cell.id
 
   return (
@@ -204,6 +212,22 @@ function CellInspector({
               <Check size={16} />
               半天
             </button>
+            <button type="button" onClick={() => onUpdateCell(cell.id, draftValue, 'quantity', nextAfterSave)}>
+              <Edit3 size={16} />
+              纸类数量
+            </button>
+            <button type="button" onClick={() => onUpdateCell(cell.id, draftValue, 'directMoney', nextAfterSave)}>
+              <Edit3 size={16} />
+              上下货金额
+            </button>
+            <button type="button" onClick={() => onUpdateCell(cell.id, draftValue, 'deduction', nextAfterSave)}>
+              <Edit3 size={16} />
+              扣款
+            </button>
+            <button type="button" onClick={() => onUpdateCell(cell.id, draftValue, 'note', nextAfterSave)}>
+              <Edit3 size={16} />
+              备注
+            </button>
             <button type="button" onClick={() => onUpdateCell(cell.id, draftValue, semanticType, nextAfterSave)}>
               <Edit3 size={16} />
               保存格子
@@ -231,17 +255,23 @@ function CellInspector({
         </div>
       ) : null}
       {imageUrl ? <CellCropPreview cell={cell} imageUrl={imageUrl} /> : null}
-      <div className="cell-evidence-grid">
-        <span>cellId</span>
-        <code>{cell.id}</code>
-        <span>原图 bbox</span>
-        <code>
-          x{cell.bboxOriginal.x.toFixed(1)} y{cell.bboxOriginal.y.toFixed(1)} w
-          {cell.bboxOriginal.width.toFixed(1)} h{cell.bboxOriginal.height.toFixed(1)}
-        </code>
-        <span>裁剪证据</span>
-        <code>{cell.cropRef}</code>
-      </div>
+      <details className="cell-evidence-details">
+        <summary>
+          <Eye size={15} />
+          证据详情
+        </summary>
+        <div className="cell-evidence-grid">
+          <span>格子编号</span>
+          <code>{cell.id}</code>
+          <span>原图位置</span>
+          <code>
+            x{cell.bboxOriginal.x.toFixed(1)} y{cell.bboxOriginal.y.toFixed(1)} w
+            {cell.bboxOriginal.width.toFixed(1)} h{cell.bboxOriginal.height.toFixed(1)}
+          </code>
+          <span>裁剪证据</span>
+          <code>{cell.cropRef}</code>
+        </div>
+      </details>
       {cell.riskFlags.length ? (
         <div className="cell-risk-list">
           {cell.riskFlags.map((risk) => (
@@ -403,8 +433,18 @@ export function ReconstructedLedgerTable({
         <span>切割可行度</span>
         <strong>{cutting.score}</strong>
         <b>{cutting.label}</b>
-        <em>模板/校准偏差 {cutting.maxDelta.toFixed(1)}%</em>
+        <em>
+          偏差 {cutting.maxDelta.toFixed(1)}% · 证据 {cutting.support.distinctRows} 行/
+          {cutting.support.distinctColumns} 列 · 残差 {formatResidual(cutting.residuals.max)}
+          {cutting.fallback.x || cutting.fallback.y ? ' · 已回退模板' : ''}
+        </em>
       </div>
+
+      {cutting.level !== 'good' ? (
+        <div className="cutting-calibration-warning" role="alert">
+          当前格子位置不能自动通过，请先按原图抽查或校准表格边界；系统不会把它当成可靠切割。
+        </div>
+      ) : null}
 
       <MobileRowStrip
         cells={cells}

@@ -1,12 +1,13 @@
 import { evaluateMobileAuditUx } from '../lib/uxScore'
-import type { RecognitionResult } from '../types'
+import type { PaperTemplate, RecognitionResult } from '../types'
 
 interface UxScorePanelProps {
+  paperTemplate: PaperTemplate
   result: RecognitionResult
 }
 
-export function UxScorePanel({ result }: UxScorePanelProps) {
-  const evaluation = evaluateMobileAuditUx(result)
+export function UxScorePanel({ paperTemplate, result }: UxScorePanelProps) {
+  const evaluation = evaluateMobileAuditUx(result, paperTemplate)
 
   return (
     <section className={`ux-score-panel grade-${evaluation.grade}`} aria-label="UX 评分子 AI">

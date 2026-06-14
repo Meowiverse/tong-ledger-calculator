@@ -58,7 +58,59 @@ describe('ledger cells', () => {
     expect(feasibility.fixedRegion).toEqual(DEFAULT_PAPER_TEMPLATE.grid.tableRegion)
     expect(feasibility.calibratedRegion.width).toBeGreaterThan(40)
     expect(feasibility.maxDelta).toBeGreaterThanOrEqual(0)
+    expect(feasibility.support.distinctRows).toBeGreaterThanOrEqual(8)
+    expect(feasibility.support.distinctColumns).toBeGreaterThanOrEqual(2)
     expect(['good', 'review', 'calibrate']).toContain(feasibility.level)
+  })
+
+  it('does not mark fallback template cutting as good when evidence is sparse', () => {
+    const sparseResult = {
+      ...SAMPLE_RECOGNITION,
+      entries: SAMPLE_RECOGNITION.entries.slice(0, 1),
+    }
+    const feasibility = getCuttingFeasibility(sparseResult, DEFAULT_PAPER_TEMPLATE)
+
+    expect(feasibility.maxDelta).toBe(0)
+    expect(feasibility.fallback.x || feasibility.fallback.y).toBe(true)
+    expect(feasibility.support.distinctRows).toBeLessThan(8)
+    expect(feasibility.level).not.toBe('good')
+  })
+
+  it('requires both row and column support before direct cutting is allowed', () => {
+    const oneColumnResult = {
+      ...SAMPLE_RECOGNITION,
+      entries: SAMPLE_RECOGNITION.entries.filter((entry) => entry.label.includes('中列')),
+    }
+    const oneRowResult = {
+      ...SAMPLE_RECOGNITION,
+      entries: SAMPLE_RECOGNITION.entries.filter((entry) => entry.rowLabel === '4日'),
+    }
+
+    const oneColumnFeasibility = getCuttingFeasibility(oneColumnResult, DEFAULT_PAPER_TEMPLATE)
+    const oneRowFeasibility = getCuttingFeasibility(oneRowResult, DEFAULT_PAPER_TEMPLATE)
+
+    expect(oneColumnFeasibility.fallback.x).toBe(true)
+    expect(oneColumnFeasibility.level).not.toBe('good')
+    expect(oneRowFeasibility.fallback.y).toBe(true)
+    expect(oneRowFeasibility.level).not.toBe('good')
+  })
+
+  it('downgrades high-residual fits even when support exists', () => {
+    const noisyResult = {
+      ...SAMPLE_RECOGNITION,
+      entries: SAMPLE_RECOGNITION.entries.map((entry, index) => ({
+        ...entry,
+        region: {
+          ...entry.region,
+          y: entry.region.y + (index % 3 === 0 ? 10 : index % 3 === 1 ? -6 : 0),
+        },
+      })),
+    }
+    const feasibility = getCuttingFeasibility(noisyResult, DEFAULT_PAPER_TEMPLATE)
+
+    expect(feasibility.support.distinctRows).toBeGreaterThanOrEqual(8)
+    expect(feasibility.residuals.max ?? 0).toBeGreaterThan(1.8)
+    expect(feasibility.level).not.toBe('good')
   })
 
   it('normalizes cells idempotently without duplicating entry evidence', () => {

@@ -118,6 +118,10 @@ function linearFit(points: Array<{ x: number; y: number }>) {
   return { intercept, slope }
 }
 
+function mean(values: number[]) {
+  return values.length ? values.reduce((total, value) => total + value, 0) / values.length : null
+}
+
 function clampRegion(region: ImageRegion): ImageRegion {
   const x = Math.max(0, Math.min(99, region.x))
   const y = Math.max(0, Math.min(99, region.y))
@@ -129,12 +133,34 @@ function clampRegion(region: ImageRegion): ImageRegion {
   }
 }
 
-export function getLedgerTableRegion(result: RecognitionResult, template: PaperTemplate): ImageRegion {
+export interface LedgerTableFit {
+  region: ImageRegion
+  fixedRegion: ImageRegion
+  support: {
+    rowPoints: number
+    columnPoints: number
+    distinctRows: number
+    distinctColumns: number
+  }
+  residuals: {
+    x: number | null
+    y: number | null
+    max: number | null
+  }
+  fallback: {
+    x: boolean
+    y: boolean
+  }
+}
+
+export function getLedgerTableFit(result: RecognitionResult, template: PaperTemplate): LedgerTableFit {
   const grid = getTemplateGrid(template)
   const fallback = grid.tableRegion
   const columnIndexById = new Map(grid.columns.map((column, index) => [column.id, index]))
   const xPoints: Array<{ x: number; y: number }> = []
   const yPoints: Array<{ x: number; y: number }> = []
+  const distinctColumnIndexes = new Set<number>()
+  const distinctRows = new Set<number>()
 
   for (const entry of result.entries) {
     const day = parseDay(entry.rowLabel)
@@ -145,37 +171,95 @@ export function getLedgerTableRegion(result: RecognitionResult, template: PaperT
 
     if (day && day >= 1 && day <= grid.rows) {
       yPoints.push({ x: day - 1, y: centerY })
+      distinctRows.add(day)
     }
     if (typeof columnIndex === 'number') {
       xPoints.push({ x: centerRatioFor(columnIndex, grid.columnRatios), y: centerX })
+      distinctColumnIndexes.add(columnIndex)
     }
   }
 
   const xFit = linearFit(xPoints)
   const yFit = linearFit(yPoints)
+  const usableXFit =
+    distinctColumnIndexes.size >= 2 &&
+    xFit &&
+    Number.isFinite(xFit.intercept) &&
+    Number.isFinite(xFit.slope) &&
+    xFit.slope > 30 &&
+    xFit.slope <= 98
+      ? xFit
+      : null
+  const usableYFit =
+    distinctRows.size >= 6 &&
+    yFit &&
+    Number.isFinite(yFit.intercept) &&
+    Number.isFinite(yFit.slope) &&
+    yFit.slope > 1 &&
+    yFit.slope <= 5
+      ? yFit
+      : null
   const x =
-    xFit && Number.isFinite(xFit.intercept) && xFit.slope > 30
-      ? xFit.intercept
+    usableXFit
+      ? usableXFit.intercept
       : fallback.x
   const width =
-    xFit && Number.isFinite(xFit.slope) && xFit.slope > 30
-      ? xFit.slope
+    usableXFit
+      ? usableXFit.slope
       : fallback.width
 
   let y = fallback.y
   let height = fallback.height
-  if (yFit && Number.isFinite(yFit.slope) && yFit.slope > 1) {
+  if (usableYFit) {
     const originCandidates = yPoints
-      .map((point) => point.y - (grid.headerRows + point.x + 0.5) * yFit.slope)
+      .map((point) => point.y - (grid.headerRows + point.x + 0.5) * usableYFit.slope)
       .filter(Number.isFinite)
     const fittedTop = quantile(originCandidates, 0.05)
     if (typeof fittedTop === 'number') {
       y = fittedTop
-      height = yFit.slope * (grid.rows + grid.headerRows)
+      height = usableYFit.slope * (grid.rows + grid.headerRows)
     }
   }
 
-  return clampRegion({ x, y, width, height })
+  const region = clampRegion({ x, y, width, height })
+  const rowHeight = region.height / (grid.rows + grid.headerRows)
+  const xResidual = usableXFit
+    ? mean(xPoints.map((point) => Math.abs(point.y - (region.x + point.x * region.width))))
+    : null
+  const yResidual = usableYFit
+    ? mean(
+        yPoints.map((point) =>
+          Math.abs(point.y - (region.y + (grid.headerRows + point.x + 0.5) * rowHeight)),
+        ),
+      )
+    : null
+  const finiteResiduals = [xResidual, yResidual].filter(
+    (value): value is number => typeof value === 'number' && Number.isFinite(value),
+  )
+
+  return {
+    region,
+    fixedRegion: fallback,
+    support: {
+      rowPoints: yPoints.length,
+      columnPoints: xPoints.length,
+      distinctRows: distinctRows.size,
+      distinctColumns: distinctColumnIndexes.size,
+    },
+    residuals: {
+      x: xResidual,
+      y: yResidual,
+      max: finiteResiduals.length ? Math.max(...finiteResiduals) : null,
+    },
+    fallback: {
+      x: !usableXFit,
+      y: !usableYFit,
+    },
+  }
+}
+
+export function getLedgerTableRegion(result: RecognitionResult, template: PaperTemplate): ImageRegion {
+  return getLedgerTableFit(result, template).region
 }
 
 export function getFixedTemplateTableRegion(template: PaperTemplate): ImageRegion {
@@ -184,7 +268,8 @@ export function getFixedTemplateTableRegion(template: PaperTemplate): ImageRegio
 
 export function getCuttingFeasibility(result: RecognitionResult, template: PaperTemplate) {
   const fixedRegion = getFixedTemplateTableRegion(template)
-  const calibratedRegion = getLedgerTableRegion(result, template)
+  const fit = getLedgerTableFit(result, template)
+  const calibratedRegion = fit.region
   const deltas = {
     x: Math.abs(calibratedRegion.x - fixedRegion.x),
     y: Math.abs(calibratedRegion.y - fixedRegion.y),
@@ -192,8 +277,33 @@ export function getCuttingFeasibility(result: RecognitionResult, template: Paper
     height: Math.abs(calibratedRegion.height - fixedRegion.height),
   }
   const maxDelta = Math.max(deltas.x, deltas.y, deltas.width, deltas.height)
-  const score = Math.max(0, Math.min(100, Math.round(100 - maxDelta * 12)))
-  const level = maxDelta <= 2.5 ? 'good' : maxDelta <= 5 ? 'review' : 'calibrate'
+  const fallbackCount = Number(fit.fallback.x) + Number(fit.fallback.y)
+  const rowShortfall = Math.max(0, 8 - fit.support.distinctRows)
+  const columnShortfall = Math.max(0, 2 - fit.support.distinctColumns)
+  const residualPenalty = (fit.residuals.max ?? 3.5) * 9
+  const score = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        100 -
+          maxDelta * 8 -
+          fallbackCount * 18 -
+          rowShortfall * 4 -
+          columnShortfall * 12 -
+          residualPenalty,
+      ),
+    ),
+  )
+  const supportOk = fit.support.distinctRows >= 8 && fit.support.distinctColumns >= 2
+  const residualOk = typeof fit.residuals.max === 'number' && fit.residuals.max <= 1.8
+  const fallbackUsed = fit.fallback.x || fit.fallback.y
+  const level =
+    supportOk && residualOk && !fallbackUsed && maxDelta <= 2.5
+      ? 'good'
+      : score >= 65 && maxDelta <= 6 && fit.support.distinctRows >= 4
+        ? 'review'
+        : 'calibrate'
   const label =
     level === 'good'
       ? '可直接切割'
@@ -206,6 +316,9 @@ export function getCuttingFeasibility(result: RecognitionResult, template: Paper
     calibratedRegion,
     deltas,
     maxDelta,
+    support: fit.support,
+    residuals: fit.residuals,
+    fallback: fit.fallback,
     score,
     level,
     label,

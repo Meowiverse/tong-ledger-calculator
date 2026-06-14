@@ -51,6 +51,14 @@
   font-size: 11px;
 }
 
+.cutting-feasibility em {
+  grid-column: 1 / -1;
+  color: #6d7e77;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.35;
+}
+
 .cutting-feasibility.is-review b {
   color: #8a5700;
   background: #fff1cf;
@@ -62,15 +70,20 @@
 }
 
 .source-grid-stage {
-  position: relative;
-  overflow: hidden;
+  overflow: auto;
   max-height: 360px;
   border: 1px solid #a9bbb4;
   border-radius: 7px;
   background: #e9eeeb;
 }
 
-.source-grid-stage img {
+.source-image-frame {
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+}
+
+.source-image-frame img {
   display: block;
   width: 100%;
   height: auto;
@@ -108,7 +121,7 @@
   background: rgba(240, 162, 2, 0.14);
 }
 
-.source-grid-stage b {
+.source-image-frame b {
   position: absolute;
   right: 8px;
   bottom: 8px;

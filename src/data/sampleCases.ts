@@ -12,19 +12,19 @@ export const SAMPLE_CASES: SampleCase[] = [
   {
     id: 'ledger-original',
     name: '原图样例',
-    imageUrl: '/samples/handwritten-ledger.png',
+    imageUrl: 'samples/handwritten-ledger.png',
     expectedResult: SAMPLE_RECOGNITION,
   },
   {
     id: 'ledger-phone',
     name: '手机拍照样例',
-    imageUrl: '/samples/handwritten-ledger-phone.png',
+    imageUrl: 'samples/handwritten-ledger-phone.png',
     expectedResult: SAMPLE_RECOGNITION,
   },
   {
     id: 'ledger-rescan',
     name: '复扫样例',
-    imageUrl: '/samples/handwritten-ledger-rescan.png',
+    imageUrl: 'samples/handwritten-ledger-rescan.png',
     expectedResult: SAMPLE_RECOGNITION,
   },
 ]

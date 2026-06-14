@@ -12,6 +12,7 @@ import {
 } from '../recognitionConfig'
 import { evaluateSampleCaseBenchmark } from '../lib/benchmark'
 import { summarizeRecognition } from '../lib/calculation'
+import { buildLedgerExportPayload } from '../lib/export'
 import { fileToDataUrl, preprocessImageForOcr, urlToDataUrl } from '../lib/image'
 import { normalizeResultCells, updateLedgerCell } from '../lib/ledgerCells'
 import { recognizeLedgerImage } from '../lib/openai'
@@ -179,11 +180,17 @@ export function useLedgerApp() {
   async function handleFile(file: File) {
     setError('')
     const dataUrl = await fileToDataUrl(file)
-    const nextPreprocessed = await preprocessImageForOcr(dataUrl)
     setImageDataUrl(dataUrl)
     setImageUrl(dataUrl)
-    setPreprocessedImageDataUrl(nextPreprocessed)
-    setPreprocessedImageUrl(nextPreprocessed)
+    try {
+      const nextPreprocessed = await preprocessImageForOcr(dataUrl)
+      setPreprocessedImageDataUrl(nextPreprocessed)
+      setPreprocessedImageUrl(nextPreprocessed)
+    } catch {
+      setPreprocessedImageDataUrl(dataUrl)
+      setPreprocessedImageUrl(dataUrl)
+      setError('图片预处理失败，已使用原图继续；仍可先做本地切割预览。')
+    }
     setResult(null)
     setOverlayMode('low')
     setSelectedEntryId('')
@@ -211,6 +218,44 @@ export function useLedgerApp() {
     setVerificationQueue(buildVerificationQueue(normalizedSample))
     setReviewHistory([])
     setReviewNotice('')
+  }
+
+  function previewLocalCutting() {
+    if (!imageUrl) {
+      setError('先拍照或选择图片，再查看切割预览。')
+      return
+    }
+
+    const previewResult = normalizeLedgerResult({
+      title: '本地切割预览',
+      sourceType: '固定账本本地预览',
+      summary: '未调用模型识别；当前只按固定账本模板生成格子、裁剪证据和原图定位。',
+      currency: 'CNY',
+      overallConfidence: 0.35,
+      computedTotal: null,
+      calculationFormula: '本地预览不计算金额；补录或模型识别后再按格子规则复算。',
+      columnRules: [],
+      entries: [],
+      uncertainMarks: [],
+      extractedText: ['本地切割预览：没有上传图片，也没有识别手写数字。'],
+      auditNotes: [
+        '这是纯本地模板切割预览，用于检查格子是否对准原图。',
+        '所有可计算格会进入核查队列；确认或补录后才会计入金额。',
+      ],
+    })
+    const firstReviewableCell = previewResult.cells?.find(
+      (cell) => cell.columnKind !== 'date' && cell.columnKind !== 'dailyTotal',
+    )
+
+    setError('')
+    setResult(previewResult)
+    setOverlayMode('low')
+    setSelectedEntryId(firstReviewableCell?.id ?? '')
+    setVerificationState({})
+    setVerificationQueue(buildVerificationQueue(previewResult))
+    setReviewHistory([])
+    setReviewNotice('已生成本地切割预览；未调用模型，图片没有离开浏览器。')
+    if (!activeSampleCase) saveLastResult(previewResult)
   }
 
   function recordModelRun(record: Omit<ModelRunRecord, 'createdAt' | 'id'>) {
@@ -376,7 +421,9 @@ export function useLedgerApp() {
 
   function downloadJson() {
     if (!result) return
-    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
+    const blob = new Blob([JSON.stringify(buildLedgerExportPayload(result, activePaperTemplate), null, 2)], {
+      type: 'application/json',
+    })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -521,6 +568,7 @@ export function useLedgerApp() {
     modelRuns,
     overlayMode,
     prompt,
+    previewLocalCutting,
     reviewImageUrl: preprocessedImageUrl || imageUrl,
     result,
     reviewNotice,

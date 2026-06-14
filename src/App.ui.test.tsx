@@ -94,6 +94,25 @@ describe('App paper-template UI flow', () => {
     expect(within(sampleCases).getByRole('button', { name: '复扫样例' })).toBeTruthy()
   })
 
+  it('can build a local cutting preview from an uploaded image without model recognition', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const file = new File(['fake image'], 'ledger.jpg', { type: 'image/jpeg' })
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement
+    await user.upload(input, file)
+
+    const previewButton = screen.getByRole('button', { name: '本地切割预览' })
+    await waitFor(() => expect(previewButton.hasAttribute('disabled')).toBe(false))
+    await user.click(previewButton)
+
+    expect(await screen.findByRole('region', { name: '重绘表格对照' })).toBeTruthy()
+    expect(screen.getByText(/已生成本地切割预览/)).toBeTruthy()
+    expect(screen.getByLabelText('原图固定格子切割对照')).toBeTruthy()
+    expect(screen.getByRole('alert').textContent).toContain('系统不会把它当成可靠切割')
+    expect(screen.getAllByRole('button', { name: /空白/ }).length).toBeGreaterThan(0)
+  })
+
   it('renders a reconstructed table that can select a source entry', async () => {
     const user = userEvent.setup()
     const onSelectEntry = vi.fn()
