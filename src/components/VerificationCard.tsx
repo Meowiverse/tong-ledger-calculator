@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Check, Edit3, RotateCcw, SkipForward, X } from 'lucide-react'
 import { formatAmount, getEntryCalculatedAmount } from '../lib/calculation'
+import { riskFlagLabel } from '../lib/ledgerCells'
 import type { RecognitionResult, VerificationItem } from '../types'
 
 interface VerificationCardProps {
@@ -32,7 +33,6 @@ export function VerificationCard({
 }: VerificationCardProps) {
   const selectedEntry = result.entries.find((entry) => entry.id === item?.targetId)
   const selectedMark = result.uncertainMarks.find((mark) => mark.id === item?.targetId)
-  const selectedCell = result.cells?.find((cell) => cell.id === item?.targetId)
   const nearbyEntry = useMemo(() => {
     if (!selectedMark) return undefined
     return result.entries.find(
@@ -41,6 +41,13 @@ export function VerificationCard({
         Math.abs(entry.region.y - selectedMark.region.y) < 1,
     )
   }, [result.entries, selectedMark])
+  const selectedCell = result.cells?.find(
+    (cell) =>
+      cell.id === item?.targetId ||
+      Boolean(selectedEntry?.cellId && cell.id === selectedEntry.cellId) ||
+      Boolean(selectedEntry && cell.entryIds.includes(selectedEntry.id)) ||
+      Boolean(nearbyEntry && cell.entryIds.includes(nearbyEntry.id)),
+  )
   const displayValue =
     selectedMark?.text ?? selectedEntry?.rawText ?? nearbyEntry?.rawText ?? selectedCell?.rawText ?? ''
   const locationLabel =
@@ -124,13 +131,20 @@ export function VerificationCard({
         ) : (
           <p className="candidate-copy">
             {locationLabel}，请对照上方放大图确认。
-            {selectedCell?.riskFlags.length ? ` 风险：${selectedCell.riskFlags.join(' / ')}` : ''}
+            {selectedCell?.riskFlags.length
+              ? ` 风险：${selectedCell.riskFlags.map((flag) => riskFlagLabel(flag)).join(' / ')}`
+              : ''}
           </p>
         )}
         {typeof alternativeDelta === 'number' && alternative ? (
           <p className="impact-copy">
             若改为 {alternative}，合计将
             {alternativeDelta >= 0 ? '增加' : '减少'} {formatAmount(Math.abs(alternativeDelta), result.currency)}
+          </p>
+        ) : null}
+        {selectedCell?.cutEvidence.reasons.length ? (
+          <p className="impact-copy">
+            本地切格提醒：{Math.round(selectedCell.cutEvidence.confidence * 100)}% · {selectedCell.cutEvidence.reasons.join('；')}
           </p>
         ) : null}
       </div>

@@ -7,6 +7,7 @@ interface HeroCaptureProps {
   compact?: boolean
   hasImage: boolean
   imageUrl: string
+  oneTapMode?: boolean
   prompt: SmartPrompt
   settings: AppSettings
   onFile: (file: File) => void
@@ -17,6 +18,7 @@ export function HeroCapture({
   compact = false,
   hasImage,
   imageUrl,
+  oneTapMode = false,
   prompt,
   settings,
   onFile,
@@ -49,8 +51,8 @@ export function HeroCapture({
   return (
     <div className="hero-panel">
       <div className="hero-copy">
-        <h2>{hasImage ? '整页照片已准备好' : '整页一扫，按格核对'}</h2>
-        <p>{hasImage ? '确认四角和 31 行都清晰后开始。' : '拍完整单页账本，一张图生成 31 行固定格。'}</p>
+        <h2>{hasImage ? '照片已准备好' : '拍一张账本'}</h2>
+        <p>{hasImage ? '点下面按钮自动计算。' : '拍完整单页，尽量让日期 1-31 都入镜。'}</p>
       </div>
 
       <div className="capture-zone">
@@ -83,7 +85,8 @@ export function HeroCapture({
         <p className="camera-caption">{hasImage ? '点照片可更换' : '拍整页或从相册选择'}</p>
       </div>
 
-      <div className="prompt-picker">
+      {!oneTapMode ? (
+        <div className="prompt-picker">
         <label htmlFor="prompt-select">计算方式</label>
         <div className="select-wrap">
           <FluentEmoji name={prompt.emoji} fallback="✨" />
@@ -101,6 +104,7 @@ export function HeroCapture({
           <ChevronDown size={18} />
         </div>
       </div>
+      ) : null}
     </div>
   )
 }

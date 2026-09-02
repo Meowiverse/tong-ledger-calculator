@@ -3,10 +3,12 @@ import './App.css'
 import './Responsive.css'
 import { ActionBar } from './components/ActionBar'
 import { BrandHeader } from './components/BrandHeader'
+import { CropOcrPlanPanel } from './components/CropOcrPlanPanel'
 import { EntryTable } from './components/EntryTable'
 import { HeroCapture } from './components/HeroCapture'
 import { ImageReview } from './components/ImageReview'
 import { ModelRunHistory } from './components/ModelRunHistory'
+import { PreflightPanel } from './components/PreflightPanel'
 import { ReconstructedLedgerTable } from './components/ReconstructedLedgerTable'
 import { ResultSummary } from './components/ResultSummary'
 import { SettingsPanel } from './components/SettingsPanel'
@@ -14,10 +16,13 @@ import { UxScorePanel } from './components/UxScorePanel'
 import { VerificationCard } from './components/VerificationCard'
 import { useLedgerApp } from './hooks/useLedgerApp'
 import { formatAmount } from './lib/calculation'
+import { isHostedOneTapMode } from './lib/hostedMode'
 
 function App() {
   const app = useLedgerApp()
-  const labMode = new URLSearchParams(window.location.search).get('lab') === '1'
+  const hostedOneTapMode = isHostedOneTapMode()
+  const labMode = !hostedOneTapMode && new URLSearchParams(window.location.search).get('lab') === '1'
+  const oneTapMode = hostedOneTapMode
   const hasImage = Boolean(app.imageUrl)
   const hasResult = Boolean(app.result && app.summary)
 
@@ -25,14 +30,21 @@ function App() {
     <main className="app-shell">
       <div className="phone-frame">
         <section className="main-flow">
-          <BrandHeader onToggleSettings={() => app.setShowSettings((value) => !value)} />
+          <BrandHeader
+            onToggleSettings={
+              oneTapMode ? undefined : () => app.setShowSettings((value) => !value)
+            }
+          />
 
-          {app.showSettings ? (
+          {app.showSettings && !oneTapMode ? (
             <SettingsPanel
               activePaperTemplate={app.activePaperTemplate}
+              apiSelfCheck={app.apiSelfCheck}
+              isCheckingApi={app.isCheckingApi}
               prompt={app.prompt}
               settings={app.settings}
               onAddPrompt={app.addPrompt}
+              onCheckApi={app.checkApiReadiness}
               onDeletePrompt={app.deleteCurrentPrompt}
               onUpdatePaperTemplate={app.updateActivePaperTemplate}
               onUpdatePrompt={app.updateCurrentPrompt}
@@ -44,6 +56,7 @@ function App() {
             <HeroCapture
               hasImage={hasImage}
               imageUrl={app.reviewImageUrl}
+              oneTapMode={oneTapMode}
               prompt={app.prompt}
               settings={app.settings}
               onFile={app.handleFile}
@@ -51,16 +64,28 @@ function App() {
             />
           ) : null}
 
+          {!hasResult && !oneTapMode ? (
+            <PreflightPanel
+              gridCut={app.preflightGridCut}
+              isRunning={app.isPreflighting}
+              readiness={app.preflightReadiness}
+              shouldHold={app.shouldHoldForRecognition}
+            />
+          ) : null}
+
           {!hasResult ? (
             <ActionBar
               hasImage={hasImage}
               isRecognizing={app.isRecognizing}
+              oneTapMode={oneTapMode}
+              recognitionElapsedSeconds={app.recognitionElapsedSeconds}
+              recognitionStage={app.recognitionStage}
               onPreviewCutting={app.previewLocalCutting}
-              onRunRecognition={app.runRecognition}
+              onRunRecognition={() => app.runRecognition(oneTapMode)}
             />
           ) : null}
 
-          {app.error ? <div className="error-box">{app.error}</div> : null}
+          {app.error ? <div className="error-box" role="alert">{app.error}</div> : null}
 
           {hasResult && app.result && app.summary && !app.activeVerificationItem ? (
             <ResultSummary
@@ -80,6 +105,14 @@ function App() {
             </div>
           ) : null}
 
+          {hasResult && app.cropOcrPlan && !oneTapMode ? (
+            <CropOcrPlanPanel
+              compact={Boolean(app.activeVerificationItem)}
+              execution={app.result?.cropOcrExecution}
+              plan={app.cropOcrPlan}
+            />
+          ) : null}
+
           {hasResult && app.result && app.imageUrl ? (
             <section className="review-workspace">
               <ImageReview
@@ -88,6 +121,7 @@ function App() {
                   app.verificationProgress.completed + 1,
                   app.verificationProgress.total,
                 )}
+                oneTapMode={oneTapMode}
                 paperTemplate={app.activePaperTemplate}
                 result={app.result}
                 selectedEntryId={app.selectedEntryId}
@@ -105,6 +139,50 @@ function App() {
                 onUndo={app.undoLastReview}
               />
             </section>
+          ) : null}
+
+          {hasResult ? (
+            <div className="result-actions">
+              {!oneTapMode &&
+              app.result?.sourceType.includes('本地预览') &&
+              app.canContinueFromPreview &&
+              !app.isPreviewOverrideLocked ? (
+                <button
+                  className="primary-button"
+                  type="button"
+                  disabled={app.isRecognizing || app.isPreviewOverrideLocked}
+                  onClick={() => app.continueRecognitionFromPreview()}
+                >
+                  {app.isRecognizing ? '正在送模型识别…' : '仍然送模型识别'}
+                </button>
+              ) : null}
+              {app.isRecognizing ? (
+                <div className="recognition-progress" role="status" aria-live="polite">
+                  <div>
+                    <span>{app.recognitionStage || '正在继续计算'}</span>
+                    <strong>{app.recognitionElapsedSeconds}s</strong>
+                  </div>
+                  <p>
+                    {app.recognitionElapsedSeconds >= 60
+                      ? '服务器还在识别这张整页账本，请不要重复提交。'
+                      : app.recognitionElapsedSeconds >= 25
+                        ? '整页手写识别会比较慢，当前请求仍在进行。'
+                        : '正在处理当前照片。'}
+                  </p>
+                  <i aria-hidden="true" />
+                </div>
+              ) : null}
+              <HeroCapture
+                compact
+                hasImage
+                imageUrl={app.reviewImageUrl}
+                oneTapMode={oneTapMode}
+                prompt={app.prompt}
+                settings={app.settings}
+                onFile={app.handleFile}
+                onUpdateSettings={app.updateSettings}
+              />
+            </div>
           ) : null}
 
           {hasResult && app.result ? (
@@ -131,20 +209,6 @@ function App() {
                 onSelectEntry={app.setSelectedEntryId}
               />
             </details>
-          ) : null}
-
-          {hasResult ? (
-            <div className="result-actions">
-              <HeroCapture
-                compact
-                hasImage
-                imageUrl={app.reviewImageUrl}
-                prompt={app.prompt}
-                settings={app.settings}
-                onFile={app.handleFile}
-                onUpdateSettings={app.updateSettings}
-              />
-            </div>
           ) : null}
         </section>
 
@@ -181,7 +245,15 @@ function App() {
                   reviewCount={app.verificationQueue.length}
                   summary={app.summary}
                 />
+                {app.cropOcrPlan ? (
+                  <CropOcrPlanPanel
+                    developerMode
+                    execution={app.result?.cropOcrExecution}
+                    plan={app.cropOcrPlan}
+                  />
+                ) : null}
                 <ModelRunHistory
+                  benchmarkMode={app.settings.qualityMode === 'max' ? 'high' : app.settings.qualityMode}
                   isBenchmarking={app.isBenchmarking}
                   progress={app.benchmarkProgress}
                   runs={app.modelRuns}

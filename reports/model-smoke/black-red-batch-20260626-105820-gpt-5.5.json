@@ -1,0 +1,386 @@
+{
+  "generatedAt": "2026-06-26T10:58:18.272Z",
+  "model": "gpt-5.5",
+  "baseUrl": "https://api.openai.com/v1",
+  "preprocessing": {
+    "blackQuality": 0.72,
+    "blackFormat": "webp",
+    "maxEdge": 1100,
+    "redQuality": 0.9,
+    "redFormat": "png",
+    "redDilate": 2,
+    "redPadding": 0.045,
+    "trimPage": true,
+    "imagesPerRequest": 2,
+    "preprocessOnly": true
+  },
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 272,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 814,
+        "redHeight": 429,
+        "redPixelCount": 3189,
+        "blackBytes": 84522,
+        "redBytes": 12447,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 0,
+          "y": 0,
+          "width": 814,
+          "height": 429
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/01-1e54d27dad3fbca7d52c62b825ef3a71.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/01-1e54d27dad3fbca7d52c62b825ef3a71.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/209da0c831338ad89b2225589b8509c2.jpg",
+      "file": "209da0c831338ad89b2225589b8509c2.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 154,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 310,
+        "redHeight": 484,
+        "redPixelCount": 4933,
+        "blackBytes": 88148,
+        "redBytes": 10388,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 515,
+          "y": 0,
+          "width": 310,
+          "height": 484
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/02-209da0c831338ad89b2225589b8509c2.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/02-209da0c831338ad89b2225589b8509c2.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/265d8c382dbff5d038ee586058d05487.jpg",
+      "file": "265d8c382dbff5d038ee586058d05487.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 166,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 77,
+        "redHeight": 101,
+        "redPixelCount": 1,
+        "blackBytes": 86870,
+        "redBytes": 430,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 434,
+          "y": 156,
+          "width": 77,
+          "height": 101
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/03-265d8c382dbff5d038ee586058d05487.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/03-265d8c382dbff5d038ee586058d05487.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "file": "28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 149,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 1,
+        "redHeight": 1,
+        "redPixelCount": 0,
+        "blackBytes": 100154,
+        "redBytes": 89,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": null
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/04-28db2a49bf5a33076ff3a5dff15c01e5.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/04-28db2a49bf5a33076ff3a5dff15c01e5.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "file": "2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 159,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 419,
+        "redHeight": 630,
+        "redPixelCount": 2583,
+        "blackBytes": 108868,
+        "redBytes": 10994,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 406,
+          "y": 0,
+          "width": 419,
+          "height": 630
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/05-2e0f3c7f440a7b3e12bf659e0956b0f4.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/05-2e0f3c7f440a7b3e12bf659e0956b0f4.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/41968dfef3ad304fec11cd541c322a42.jpg",
+      "file": "41968dfef3ad304fec11cd541c322a42.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 156,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 107,
+        "redHeight": 137,
+        "redPixelCount": 10,
+        "blackBytes": 99166,
+        "redBytes": 903,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 525,
+          "y": 202,
+          "width": 107,
+          "height": 137
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/06-41968dfef3ad304fec11cd541c322a42.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/06-41968dfef3ad304fec11cd541c322a42.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4692731ea3e39a6002303e488bf3f6da.jpg",
+      "file": "4692731ea3e39a6002303e488bf3f6da.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 170,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 769,
+        "redHeight": 673,
+        "redPixelCount": 763,
+        "blackBytes": 96270,
+        "redBytes": 15833,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 0,
+          "y": 21,
+          "width": 769,
+          "height": 673
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/07-4692731ea3e39a6002303e488bf3f6da.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/07-4692731ea3e39a6002303e488bf3f6da.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "file": "4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 217,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 195,
+        "redHeight": 171,
+        "redPixelCount": 34,
+        "blackBytes": 105176,
+        "redBytes": 1547,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 479,
+          "y": 152,
+          "width": 195,
+          "height": 171
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/08-4dfd4360c1cd1b2180dcce57d811ad97.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/08-4dfd4360c1cd1b2180dcce57d811ad97.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4eaf23ad8455a5179773dc967e163aeb.jpg",
+      "file": "4eaf23ad8455a5179773dc967e163aeb.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 149,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 317,
+        "redHeight": 383,
+        "redPixelCount": 3068,
+        "blackBytes": 94600,
+        "redBytes": 7517,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 452,
+          "y": 0,
+          "width": 317,
+          "height": 383
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/09-4eaf23ad8455a5179773dc967e163aeb.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/09-4eaf23ad8455a5179773dc967e163aeb.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/60a37979fe54349f8d4eba53765d3527.jpg",
+      "file": "60a37979fe54349f8d4eba53765d3527.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 157,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 82,
+        "redHeight": 105,
+        "redPixelCount": 9,
+        "blackBytes": 97512,
+        "redBytes": 594,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 558,
+          "y": 296,
+          "width": 82,
+          "height": 105
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/10-60a37979fe54349f8d4eba53765d3527.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/20260626-105817/10-60a37979fe54349f8d4eba53765d3527.red.png"
+      },
+      "usage": null,
+      "result": null
+    }
+  ],
+  "aggregate": {
+    "total": 10,
+    "successful": 10,
+    "failed": 0,
+    "matched": 0,
+    "matchRate": 0,
+    "averageAbsDifference": null,
+    "maxAbsDifference": null,
+    "totalTokens": 0
+  }
+}

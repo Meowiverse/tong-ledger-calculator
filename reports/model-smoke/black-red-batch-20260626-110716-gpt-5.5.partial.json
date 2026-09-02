@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-06-26T11:07:16.636Z",
+  "model": "gpt-5.5",
+  "baseUrl": "https://api.openai.com/v1",
+  "preprocessing": {
+    "blackQuality": 0.72,
+    "blackFormat": "webp",
+    "blackThreshold": 105,
+    "maxEdge": 1100,
+    "redQuality": 0.9,
+    "redFormat": "png",
+    "redFallbackFormat": "webp",
+    "redFallbackQuality": 0.72,
+    "redDilate": 2,
+    "redMinPixels": 80,
+    "redPadding": 0.045,
+    "maskCalcZone": true,
+    "trimPage": true,
+    "imagesPerRequest": 2,
+    "preprocessOnly": true
+  },
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 141,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 814,
+        "redHeight": 429,
+        "redPixelCount": 3189,
+        "redSource": "red-mask",
+        "blackBytes": 46192,
+        "redBytes": 12447,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 0,
+          "y": 0,
+          "width": 814,
+          "height": 429
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-default-despeckled/01-1e54d27dad3fbca7d52c62b825ef3a71.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-default-despeckled/01-1e54d27dad3fbca7d52c62b825ef3a71.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/209da0c831338ad89b2225589b8509c2.jpg",
+      "file": "209da0c831338ad89b2225589b8509c2.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 135,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 310,
+        "redHeight": 484,
+        "redPixelCount": 4933,
+        "redSource": "red-mask",
+        "blackBytes": 56808,
+        "redBytes": 10388,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 515,
+          "y": 0,
+          "width": 310,
+          "height": 484
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-default-despeckled/02-209da0c831338ad89b2225589b8509c2.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-default-despeckled/02-209da0c831338ad89b2225589b8509c2.red.png"
+      },
+      "usage": null,
+      "result": null
+    }
+  ],
+  "aggregate": null
+}

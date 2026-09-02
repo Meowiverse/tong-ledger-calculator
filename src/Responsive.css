@@ -23,6 +23,17 @@
     z-index: 5;
   }
 
+  .result-actions {
+    position: sticky;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 12;
+    display: grid;
+    gap: 8px;
+    padding: 8px 10px;
+    margin: 0 -2px;
+    background: linear-gradient(180deg, rgba(246, 245, 240, 0.15), rgba(246, 245, 240, 0.96) 28%, rgba(246, 245, 240, 1));
+  }
+
   .image-review {
     gap: 8px;
     padding: 10px 10px 0;
@@ -196,5 +207,15 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes progress-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
   }
 }

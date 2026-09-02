@@ -1,0 +1,333 @@
+{
+  "summary": {
+    "total": 31,
+    "matched": 28,
+    "mismatched": 3,
+    "byBucket": {
+      "complete-page-candidate": {
+        "total": 13,
+        "matched": 13
+      },
+      "incomplete-or-cropped": {
+        "total": 9,
+        "matched": 9
+      },
+      "review-before-model": {
+        "total": 9,
+        "matched": 6
+      }
+    }
+  },
+  "results": [
+    {
+      "image": "1692330cc1b52ac5f9fe33ed58140623.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "1c4e8a1a1727952e4b90b1a61e465ed8.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "1f31da0cafe43b683d93d72cb62f0df6.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "209da0c831338ad89b2225589b8509c2.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "2100752e0bd5becaee8df0d511d8b4b8.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "265d8c382dbff5d038ee586058d05487.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "283b5293967076b0a27fcc73eaf664be.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": false
+    },
+    {
+      "image": "28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "319817e2b341941a842f087f6fd2604e.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "41968dfef3ad304fec11cd541c322a42.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "43d839acd4af0e6b7bd71b39f4efc861.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "4692731ea3e39a6002303e488bf3f6da.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "4eaf23ad8455a5179773dc967e163aeb.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "522e50a3347e6c6381a281d5290de60f.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "60a37979fe54349f8d4eba53765d3527.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "691113c29a125f48d14fb6631672dabd.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": false
+    },
+    {
+      "image": "7805a916191c6c7213ed8d32b97fef6c.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "7c45361f3d8de022d85a6516c6d6fecb.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "92847c57cf0b6252765abafa5292fcf3.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "ab4e3305ff4fb2b1dd0c1da885ccc6c1.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": false
+    },
+    {
+      "image": "bae41cc17daa6c93e776597ed04ba22c.jpg",
+      "bucket": "complete-page-candidate",
+      "expectedRoute": "model",
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "ok": true
+    },
+    {
+      "image": "bfb7eefe5d906e163505509e3bb61236.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "d4b02f90d17f67a29d7ca3c21865cb53.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "db04ad665c76a081d3f1f83ac183a712.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "f709270169f42a987a5c87a7379b8b57.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "f70cdaafc423f16ce1400746a6392cca.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "f79c2a51443157c42e532fa3edfe5419.jpg",
+      "bucket": "review-before-model",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    },
+    {
+      "image": "fc5d23fd791ddffacc863b89f9cc4f4b.jpg",
+      "bucket": "incomplete-or-cropped",
+      "expectedRoute": "hold",
+      "actualRoute": "hold",
+      "sourceType": "固定账本本地预览",
+      "cropStatus": null,
+      "sentCropCount": 0,
+      "ok": true
+    }
+  ]
+}

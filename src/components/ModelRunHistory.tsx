@@ -2,6 +2,7 @@ import { FlaskConical, LoaderCircle } from 'lucide-react'
 import type { ModelRunRecord } from '../types'
 
 interface ModelRunHistoryProps {
+  benchmarkMode: string
   isBenchmarking: boolean
   onRunModelSuite: () => void
   progress: string
@@ -21,6 +22,7 @@ function formatRunTime(isoTime: string) {
 }
 
 export function ModelRunHistory({
+  benchmarkMode,
   isBenchmarking,
   onRunModelSuite,
   progress,
@@ -41,6 +43,7 @@ export function ModelRunHistory({
         {isBenchmarking ? <LoaderCircle className="spin-icon" size={16} /> : <FlaskConical size={16} />}
         {isBenchmarking ? progress || '运行中' : '连续运行 3 次'}
       </button>
+      <p className="empty-runs">实验室稳定性测试最多跑到 {benchmarkMode} 档，避免把小图 OCR token 成本重复放大。</p>
       <div className="model-run-list">
         {runs.length ? (
           runs.slice(0, 6).map((run) => (

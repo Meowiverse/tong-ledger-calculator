@@ -14,6 +14,9 @@ describe('ledger export payload', () => {
     expect(payload.audit.cuttingEvidence.residuals).toHaveProperty('max')
     expect(payload.audit.cuttingEvidence.fallback).toHaveProperty('x')
     expect(payload.audit.paperTemplate.tableRegion).toEqual(DEFAULT_PAPER_TEMPLATE.grid.tableRegion)
+    expect(payload.audit.cropOcrPlan.strategy).toBe('page-plus-priority-crops')
+    expect(payload.audit.cropOcrPlan.reviewableCellCount).toBeGreaterThan(0)
+    expect(payload.audit).toHaveProperty('cropOcrExecution')
     expect(payload.audit.cellEvidence).toHaveLength(result.cells?.length ?? 0)
     expect(payload.audit.cellEvidence.every((cell) => cell.cellId && cell.bboxOriginal && cell.cropRef)).toBe(
       true,

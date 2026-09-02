@@ -1,0 +1,174 @@
+{
+  "generatedAt": "2026-06-26T11:02:58.160Z",
+  "model": "gpt-5.5",
+  "baseUrl": "https://api.openai.com/v1",
+  "preprocessing": {
+    "blackQuality": 0.72,
+    "blackFormat": "webp",
+    "maxEdge": 1100,
+    "redQuality": 0.9,
+    "redFormat": "png",
+    "redFallbackFormat": "webp",
+    "redFallbackQuality": 0.72,
+    "redDilate": 2,
+    "redMinPixels": 80,
+    "redPadding": 0.045,
+    "maskCalcZone": true,
+    "trimPage": true,
+    "imagesPerRequest": 2,
+    "preprocessOnly": true
+  },
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 270,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 814,
+        "redHeight": 429,
+        "redPixelCount": 3189,
+        "redSource": "red-mask",
+        "blackBytes": 75284,
+        "redBytes": 12447,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 0,
+          "y": 0,
+          "width": 814,
+          "height": 429
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/01-1e54d27dad3fbca7d52c62b825ef3a71.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/01-1e54d27dad3fbca7d52c62b825ef3a71.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/209da0c831338ad89b2225589b8509c2.jpg",
+      "file": "209da0c831338ad89b2225589b8509c2.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 153,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 310,
+        "redHeight": 484,
+        "redPixelCount": 4933,
+        "redSource": "red-mask",
+        "blackBytes": 71814,
+        "redBytes": 10388,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 515,
+          "y": 0,
+          "width": 310,
+          "height": 484
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/02-209da0c831338ad89b2225589b8509c2.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/02-209da0c831338ad89b2225589b8509c2.red.png"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/265d8c382dbff5d038ee586058d05487.jpg",
+      "file": "265d8c382dbff5d038ee586058d05487.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 168,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 324,
+        "redHeight": 386,
+        "redPixelCount": 1,
+        "redSource": "audit-zone-fallback",
+        "blackBytes": 70618,
+        "redBytes": 11756,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 445,
+          "y": 110,
+          "width": 324,
+          "height": 386
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/03-265d8c382dbff5d038ee586058d05487.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/03-265d8c382dbff5d038ee586058d05487.red.webp"
+      },
+      "usage": null,
+      "result": null
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "file": "28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "ok": true,
+      "skippedModel": true,
+      "elapsedMs": 220,
+      "variants": {
+        "sourceWidth": 825,
+        "sourceHeight": 1100,
+        "blackWidth": 825,
+        "blackHeight": 1100,
+        "redWidth": 324,
+        "redHeight": 386,
+        "redPixelCount": 0,
+        "redSource": "audit-zone-fallback",
+        "blackBytes": 81600,
+        "redBytes": 12386,
+        "blackBox": {
+          "x": 0,
+          "y": 0,
+          "width": 825,
+          "height": 1100
+        },
+        "redBox": {
+          "x": 445,
+          "y": 110,
+          "width": 324,
+          "height": 386
+        }
+      },
+      "previewPaths": {
+        "black": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/04-28db2a49bf5a33076ff3a5dff15c01e5.black.webp",
+        "red": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/model-smoke/previews/latest-local-compress-webp-fallback/04-28db2a49bf5a33076ff3a5dff15c01e5.red.webp"
+      },
+      "usage": null,
+      "result": null
+    }
+  ],
+  "aggregate": null
+}

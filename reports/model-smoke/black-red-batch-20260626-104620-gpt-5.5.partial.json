@@ -1,0 +1,2700 @@
+{
+  "generatedAt": "2026-06-26T10:24:20.654Z",
+  "model": "gpt-5.5",
+  "baseUrl": "http://127.0.0.1:12455/v1",
+  "preprocessing": {
+    "blackQuality": 0.68,
+    "maxEdge": 1100,
+    "redQuality": 0.62,
+    "imagesPerRequest": 2
+  },
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": true,
+      "elapsedMs": 205181,
+      "usage": {
+        "prompt_tokens": 2549,
+        "completion_tokens": 5563,
+        "total_tokens": 8112,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3257
+        }
+      },
+      "result": {
+        "blackComputedTotal": 32651.5,
+        "redComputedTotal": 33810,
+        "redWrittenTotal": 33810,
+        "difference": -1158.5,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.62,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 4,
+            "rawText": "0.68列:240；0.1列疑似被污损遮挡",
+            "rawValue": 240,
+            "calculatedAmount": 163.2,
+            "confidence": 0.58
+          },
+          {
+            "day": 5,
+            "rawText": "0.68列:750；0.95列:2110；0.1列疑似被污损遮挡",
+            "rawValue": 2860,
+            "calculatedAmount": 2514.5,
+            "confidence": 0.68
+          },
+          {
+            "day": 6,
+            "rawText": "0.68列:740；0.95列:2330；0.1列疑似被污损遮挡",
+            "rawValue": 3070,
+            "calculatedAmount": 2716.7,
+            "confidence": 0.68
+          },
+          {
+            "day": 7,
+            "rawText": "0.68列:650；0.95列:2110；0.1列疑似被污损遮挡",
+            "rawValue": 2760,
+            "calculatedAmount": 2446.5,
+            "confidence": 0.68
+          },
+          {
+            "day": 8,
+            "rawText": "0.68列:480；0.95列:2430；0.1列疑似被污损遮挡",
+            "rawValue": 2910,
+            "calculatedAmount": 2634.9,
+            "confidence": 0.68
+          },
+          {
+            "day": 9,
+            "rawText": "0.68列:710；0.95列:260?；0.1列疑似被污损遮挡",
+            "rawValue": 970,
+            "calculatedAmount": 729.8,
+            "confidence": 0.55
+          },
+          {
+            "day": 10,
+            "rawText": "0.68列:1360；0.1列疑似被污损遮挡",
+            "rawValue": 1360,
+            "calculatedAmount": 924.8,
+            "confidence": 0.72
+          },
+          {
+            "day": 11,
+            "rawText": "0.68列:1400；0.1列疑似被污损遮挡",
+            "rawValue": 1400,
+            "calculatedAmount": 952,
+            "confidence": 0.72
+          },
+          {
+            "day": 12,
+            "rawText": "0.68列:1480；0.1列疑似被污损遮挡",
+            "rawValue": 1480,
+            "calculatedAmount": 1006.4,
+            "confidence": 0.72
+          },
+          {
+            "day": 13,
+            "rawText": "0.68列:1440；0.1列疑似被污损遮挡",
+            "rawValue": 1440,
+            "calculatedAmount": 979.2,
+            "confidence": 0.72
+          },
+          {
+            "day": 14,
+            "rawText": "0.68列:1400；0.1列疑似被污损遮挡",
+            "rawValue": 1400,
+            "calculatedAmount": 952,
+            "confidence": 0.72
+          },
+          {
+            "day": 15,
+            "rawText": "0.68列:760；0.95列:2230；0.1列疑似被污损遮挡",
+            "rawValue": 2990,
+            "calculatedAmount": 2635.3,
+            "confidence": 0.64
+          },
+          {
+            "day": 16,
+            "rawText": "0.68列:760；0.95列:2500?；0.1列局部遮挡",
+            "rawValue": 3260,
+            "calculatedAmount": 2891.8,
+            "confidence": 0.6
+          },
+          {
+            "day": 17,
+            "rawText": "0.68列:1420",
+            "rawValue": 1420,
+            "calculatedAmount": 965.6,
+            "confidence": 0.78
+          },
+          {
+            "day": 18,
+            "rawText": "0.68列:1280",
+            "rawValue": 1280,
+            "calculatedAmount": 870.4,
+            "confidence": 0.78
+          },
+          {
+            "day": 19,
+            "rawText": "0.68列:1390",
+            "rawValue": 1390,
+            "calculatedAmount": 945.2,
+            "confidence": 0.78
+          },
+          {
+            "day": 20,
+            "rawText": "0.68列:1260",
+            "rawValue": 1260,
+            "calculatedAmount": 856.8,
+            "confidence": 0.78
+          },
+          {
+            "day": 21,
+            "rawText": "0.68列:1280",
+            "rawValue": 1280,
+            "calculatedAmount": 870.4,
+            "confidence": 0.76
+          },
+          {
+            "day": 22,
+            "rawText": "0.68列:1370",
+            "rawValue": 1370,
+            "calculatedAmount": 931.6,
+            "confidence": 0.76
+          },
+          {
+            "day": 23,
+            "rawText": "0.68列:1270",
+            "rawValue": 1270,
+            "calculatedAmount": 863.6,
+            "confidence": 0.76
+          },
+          {
+            "day": 24,
+            "rawText": "0.68列:1260",
+            "rawValue": 1260,
+            "calculatedAmount": 856.8,
+            "confidence": 0.76
+          },
+          {
+            "day": 25,
+            "rawText": "0.68列:960",
+            "rawValue": 960,
+            "calculatedAmount": 652.8,
+            "confidence": 0.76
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 28,
+            "rawText": "0.68列:1080",
+            "rawValue": 1080,
+            "calculatedAmount": 734.4,
+            "confidence": 0.78
+          },
+          {
+            "day": 29,
+            "rawText": "0.68列:1260",
+            "rawValue": 1260,
+            "calculatedAmount": 856.8,
+            "confidence": 0.78
+          },
+          {
+            "day": 30,
+            "rawText": "0.68列:1300",
+            "rawValue": 1300,
+            "calculatedAmount": 884,
+            "confidence": 0.78
+          },
+          {
+            "day": 31,
+            "rawText": "0.68列:1200",
+            "rawValue": 1200,
+            "calculatedAmount": 816,
+            "confidence": 0.78
+          }
+        ],
+        "redFormulae": [
+          "疑似：0.1×11585=1158.5",
+          "0.68×28500=19380.00",
+          "0.95×13970=13271.50",
+          "疑似合计：33810.00"
+        ],
+        "suspectCells": [
+          {
+            "day": 4,
+            "issue": "0.1单价列被大块黑色污损遮挡，无法从黑字图读取该列原始数值",
+            "blackText": "0.68列240；0.1列不清",
+            "confidence": 0.45
+          },
+          {
+            "day": 5,
+            "issue": "0.1单价列被遮挡；红字公式疑似包含0.1列合计，但不能反推入黑字",
+            "blackText": "0.68列750，0.95列2110",
+            "confidence": 0.55
+          },
+          {
+            "day": 6,
+            "issue": "0.1单价列被遮挡；红字公式疑似包含0.1列合计，但不能反推入黑字",
+            "blackText": "0.68列740，0.95列2330",
+            "confidence": 0.55
+          },
+          {
+            "day": 7,
+            "issue": "0.1单价列被遮挡；红字公式疑似包含0.1列合计，但不能反推入黑字",
+            "blackText": "0.68列650，0.95列2110",
+            "confidence": 0.55
+          },
+          {
+            "day": 8,
+            "issue": "0.1单价列被遮挡；红字公式疑似包含0.1列合计，但不能反推入黑字",
+            "blackText": "0.68列480，0.95列2430",
+            "confidence": 0.55
+          },
+          {
+            "day": 9,
+            "issue": "0.95列数值疑似为260但笔迹较弱，且0.1列被遮挡",
+            "blackText": "0.68列710，0.95列260?",
+            "confidence": 0.48
+          },
+          {
+            "day": 15,
+            "issue": "0.1单价列被遮挡；0.95列可读为2230",
+            "blackText": "0.68列760，0.95列2230",
+            "confidence": 0.56
+          },
+          {
+            "day": 16,
+            "issue": "0.95列疑似2500，0.1列局部遮挡",
+            "blackText": "0.68列760，0.95列2500?",
+            "confidence": 0.5
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 4,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 5,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 6,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 7,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 8,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 9,
+            "issue": "0.1列遮挡，0.95列读数260不确定"
+          },
+          {
+            "day": 10,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 11,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 12,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 13,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 14,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 15,
+            "issue": "0.1列是否有黑字数值无法确认"
+          },
+          {
+            "day": 16,
+            "issue": "0.1列局部遮挡，0.95列读数2500不确定"
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "黑字可读格子计算合计与红字人工合计不一致",
+            "blackComputedTotal": 32651.5,
+            "redComputedTotal": 33810,
+            "difference": -1158.5
+          },
+          {
+            "issue": "差额约等于红字疑似0.1列金额1158.5；但黑字图对应0.1列被污损遮挡，不能用红字倒推补入黑字"
+          }
+        ],
+        "auditNotes": [
+          "blackComputedTotal仅按黑字图中可读的0.68列与0.95列计算：0.68×28500 + 0.95×13970 = 32651.50。",
+          "红字mask中可辨识的人工验算疑似为0.1×11585=1158.5、0.68×28500=19380.00、0.95×13970=13271.50，合计约33810.00。",
+          "由于黑字图左侧0.1列多日被大块污损遮挡，未将红字0.1列结果反推加入黑字合计。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/209da0c831338ad89b2225589b8509c2.jpg",
+      "file": "209da0c831338ad89b2225589b8509c2.jpg",
+      "ok": true,
+      "elapsedMs": 214636,
+      "usage": {
+        "prompt_tokens": 2546,
+        "completion_tokens": 5861,
+        "total_tokens": 8407,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3538
+        }
+      },
+      "result": {
+        "blackComputedTotal": 5852.668,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 4666,
+        "difference": 1186.668,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.43,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.75
+          },
+          {
+            "day": 4,
+            "rawText": "5283.6×0.03; 6×2; 31230×0.003",
+            "rawValue": 36519.6,
+            "calculatedAmount": 264.198,
+            "confidence": 0.55
+          },
+          {
+            "day": 5,
+            "rawText": "8×2; 48270×0.003; 37×0.5; 33.3×3",
+            "rawValue": 48348.3,
+            "calculatedAmount": 279.21,
+            "confidence": 0.72
+          },
+          {
+            "day": 6,
+            "rawText": "8×2; 4860×0.003; 28×0.5; 39×3",
+            "rawValue": 4935,
+            "calculatedAmount": 161.58,
+            "confidence": 0.42
+          },
+          {
+            "day": 7,
+            "rawText": "8×2; 6230×0.003; 41×0.5; 44.3×3",
+            "rawValue": 6323.3,
+            "calculatedAmount": 188.09,
+            "confidence": 0.44
+          },
+          {
+            "day": 8,
+            "rawText": "8×2; 64180×0.003; 41×0.5; 44.5×3",
+            "rawValue": 64273.5,
+            "calculatedAmount": 362.54,
+            "confidence": 0.7
+          },
+          {
+            "day": 9,
+            "rawText": "8×2; 60780×0.003; 40×0.5; 40×3",
+            "rawValue": 60868,
+            "calculatedAmount": 338.34,
+            "confidence": 0.68
+          },
+          {
+            "day": 15,
+            "rawText": "8×2; 18170×0.003; 38×0.5; 37.6×3",
+            "rawValue": 18253.6,
+            "calculatedAmount": 202.31,
+            "confidence": 0.65
+          },
+          {
+            "day": 16,
+            "rawText": "8×2; 62270×0.003; 40×0.5; 37.2×3",
+            "rawValue": 62355.2,
+            "calculatedAmount": 334.41,
+            "confidence": 0.66
+          },
+          {
+            "day": 17,
+            "rawText": "8×2; 64850×0.003",
+            "rawValue": 64858,
+            "calculatedAmount": 210.55,
+            "confidence": 0.58
+          },
+          {
+            "day": 18,
+            "rawText": "10×2; 77980×0.003; 32×3",
+            "rawValue": 78022,
+            "calculatedAmount": 349.94,
+            "confidence": 0.62
+          },
+          {
+            "day": 19,
+            "rawText": "10×2; 81760×0.003",
+            "rawValue": 81770,
+            "calculatedAmount": 265.28,
+            "confidence": 0.68
+          },
+          {
+            "day": 20,
+            "rawText": "10×2; 85660×0.003",
+            "rawValue": 85670,
+            "calculatedAmount": 276.98,
+            "confidence": 0.68
+          },
+          {
+            "day": 21,
+            "rawText": "10×2; 85210×0.003",
+            "rawValue": 85220,
+            "calculatedAmount": 275.63,
+            "confidence": 0.67
+          },
+          {
+            "day": 22,
+            "rawText": "10×2; 82370×0.003",
+            "rawValue": 82380,
+            "calculatedAmount": 267.11,
+            "confidence": 0.67
+          },
+          {
+            "day": 23,
+            "rawText": "8×2; 6470×0.003; 2160×0.025",
+            "rawValue": 8638,
+            "calculatedAmount": 89.41,
+            "confidence": 0.4
+          },
+          {
+            "day": 24,
+            "rawText": "8×2; 66240×0.003; 22270×0.025",
+            "rawValue": 88518,
+            "calculatedAmount": 771.47,
+            "confidence": 0.46
+          },
+          {
+            "day": 25,
+            "rawText": "6×2; 44340×0.003",
+            "rawValue": 44346,
+            "calculatedAmount": 145.02,
+            "confidence": 0.62
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.76
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.76
+          },
+          {
+            "day": 28,
+            "rawText": "10×2; 84480×0.003",
+            "rawValue": 84490,
+            "calculatedAmount": 273.44,
+            "confidence": 0.66
+          },
+          {
+            "day": 29,
+            "rawText": "10×2; 85640×0.003",
+            "rawValue": 85650,
+            "calculatedAmount": 276.92,
+            "confidence": 0.66
+          },
+          {
+            "day": 30,
+            "rawText": "10×2; 77730×0.003",
+            "rawValue": 77740,
+            "calculatedAmount": 253.19,
+            "confidence": 0.66
+          },
+          {
+            "day": 31,
+            "rawText": "10×2; 82350×0.003",
+            "rawValue": 82360,
+            "calculatedAmount": 267.05,
+            "confidence": 0.66
+          }
+        ],
+        "redFormulae": [
+          "疑似：0.03×5283.6=158.508",
+          "疑似：2×182=364",
+          "其余红字公式较模糊，疑似包含 0.003、0.5、3、0.025 等列的汇总验算",
+          "底部红字合计疑似写为 4666元"
+        ],
+        "suspectCells": [
+          {
+            "day": 6,
+            "issue": "0.003列数字可能为4860或48600，图像不清",
+            "blackText": "4860",
+            "confidence": 0.42
+          },
+          {
+            "day": 7,
+            "issue": "0.003列数字可能缺位，疑似6230",
+            "blackText": "6230",
+            "confidence": 0.44
+          },
+          {
+            "day": 23,
+            "issue": "0.003列及0.025列位置/数值较模糊",
+            "blackText": "6470; 2160",
+            "confidence": 0.4
+          },
+          {
+            "day": 24,
+            "issue": "0.025列数值疑似22270，但笔迹较模糊",
+            "blackText": "22270",
+            "confidence": 0.46
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 4,
+            "text": "31230及5283.6位置可读但受线条干扰",
+            "confidence": 0.55
+          },
+          {
+            "day": 6,
+            "text": "4860/48600",
+            "confidence": 0.42
+          },
+          {
+            "day": 7,
+            "text": "6230/62330",
+            "confidence": 0.44
+          },
+          {
+            "day": 23,
+            "text": "6470/64770；右侧2160",
+            "confidence": 0.4
+          },
+          {
+            "day": 24,
+            "text": "66240；右侧22270",
+            "confidence": 0.46
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "按黑字格子和表头倍率计算的合计与红字合计不一致",
+            "blackComputedTotal": 5852.668,
+            "redWrittenTotal": 4666,
+            "difference": 1186.668,
+            "confidence": 0.43
+          },
+          {
+            "issue": "红字公式主体过于模糊，无法可靠复算出redComputedTotal；未用红字倒推修改黑字",
+            "confidence": 0.35
+          }
+        ],
+        "auditNotes": [
+          "仅使用图1黑字账本格子读取并按表头倍率0.03、2、0.003、0.5、3、0.025计算blackComputedTotal。",
+          "图2红字mask中底部合计疑似为4666元，但红字公式大部分不可稳定辨认，因此redComputedTotal置0。",
+          "黑字遮挡区域位于日期左侧说明/品名栏，未作为计算列读取。",
+          "由于多个关键数字存在歧义，本页不能判定为通过。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/265d8c382dbff5d038ee586058d05487.jpg",
+      "file": "265d8c382dbff5d038ee586058d05487.jpg",
+      "ok": true,
+      "elapsedMs": 149619,
+      "usage": {
+        "prompt_tokens": 2545,
+        "completion_tokens": 4067,
+        "total_tokens": 6612,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2588
+        }
+      },
+      "result": {
+        "blackComputedTotal": 16450,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 0,
+        "difference": 16450,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.56,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.78
+          },
+          {
+            "day": 2,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.78
+          },
+          {
+            "day": 3,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.72
+          },
+          {
+            "day": 4,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.72
+          },
+          {
+            "day": 5,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.7
+          },
+          {
+            "day": 6,
+            "rawText": "1320",
+            "rawValue": 1320,
+            "calculatedAmount": 1320,
+            "confidence": 0.86
+          },
+          {
+            "day": 7,
+            "rawText": "1380",
+            "rawValue": 1380,
+            "calculatedAmount": 1380,
+            "confidence": 0.84
+          },
+          {
+            "day": 8,
+            "rawText": "1280",
+            "rawValue": 1280,
+            "calculatedAmount": 1280,
+            "confidence": 0.84
+          },
+          {
+            "day": 9,
+            "rawText": "1400",
+            "rawValue": 1400,
+            "calculatedAmount": 1400,
+            "confidence": 0.83
+          },
+          {
+            "day": 10,
+            "rawText": "1140",
+            "rawValue": 1140,
+            "calculatedAmount": 1140,
+            "confidence": 0.8
+          },
+          {
+            "day": 11,
+            "rawText": "200",
+            "rawValue": 200,
+            "calculatedAmount": 200,
+            "confidence": 0.74
+          },
+          {
+            "day": 12,
+            "rawText": "×",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.62
+          },
+          {
+            "day": 13,
+            "rawText": "1260",
+            "rawValue": 1260,
+            "calculatedAmount": 1260,
+            "confidence": 0.77
+          },
+          {
+            "day": 14,
+            "rawText": "1300",
+            "rawValue": 1300,
+            "calculatedAmount": 1300,
+            "confidence": 0.78
+          },
+          {
+            "day": 15,
+            "rawText": "1320",
+            "rawValue": 1320,
+            "calculatedAmount": 1320,
+            "confidence": 0.76
+          },
+          {
+            "day": 16,
+            "rawText": "330",
+            "rawValue": 330,
+            "calculatedAmount": 330,
+            "confidence": 0.48
+          },
+          {
+            "day": 17,
+            "rawText": "300",
+            "rawValue": 300,
+            "calculatedAmount": 300,
+            "confidence": 0.64
+          },
+          {
+            "day": 18,
+            "rawText": "400",
+            "rawValue": 400,
+            "calculatedAmount": 400,
+            "confidence": 0.64
+          },
+          {
+            "day": 19,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.45
+          },
+          {
+            "day": 20,
+            "rawText": "480",
+            "rawValue": 480,
+            "calculatedAmount": 480,
+            "confidence": 0.55
+          },
+          {
+            "day": 21,
+            "rawText": "430",
+            "rawValue": 430,
+            "calculatedAmount": 430,
+            "confidence": 0.52
+          },
+          {
+            "day": 22,
+            "rawText": "600",
+            "rawValue": 600,
+            "calculatedAmount": 600,
+            "confidence": 0.62
+          },
+          {
+            "day": 23,
+            "rawText": "650",
+            "rawValue": 650,
+            "calculatedAmount": 650,
+            "confidence": 0.62
+          },
+          {
+            "day": 24,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.42
+          },
+          {
+            "day": 25,
+            "rawText": "600",
+            "rawValue": 600,
+            "calculatedAmount": 600,
+            "confidence": 0.55
+          },
+          {
+            "day": 26,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.4
+          },
+          {
+            "day": 27,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.38
+          },
+          {
+            "day": 28,
+            "rawText": "720",
+            "rawValue": 720,
+            "calculatedAmount": 720,
+            "confidence": 0.57
+          },
+          {
+            "day": 29,
+            "rawText": "580",
+            "rawValue": 580,
+            "calculatedAmount": 580,
+            "confidence": 0.52
+          },
+          {
+            "day": 30,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.38
+          },
+          {
+            "day": 31,
+            "rawText": "760",
+            "rawValue": 760,
+            "calculatedAmount": 760,
+            "confidence": 0.5
+          }
+        ],
+        "redFormulae": [],
+        "suspectCells": [
+          {
+            "day": 16,
+            "issue": "该格数字可能为330，也可能因遮挡/笔迹被误读；旁边黑字计算痕迹似有3320但不属于普通格子数据，未倒推采用。",
+            "blackText": "330",
+            "confidence": 0.48
+          },
+          {
+            "day": 20,
+            "issue": "下半页行列对齐和首位数字不够清晰。",
+            "blackText": "480",
+            "confidence": 0.55
+          },
+          {
+            "day": 21,
+            "issue": "数字可能为430，笔迹较淡且与行线重叠。",
+            "blackText": "430",
+            "confidence": 0.52
+          },
+          {
+            "day": 29,
+            "issue": "数字可能为580，行对齐不确定。",
+            "blackText": "580",
+            "confidence": 0.52
+          },
+          {
+            "day": 31,
+            "issue": "末行数字可能为760，底部畸变导致置信度较低。",
+            "blackText": "760",
+            "confidence": 0.5
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 16,
+            "rawText": "330",
+            "reason": "左侧遮挡严重，数值及所属日行存在不确定性"
+          },
+          {
+            "day": 17,
+            "rawText": "300",
+            "reason": "下半页行号被黑块遮挡，按网格行距推定"
+          },
+          {
+            "day": 18,
+            "rawText": "400",
+            "reason": "下半页行号被黑块遮挡，按网格行距推定"
+          },
+          {
+            "day": 20,
+            "rawText": "480",
+            "reason": "可能与相邻行错位，数字首位不十分清楚"
+          },
+          {
+            "day": 21,
+            "rawText": "430",
+            "reason": "笔迹与表格线重叠"
+          },
+          {
+            "day": 28,
+            "rawText": "720",
+            "reason": "下半页行号不可见，按行距推定"
+          },
+          {
+            "day": 29,
+            "rawText": "580",
+            "reason": "下半页行号不可见，按行距推定"
+          },
+          {
+            "day": 31,
+            "rawText": "760",
+            "reason": "底部倾斜和压缩造成识别不稳"
+          }
+        ],
+        "disagreements": [
+          {
+            "type": "missingRedCheck",
+            "blackComputedTotal": 16450,
+            "redComputedTotal": 0,
+            "redWrittenTotal": 0,
+            "difference": 16450,
+            "note": "红字mask为空，未提取到人工红字公式或红字合计，无法与黑字合计匹配。"
+          }
+        ],
+        "auditNotes": [
+          "仅按图1黑字普通格子内可见数值求和；图1右上方黑色手写公式/汇总批注未作为普通日格数据计入。",
+          "图2红字mask为空白，因此redFormulae为空，redComputedTotal和redWrittenTotal记为0。",
+          "黑字下半页左侧日期栏大面积遮挡，部分条目的日期归属按固定31日账本行距推定，已列入uncertainCells。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "file": "28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "ok": true,
+      "elapsedMs": 177463,
+      "usage": {
+        "prompt_tokens": 2550,
+        "completion_tokens": 4837,
+        "total_tokens": 7387,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3092
+        }
+      },
+      "result": {
+        "blackComputedTotal": 2127.1,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 0,
+        "difference": 2127.1,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.42,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.72
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.72
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.72
+          },
+          {
+            "day": 4,
+            "rawText": "√; 150",
+            "rawValue": 150,
+            "calculatedAmount": 3,
+            "confidence": 0.55
+          },
+          {
+            "day": 5,
+            "rawText": "√; 480",
+            "rawValue": 480,
+            "calculatedAmount": 9.6,
+            "confidence": 0.62
+          },
+          {
+            "day": 6,
+            "rawText": "√; 480",
+            "rawValue": 480,
+            "calculatedAmount": 9.6,
+            "confidence": 0.62
+          },
+          {
+            "day": 7,
+            "rawText": "√; 480",
+            "rawValue": 480,
+            "calculatedAmount": 9.6,
+            "confidence": 0.62
+          },
+          {
+            "day": 8,
+            "rawText": "21.5; 20; 10.5",
+            "rawValue": 52,
+            "calculatedAmount": 139.9,
+            "confidence": 0.55
+          },
+          {
+            "day": 9,
+            "rawText": "40.8; 600",
+            "rawValue": 640.8,
+            "calculatedAmount": 216,
+            "confidence": 0.6
+          },
+          {
+            "day": 10,
+            "rawText": "40.1; 720",
+            "rawValue": 760.1,
+            "calculatedAmount": 214.9,
+            "confidence": 0.6
+          },
+          {
+            "day": 11,
+            "rawText": "44.2; 370",
+            "rawValue": 414.2,
+            "calculatedAmount": 228.4,
+            "confidence": 0.38
+          },
+          {
+            "day": 12,
+            "rawText": "√; 360",
+            "rawValue": 360,
+            "calculatedAmount": 7.2,
+            "confidence": 0.55
+          },
+          {
+            "day": 13,
+            "rawText": "√; 600",
+            "rawValue": 600,
+            "calculatedAmount": 12,
+            "confidence": 0.62
+          },
+          {
+            "day": 14,
+            "rawText": "√; 720",
+            "rawValue": 720,
+            "calculatedAmount": 14.4,
+            "confidence": 0.62
+          },
+          {
+            "day": 15,
+            "rawText": "√; 720",
+            "rawValue": 720,
+            "calculatedAmount": 14.4,
+            "confidence": 0.62
+          },
+          {
+            "day": 16,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.45
+          },
+          {
+            "day": 17,
+            "rawText": "198; 480; 2",
+            "rawValue": 680,
+            "calculatedAmount": 1005.6,
+            "confidence": 0.55
+          },
+          {
+            "day": 18,
+            "rawText": "4",
+            "rawValue": 4,
+            "calculatedAmount": 12,
+            "confidence": 0.55
+          },
+          {
+            "day": 19,
+            "rawText": "5",
+            "rawValue": 5,
+            "calculatedAmount": 15,
+            "confidence": 0.55
+          },
+          {
+            "day": 20,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 21,
+            "confidence": 0.55
+          },
+          {
+            "day": 21,
+            "rawText": "6",
+            "rawValue": 6,
+            "calculatedAmount": 18,
+            "confidence": 0.55
+          },
+          {
+            "day": 22,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 21,
+            "confidence": 0.55
+          },
+          {
+            "day": 23,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 24,
+            "confidence": 0.55
+          },
+          {
+            "day": 24,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 21,
+            "confidence": 0.5
+          },
+          {
+            "day": 25,
+            "rawText": "4",
+            "rawValue": 4,
+            "calculatedAmount": 12,
+            "confidence": 0.5
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.65
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.65
+          },
+          {
+            "day": 28,
+            "rawText": "",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.25
+          },
+          {
+            "day": 29,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 24,
+            "confidence": 0.45
+          },
+          {
+            "day": 30,
+            "rawText": "9",
+            "rawValue": 9,
+            "calculatedAmount": 27,
+            "confidence": 0.45
+          },
+          {
+            "day": 31,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 24,
+            "confidence": 0.45
+          }
+        ],
+        "redFormulae": [],
+        "suspectCells": [
+          {
+            "day": 11,
+            "issue": "黑字数字可能为370/870等，图像笔画不清，直接影响0.02列合计。",
+            "blackText": "44.2; 370",
+            "confidence": 0.38
+          },
+          {
+            "day": 16,
+            "issue": "只有勾号，未见可计算数值；是否代表数量1不确定，本次未计入金额。",
+            "blackText": "√",
+            "confidence": 0.45
+          },
+          {
+            "day": 24,
+            "issue": "中后部竖列数字可能为7或8，表格弯曲导致列归属不清。",
+            "blackText": "7",
+            "confidence": 0.5
+          },
+          {
+            "day": 28,
+            "issue": "该日格子基本空白，但下方竖列数字与28-31日对齐关系不确定。",
+            "blackText": "",
+            "confidence": 0.25
+          },
+          {
+            "day": 29,
+            "issue": "底部竖列数字与日期行、列归属均不十分清晰。",
+            "blackText": "8",
+            "confidence": 0.45
+          },
+          {
+            "day": 30,
+            "issue": "底部竖列数字可能为8/9，识别为9但置信度较低。",
+            "blackText": "9",
+            "confidence": 0.45
+          },
+          {
+            "day": 31,
+            "issue": "底部竖列数字与31日行对齐不清。",
+            "blackText": "8",
+            "confidence": 0.45
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 4,
+            "rawText": "√; 150",
+            "issue": "勾号是否需要按表头单价计入不确定；本次仅按数值150所在0.02列计算。"
+          },
+          {
+            "day": 5,
+            "rawText": "√; 480",
+            "issue": "勾号未计金额。"
+          },
+          {
+            "day": 6,
+            "rawText": "√; 480",
+            "issue": "勾号未计金额。"
+          },
+          {
+            "day": 7,
+            "rawText": "√; 480",
+            "issue": "勾号未计金额。"
+          },
+          {
+            "day": 8,
+            "rawText": "21.5; 20; 10.5",
+            "issue": "多列数值均较清楚，但列边界有倾斜，按5/0.02/3列计算。"
+          },
+          {
+            "day": 11,
+            "rawText": "44.2; 370",
+            "issue": "第二个数值首位不清。"
+          },
+          {
+            "day": 17,
+            "rawText": "198; 480; 2",
+            "issue": "198和2分属不同列，按5、0.02、3列分别计算。"
+          },
+          {
+            "day": 28,
+            "rawText": "",
+            "issue": "未能可靠读取原始格子数据。"
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "红字mask为空，未提取到人工红字合计或公式，无法与黑字计算结果匹配。",
+            "blackComputedTotal": 2127.1,
+            "redComputedTotal": 0,
+            "redWrittenTotal": 0,
+            "difference": 2127.1
+          },
+          {
+            "issue": "黑字右侧可见非红色手写验算痕迹疑似包含“0.02×6840=136.8”“3×16.6=49.8”“36×8=288”等，但这些不属于红字mask，且与按格子读取的数值合计不完全一致，未用于倒推修改黑字数据。"
+          }
+        ],
+        "auditNotes": [
+          "红字mask图为空白，因此redFormulae为空，redComputedTotal和redWrittenTotal均置0。",
+          "blackComputedTotal按可见表头费率5、0.02、3对相应列可读黑字数值逐项计算；勾号和叉号不作为金额计入。",
+          "由于原图透视弯曲、右侧有遮挡且部分数字与列线重叠，整体置信度较低。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "file": "2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "ok": true,
+      "elapsedMs": 214227,
+      "usage": {
+        "prompt_tokens": 2553,
+        "completion_tokens": 5765,
+        "total_tokens": 8318,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2588
+        }
+      },
+      "result": {
+        "blackComputedTotal": 2506,
+        "redComputedTotal": 5770,
+        "redWrittenTotal": 5770,
+        "difference": -3264,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.48,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 4,
+            "rawText": "0.1:1240; 0.088:70",
+            "rawValue": 1310,
+            "calculatedAmount": 130.16,
+            "confidence": 0.75
+          },
+          {
+            "day": 5,
+            "rawText": "0.088:40; 0.05:2300",
+            "rawValue": 2340,
+            "calculatedAmount": 118.52,
+            "confidence": 0.75
+          },
+          {
+            "day": 6,
+            "rawText": "0.1列被黑块遮挡; 0.088:50; 0.05:1400",
+            "rawValue": 1450,
+            "calculatedAmount": 74.4,
+            "confidence": 0.45
+          },
+          {
+            "day": 7,
+            "rawText": "0.1列被黑块遮挡; 0.088:600; 0.05:440",
+            "rawValue": 1040,
+            "calculatedAmount": 74.8,
+            "confidence": 0.42
+          },
+          {
+            "day": 8,
+            "rawText": "0.1列被黑块遮挡; 0.088:440; 0.05:1260?",
+            "rawValue": 1700,
+            "calculatedAmount": 101.72,
+            "confidence": 0.38
+          },
+          {
+            "day": 9,
+            "rawText": "0.1列被黑块遮挡; 0.088:510; 0.05:440",
+            "rawValue": 950,
+            "calculatedAmount": 66.88,
+            "confidence": 0.42
+          },
+          {
+            "day": 10,
+            "rawText": "0.1列被黑块遮挡; 0.088:1000",
+            "rawValue": 1000,
+            "calculatedAmount": 88,
+            "confidence": 0.48
+          },
+          {
+            "day": 11,
+            "rawText": "0.1列被黑块遮挡; 0.088:1100",
+            "rawValue": 1100,
+            "calculatedAmount": 96.8,
+            "confidence": 0.48
+          },
+          {
+            "day": 12,
+            "rawText": "0.1列被黑块遮挡; 0.088:1100",
+            "rawValue": 1100,
+            "calculatedAmount": 96.8,
+            "confidence": 0.48
+          },
+          {
+            "day": 13,
+            "rawText": "0.1列被黑块遮挡; 0.088:1100",
+            "rawValue": 1100,
+            "calculatedAmount": 96.8,
+            "confidence": 0.48
+          },
+          {
+            "day": 14,
+            "rawText": "0.1列被黑块遮挡; 0.088:1150",
+            "rawValue": 1150,
+            "calculatedAmount": 101.2,
+            "confidence": 0.45
+          },
+          {
+            "day": 15,
+            "rawText": "0.1列疑似遮挡/不清; 0.088:520; 0.05:2380",
+            "rawValue": 2900,
+            "calculatedAmount": 164.76,
+            "confidence": 0.5
+          },
+          {
+            "day": 16,
+            "rawText": "0.1列疑似遮挡/不清; 0.088:430; 0.05:2460",
+            "rawValue": 2890,
+            "calculatedAmount": 160.84,
+            "confidence": 0.5
+          },
+          {
+            "day": 17,
+            "rawText": "0.1列疑似遮挡/不清; 0.088:500?",
+            "rawValue": 500,
+            "calculatedAmount": 44,
+            "confidence": 0.35
+          },
+          {
+            "day": 18,
+            "rawText": "X/空",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.65
+          },
+          {
+            "day": 19,
+            "rawText": "0.088:1000?",
+            "rawValue": 1000,
+            "calculatedAmount": 88,
+            "confidence": 0.45
+          },
+          {
+            "day": 20,
+            "rawText": "0.088:1170",
+            "rawValue": 1170,
+            "calculatedAmount": 102.96,
+            "confidence": 0.7
+          },
+          {
+            "day": 21,
+            "rawText": "0.088:1160",
+            "rawValue": 1160,
+            "calculatedAmount": 102.08,
+            "confidence": 0.7
+          },
+          {
+            "day": 22,
+            "rawText": "0.088:1220",
+            "rawValue": 1220,
+            "calculatedAmount": 107.36,
+            "confidence": 0.7
+          },
+          {
+            "day": 23,
+            "rawText": "0.088:1240",
+            "rawValue": 1240,
+            "calculatedAmount": 109.12,
+            "confidence": 0.7
+          },
+          {
+            "day": 24,
+            "rawText": "0.088:1140",
+            "rawValue": 1140,
+            "calculatedAmount": 100.32,
+            "confidence": 0.72
+          },
+          {
+            "day": 25,
+            "rawText": "0.088:630",
+            "rawValue": 630,
+            "calculatedAmount": 55.44,
+            "confidence": 0.72
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 28,
+            "rawText": "0.088:1200",
+            "rawValue": 1200,
+            "calculatedAmount": 105.6,
+            "confidence": 0.75
+          },
+          {
+            "day": 29,
+            "rawText": "0.088:1210",
+            "rawValue": 1210,
+            "calculatedAmount": 106.48,
+            "confidence": 0.75
+          },
+          {
+            "day": 30,
+            "rawText": "0.088:1210",
+            "rawValue": 1210,
+            "calculatedAmount": 106.48,
+            "confidence": 0.75
+          },
+          {
+            "day": 31,
+            "rawText": "0.088:1210",
+            "rawValue": 1210,
+            "calculatedAmount": 106.48,
+            "confidence": 0.75
+          }
+        ],
+        "redFormulae": [
+          "0.1×33880=3388",
+          "0.088×21000=1848",
+          "0.05×10680=534",
+          "3388+1848+534=5770"
+        ],
+        "suspectCells": [
+          {
+            "day": 6,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 7,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 8,
+            "issue": "0.1列原始数字被大面积黑块遮挡，0.05列疑似1260",
+            "blackText": "遮挡/1260?",
+            "confidence": 0.25
+          },
+          {
+            "day": 9,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 10,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 11,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 12,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 13,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 14,
+            "issue": "0.1列原始数字被大面积黑块遮挡，无法纳入黑字合计",
+            "blackText": "遮挡",
+            "confidence": 0.25
+          },
+          {
+            "day": 15,
+            "issue": "0.1列局部不清/疑似遮挡",
+            "blackText": "不清",
+            "confidence": 0.35
+          },
+          {
+            "day": 16,
+            "issue": "0.1列局部不清/疑似遮挡",
+            "blackText": "不清",
+            "confidence": 0.35
+          },
+          {
+            "day": 17,
+            "issue": "0.1列局部不清/疑似遮挡，0.088列读数也偏低置信",
+            "blackText": "500?",
+            "confidence": 0.3
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 6,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 7,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 8,
+            "issue": "左侧0.1列被黑块覆盖，0.05列数值不完全清晰"
+          },
+          {
+            "day": 9,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 10,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 11,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 12,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 13,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 14,
+            "issue": "左侧0.1列被黑块覆盖"
+          },
+          {
+            "day": 15,
+            "issue": "左侧0.1列不清晰"
+          },
+          {
+            "day": 16,
+            "issue": "左侧0.1列不清晰"
+          },
+          {
+            "day": 17,
+            "issue": "读数不清晰"
+          },
+          {
+            "day": 19,
+            "issue": "0.088列疑似1000，受污迹影响"
+          }
+        ],
+        "disagreements": [
+          {
+            "type": "total",
+            "blackComputedTotal": 2506,
+            "redComputedTotal": 5770,
+            "difference": -3264,
+            "note": "黑字合计仅按可辨认原始格子计算；红字验算包含0.1列33880等汇总，黑字图中该列多日被遮挡，不能据红字倒推补齐。"
+          }
+        ],
+        "auditNotes": [
+          "黑字计算采用表头可见倍率：0.1、0.088、0.05。",
+          "红字mask中可辨认为三项乘法及合计5770，但红字只作对比，不用于修正黑字格子。",
+          "黑字图左侧多行有大面积黑色遮挡，因此blackComputedTotal为可读格子的保守合计，不代表完整账本确定总额。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/41968dfef3ad304fec11cd541c322a42.jpg",
+      "file": "41968dfef3ad304fec11cd541c322a42.jpg",
+      "ok": true,
+      "elapsedMs": 87929,
+      "usage": {
+        "prompt_tokens": 2544,
+        "completion_tokens": 2353,
+        "total_tokens": 4897,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1034
+        }
+      },
+      "result": {
+        "blackComputedTotal": 972.3,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 0,
+        "difference": 972.3,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.43,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.83
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.83
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.82
+          },
+          {
+            "day": 4,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.75
+          },
+          {
+            "day": 5,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.75
+          },
+          {
+            "day": 6,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.75
+          },
+          {
+            "day": 7,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.74
+          },
+          {
+            "day": 8,
+            "rawText": "246.5",
+            "rawValue": 246.5,
+            "calculatedAmount": 246.5,
+            "confidence": 0.58
+          },
+          {
+            "day": 9,
+            "rawText": "45",
+            "rawValue": 45,
+            "calculatedAmount": 45,
+            "confidence": 0.72
+          },
+          {
+            "day": 10,
+            "rawText": "45",
+            "rawValue": 45,
+            "calculatedAmount": 45,
+            "confidence": 0.55
+          },
+          {
+            "day": 11,
+            "rawText": "135",
+            "rawValue": 135,
+            "calculatedAmount": 135,
+            "confidence": 0.67
+          },
+          {
+            "day": 12,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.76
+          },
+          {
+            "day": 13,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.76
+          },
+          {
+            "day": 14,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.76
+          },
+          {
+            "day": 15,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.75
+          },
+          {
+            "day": 16,
+            "rawText": "√",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.74
+          },
+          {
+            "day": 17,
+            "rawText": "246, 246.8, 2",
+            "rawValue": 494.8,
+            "calculatedAmount": 494.8,
+            "confidence": 0.43
+          },
+          {
+            "day": 18,
+            "rawText": "上/1",
+            "rawValue": 1,
+            "calculatedAmount": 1,
+            "confidence": 0.24
+          },
+          {
+            "day": 19,
+            "rawText": "6",
+            "rawValue": 6,
+            "calculatedAmount": 6,
+            "confidence": 0.45
+          },
+          {
+            "day": 20,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 21,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 22,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 23,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 24,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 25,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.82
+          },
+          {
+            "day": 28,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.8
+          },
+          {
+            "day": 29,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.68
+          },
+          {
+            "day": 30,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.45
+          },
+          {
+            "day": 31,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.35
+          }
+        ],
+        "redFormulae": [],
+        "suspectCells": [
+          {
+            "day": 8,
+            "issue": "数字末位和小数点不够清晰，可能是246.5或245",
+            "blackText": "246.5",
+            "confidence": 0.58
+          },
+          {
+            "day": 10,
+            "issue": "数字书写模糊，按45计入但不确定",
+            "blackText": "45",
+            "confidence": 0.55
+          },
+          {
+            "day": 17,
+            "issue": "同一日跨多格有多个数字，是否均为原始格子数据不确定",
+            "blackText": "246, 246.8, 2",
+            "confidence": 0.43
+          },
+          {
+            "day": 18,
+            "issue": "字形可能为“上”或数字1，按1暂计，置信度低",
+            "blackText": "上/1",
+            "confidence": 0.24
+          },
+          {
+            "day": 19,
+            "issue": "数字位置和字形较模糊，可能不是有效金额",
+            "blackText": "6",
+            "confidence": 0.45
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 8,
+            "rawText": "246.5",
+            "issue": "可能读作245或246.5"
+          },
+          {
+            "day": 17,
+            "rawText": "246, 246.8, 2",
+            "issue": "多列数字归属不确定"
+          },
+          {
+            "day": 18,
+            "rawText": "上/1",
+            "issue": "无法确认是否金额"
+          },
+          {
+            "day": 19,
+            "rawText": "6",
+            "issue": "无法确认是否金额"
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "红字mask为空，未提取到人工红字合计或公式，无法与黑字合计匹配",
+            "blackComputedTotal": 972.3,
+            "redComputedTotal": 0,
+            "redWrittenTotal": 0,
+            "difference": 972.3
+          }
+        ],
+        "auditNotes": [
+          "红字mask图基本为空，redFormulae、redComputedTotal、redWrittenTotal均按未检出处理。",
+          "blackComputedTotal仅根据黑字账本格内可读数字求和；X和√未作为金额计入。",
+          "图像倾斜且部分格线/字迹粘连，黑字合计置信度偏低。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4692731ea3e39a6002303e488bf3f6da.jpg",
+      "file": "4692731ea3e39a6002303e488bf3f6da.jpg",
+      "ok": true,
+      "elapsedMs": 82404,
+      "usage": {
+        "prompt_tokens": 2547,
+        "completion_tokens": 2188,
+        "total_tokens": 4735,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 979
+        }
+      },
+      "result": {
+        "blackComputedTotal": 4966,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 0,
+        "difference": 4966,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.62,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.86
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.86
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.84
+          },
+          {
+            "day": 4,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 182,
+            "confidence": 0.82
+          },
+          {
+            "day": 5,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 182,
+            "confidence": 0.82
+          },
+          {
+            "day": 6,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 7,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 182,
+            "confidence": 0.8
+          },
+          {
+            "day": 8,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 182,
+            "confidence": 0.78
+          },
+          {
+            "day": 9,
+            "rawText": "5",
+            "rawValue": 5,
+            "calculatedAmount": 130,
+            "confidence": 0.72
+          },
+          {
+            "day": 10,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.86
+          },
+          {
+            "day": 11,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.86
+          },
+          {
+            "day": 12,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.86
+          },
+          {
+            "day": 13,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.86
+          },
+          {
+            "day": 14,
+            "rawText": "7",
+            "rawValue": 7,
+            "calculatedAmount": 182,
+            "confidence": 0.78
+          },
+          {
+            "day": 15,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 16,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 17,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 18,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 19,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 20,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.82
+          },
+          {
+            "day": 21,
+            "rawText": "1",
+            "rawValue": 1,
+            "calculatedAmount": 26,
+            "confidence": 0.62
+          },
+          {
+            "day": 22,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 23,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.84
+          },
+          {
+            "day": 24,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.82
+          },
+          {
+            "day": 25,
+            "rawText": "5",
+            "rawValue": 5,
+            "calculatedAmount": 130,
+            "confidence": 0.68
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.82
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.82
+          },
+          {
+            "day": 28,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.82
+          },
+          {
+            "day": 29,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.82
+          },
+          {
+            "day": 30,
+            "rawText": "9",
+            "rawValue": 9,
+            "calculatedAmount": 234,
+            "confidence": 0.72
+          },
+          {
+            "day": 31,
+            "rawText": "8",
+            "rawValue": 8,
+            "calculatedAmount": 208,
+            "confidence": 0.8
+          }
+        ],
+        "redFormulae": [],
+        "suspectCells": [
+          {
+            "day": 21,
+            "issue": "数字较细且与常见8形态不同，按1读取但置信度较低",
+            "blackText": "1",
+            "confidence": 0.62
+          },
+          {
+            "day": 25,
+            "issue": "手写数字可能为5，局部线条较弱",
+            "blackText": "5",
+            "confidence": 0.68
+          },
+          {
+            "day": 30,
+            "issue": "手写数字可能为9，底部靠近边缘且有倾斜",
+            "blackText": "9",
+            "confidence": 0.72
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 0,
+            "issue": "表头倍率/单价读取为26，用于计算各日金额；表头位置倾斜且部分遮挡，存在不确定性",
+            "blackText": "26",
+            "confidence": 0.68
+          },
+          {
+            "day": 21,
+            "issue": "该格可能为1，需人工复核",
+            "blackText": "1",
+            "confidence": 0.62
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "红字mask中未能提取到清晰可读的人工计算总数或公式，无法与黑字计算总额匹配",
+            "blackComputedTotal": 4966,
+            "redComputedTotal": 0,
+            "redWrittenTotal": 0,
+            "difference": 4966
+          }
+        ],
+        "auditNotes": [
+          "仅按黑字图读取31日固定账本格子数据；X按0计。",
+          "读取到的有效日数值合计为191，按表头倍率26计算：191*26=4966。",
+          "红字mask几乎为空，仅有零散像素点，未识别出可用红字公式或红字总数。"
+        ]
+      }
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "file": "4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "ok": true,
+      "elapsedMs": 188498,
+      "usage": {
+        "prompt_tokens": 2548,
+        "completion_tokens": 5130,
+        "total_tokens": 7678,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3106
+        }
+      },
+      "result": {
+        "blackComputedTotal": 6070.75,
+        "redComputedTotal": 0,
+        "redWrittenTotal": 0,
+        "difference": 6070.75,
+        "isMatch": false,
+        "matchTolerance": 0.5,
+        "overallConfidence": 0.62,
+        "blackEntries": [
+          {
+            "day": 1,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 2,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 3,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.9
+          },
+          {
+            "day": 4,
+            "rawText": "0.015:13980;0.02:860",
+            "rawValue": 14840,
+            "calculatedAmount": 226.9,
+            "confidence": 0.78
+          },
+          {
+            "day": 5,
+            "rawText": "0.015:20760;0.04:300",
+            "rawValue": 21060,
+            "calculatedAmount": 323.4,
+            "confidence": 0.72
+          },
+          {
+            "day": 6,
+            "rawText": "0.015:19860;0.02:600",
+            "rawValue": 20460,
+            "calculatedAmount": 309.9,
+            "confidence": 0.8
+          },
+          {
+            "day": 7,
+            "rawText": "0.015:24460",
+            "rawValue": 24460,
+            "calculatedAmount": 366.9,
+            "confidence": 0.8
+          },
+          {
+            "day": 8,
+            "rawText": "0.015:20750;0.02:280",
+            "rawValue": 21030,
+            "calculatedAmount": 316.85,
+            "confidence": 0.76
+          },
+          {
+            "day": 9,
+            "rawText": "0.02:450",
+            "rawValue": 450,
+            "calculatedAmount": 9,
+            "confidence": 0.62
+          },
+          {
+            "day": 10,
+            "rawText": "0.015:13940;0.02:230",
+            "rawValue": 14170,
+            "calculatedAmount": 213.7,
+            "confidence": 0.74
+          },
+          {
+            "day": 11,
+            "rawText": "0.015:18880;0.02:560",
+            "rawValue": 19440,
+            "calculatedAmount": 294.4,
+            "confidence": 0.78
+          },
+          {
+            "day": 12,
+            "rawText": "0.015:17880;0.02:600",
+            "rawValue": 18480,
+            "calculatedAmount": 280.2,
+            "confidence": 0.62
+          },
+          {
+            "day": 13,
+            "rawText": "0.015:12400;0.02:140",
+            "rawValue": 12540,
+            "calculatedAmount": 188.8,
+            "confidence": 0.72
+          },
+          {
+            "day": 14,
+            "rawText": "0.015:19380;0.02:270",
+            "rawValue": 19650,
+            "calculatedAmount": 296.1,
+            "confidence": 0.7
+          },
+          {
+            "day": 15,
+            "rawText": "0.015:19120;0.02:570",
+            "rawValue": 19690,
+            "calculatedAmount": 298.2,
+            "confidence": 0.72
+          },
+          {
+            "day": 16,
+            "rawText": "0.015:18030;0.02:730",
+            "rawValue": 18760,
+            "calculatedAmount": 285.05,
+            "confidence": 0.72
+          },
+          {
+            "day": 17,
+            "rawText": "0.015:16450;0.02:1200",
+            "rawValue": 17650,
+            "calculatedAmount": 270.75,
+            "confidence": 0.74
+          },
+          {
+            "day": 18,
+            "rawText": "0.015:19890;0.02:130",
+            "rawValue": 20020,
+            "calculatedAmount": 300.95,
+            "confidence": 0.7
+          },
+          {
+            "day": 19,
+            "rawText": "0.015:21860;0.02:380",
+            "rawValue": 22240,
+            "calculatedAmount": 335.5,
+            "confidence": 0.72
+          },
+          {
+            "day": 20,
+            "rawText": "0.015:24660",
+            "rawValue": 24660,
+            "calculatedAmount": 369.9,
+            "confidence": 0.72
+          },
+          {
+            "day": 21,
+            "rawText": "0.015:20020;0.02:200",
+            "rawValue": 20220,
+            "calculatedAmount": 304.3,
+            "confidence": 0.72
+          },
+          {
+            "day": 22,
+            "rawText": "0.015:24580",
+            "rawValue": 24580,
+            "calculatedAmount": 368.7,
+            "confidence": 0.58
+          },
+          {
+            "day": 23,
+            "rawText": "0.015:2900;0.02:200",
+            "rawValue": 3100,
+            "calculatedAmount": 47.5,
+            "confidence": 0.55
+          },
+          {
+            "day": 24,
+            "rawText": "0.015:17290;0.02:1100",
+            "rawValue": 18390,
+            "calculatedAmount": 281.35,
+            "confidence": 0.68
+          },
+          {
+            "day": 25,
+            "rawText": "0.015:14670;0.02:500",
+            "rawValue": 15170,
+            "calculatedAmount": 230.05,
+            "confidence": 0.68
+          },
+          {
+            "day": 26,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 27,
+            "rawText": "X",
+            "rawValue": 0,
+            "calculatedAmount": 0,
+            "confidence": 0.85
+          },
+          {
+            "day": 28,
+            "rawText": "0.015:2420;0.02:210",
+            "rawValue": 2630,
+            "calculatedAmount": 40.5,
+            "confidence": 0.52
+          },
+          {
+            "day": 29,
+            "rawText": "0.015:2120;0.02:110",
+            "rawValue": 2230,
+            "calculatedAmount": 34,
+            "confidence": 0.52
+          },
+          {
+            "day": 30,
+            "rawText": "0.015:1740;0.02:700",
+            "rawValue": 2440,
+            "calculatedAmount": 40.1,
+            "confidence": 0.55
+          },
+          {
+            "day": 31,
+            "rawText": "0.015:1850;0.02:500",
+            "rawValue": 2350,
+            "calculatedAmount": 37.75,
+            "confidence": 0.56
+          }
+        ],
+        "redFormulae": [],
+        "suspectCells": [
+          {
+            "day": 9,
+            "issue": "该行第一金额列为空，仅识别到0.02列450；需人工复核是否错行或漏写。",
+            "blackText": "0.02:450",
+            "confidence": 0.62
+          },
+          {
+            "day": 22,
+            "issue": "0.015列数字疑似24580，但笔画压线，末两位不够清晰。",
+            "blackText": "0.015:24580",
+            "confidence": 0.58
+          },
+          {
+            "day": 23,
+            "issue": "0.015列疑似2900，位数和周边行差异较大，可能漏读前导数字。",
+            "blackText": "0.015:2900;0.02:200",
+            "confidence": 0.55
+          },
+          {
+            "day": 28,
+            "issue": "0.015列疑似2420，可能为2400/2420；0.02列疑似210。",
+            "blackText": "0.015:2420;0.02:210",
+            "confidence": 0.52
+          },
+          {
+            "day": 29,
+            "issue": "0.015列疑似2120，0.02列疑似110，低清晰度。",
+            "blackText": "0.015:2120;0.02:110",
+            "confidence": 0.52
+          },
+          {
+            "day": 30,
+            "issue": "0.015列疑似1740，0.02列疑似700。",
+            "blackText": "0.015:1740;0.02:700",
+            "confidence": 0.55
+          },
+          {
+            "day": 31,
+            "issue": "0.015列疑似1850，0.02列疑似500。",
+            "blackText": "0.015:1850;0.02:500",
+            "confidence": 0.56
+          }
+        ],
+        "uncertainCells": [
+          {
+            "day": 5,
+            "rawText": "0.015:20760;0.04:300",
+            "issue": "300位于0.04列，行对齐略有不确定。",
+            "confidence": 0.72
+          },
+          {
+            "day": 12,
+            "rawText": "0.015:17880;0.02:600",
+            "issue": "0.015列可能为17880或相近数字。",
+            "confidence": 0.62
+          },
+          {
+            "day": 22,
+            "rawText": "0.015:24580",
+            "issue": "末位笔画不清。",
+            "confidence": 0.58
+          },
+          {
+            "day": 23,
+            "rawText": "0.015:2900;0.02:200",
+            "issue": "0.015列位数异常。",
+            "confidence": 0.55
+          },
+          {
+            "day": 28,
+            "rawText": "0.015:2420;0.02:210",
+            "issue": "数字较模糊。",
+            "confidence": 0.52
+          },
+          {
+            "day": 29,
+            "rawText": "0.015:2120;0.02:110",
+            "issue": "数字较模糊。",
+            "confidence": 0.52
+          },
+          {
+            "day": 30,
+            "rawText": "0.015:1740;0.02:700",
+            "issue": "数字较模糊。",
+            "confidence": 0.55
+          },
+          {
+            "day": 31,
+            "rawText": "0.015:1850;0.02:500",
+            "issue": "数字较模糊。",
+            "confidence": 0.56
+          }
+        ],
+        "disagreements": [
+          {
+            "issue": "红字mask为空，未提取到红字人工合计或公式；无法与黑字计算值6070.75匹配。",
+            "blackComputedTotal": 6070.75,
+            "redComputedTotal": 0,
+            "redWrittenTotal": 0,
+            "difference": 6070.75
+          }
+        ],
+        "auditNotes": [
+          "仅使用图1黑字格子数据计算；图2红字mask为空，因此redFormulae为空。",
+          "按表头识别到的费率计算：第一金额列0.015，第二金额列0.02，第三金额列0.04。",
+          "图1右侧可见的黑色手写验算/批注未作为红字结果读取，也未用于倒推修改格子数据。"
+        ]
+      }
+    }
+  ],
+  "aggregate": null
+}

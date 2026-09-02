@@ -1,6 +1,6 @@
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
 export type OverlayMode = 'all' | 'focus' | 'low' | 'grid' | 'off'
-export type ApiMode = 'responses' | 'chatCompletions'
+export type ApiMode = 'responses' | 'chatCompletions' | 'mockLocal'
 export type QualityMode = 'fast' | 'high' | 'max'
 export type VerificationStatus = 'pending' | 'confirmed' | 'skipped' | 'flagged'
 
@@ -96,10 +96,23 @@ export interface AppSettings {
   apiMode: ApiMode
   model: string
   qualityMode: QualityMode
+  localDatePreflightEnabled: boolean
+  localDatePreflightUrl: string
+  priorityCropOcrEnabled: boolean
+  priorityCropOcrLimit: number
   selectedPromptId: string
   prompts: SmartPrompt[]
   selectedPaperTemplateId: string
   paperTemplates: PaperTemplate[]
+}
+
+export interface ApiSelfCheckReport {
+  status: 'passed' | 'failed'
+  checkedAt: string
+  mode: ApiMode
+  baseUrl: string
+  model: string
+  note: string
 }
 
 export interface RecognizedEntry {
@@ -132,6 +145,7 @@ export type LedgerCellSemanticType =
 
 export type LedgerCellRiskFlag =
   | 'lowConfidence'
+  | 'cutLowConfidence'
   | 'nearBorder'
   | 'crossCell'
   | 'possibleMissedDigit'
@@ -139,6 +153,18 @@ export type LedgerCellRiskFlag =
   | 'moneyUnit'
   | 'calculationMismatch'
   | 'userEdited'
+
+export interface LedgerCellCutEvidence {
+  confidence: number
+  level: 'good' | 'review' | 'calibrate'
+  reasons: string[]
+  lineDeltas: {
+    left: number | null
+    right: number | null
+    top: number | null
+    bottom: number | null
+  }
+}
 
 export interface LedgerCell {
   id: string
@@ -154,10 +180,55 @@ export interface LedgerCell {
   semanticType: LedgerCellSemanticType
   blankConfidence: number
   confidence: number
+  cutEvidence: LedgerCellCutEvidence
   riskFlags: LedgerCellRiskFlag[]
   entryIds: string[]
   amount: number | null
   note: string
+}
+
+export interface GridCutLine {
+  axis: 'x' | 'y'
+  position: number
+  strength: number
+}
+
+export interface GridCutEvidence {
+  method: 'template' | 'projection-lines' | 'hybrid-model' | 'cnn-hybrid'
+  level: 'good' | 'review' | 'calibrate'
+  label: string
+  score: number
+  confidence: number
+  tableRegion: ImageRegion
+  fixedRegion: ImageRegion
+  lines: {
+    horizontal: GridCutLine[]
+    vertical: GridCutLine[]
+  }
+  support: {
+    expectedHorizontal: number
+    expectedVertical: number
+    detectedHorizontal: number
+    detectedVertical: number
+    rawHorizontalSpan?: number
+    rawVerticalSpan?: number
+    alignedHorizontalMatched?: number
+    alignedHorizontalSynthetic?: number
+    alignedVerticalMatched?: number
+    alignedVerticalSynthetic?: number
+    effectiveHorizontalCoverage?: number
+    effectiveVerticalCoverage?: number
+  }
+  residuals: {
+    x: number | null
+    y: number | null
+    max: number | null
+  }
+  fallback: {
+    x: boolean
+    y: boolean
+  }
+  reasons: string[]
 }
 
 export type VisualTokenKind = 'number' | 'multiplier' | 'mark' | 'text'
@@ -174,6 +245,13 @@ export interface ExternalOcrToken {
   region: ImageRegion
   kind?: VisualTokenKind
   provider?: string
+}
+
+export interface CropOcrReading {
+  cropRef: string
+  text: string
+  confidence: number
+  kind?: VisualTokenKind
 }
 
 export interface VisualToken {
@@ -226,6 +304,43 @@ export interface RecognitionResult {
   auditNotes: string[]
   visualTokens?: VisualToken[]
   cells?: LedgerCell[]
+  gridCut?: GridCutEvidence
+  cropOcrExecution?: CropOcrExecution
+}
+
+export interface CropOcrTask {
+  cellId: string
+  row: number
+  columnLabel: string
+  region: ImageRegion
+  cropRef: string
+  score: number
+  priority: 'high' | 'medium' | 'low'
+  shouldSend: boolean
+  amountImpact: number
+  cutConfidence: number
+  readConfidence: number
+  reasons: string[]
+}
+
+export interface CropOcrPlan {
+  strategy: 'page-plus-priority-crops'
+  pageImageCount: number
+  reviewableCellCount: number
+  recommendedCropCount: number
+  deferredCropCount: number
+  skippedCropCount: number
+  estimatedSavingsRatio: number
+  tokenBudgetLabel: string
+  notes: string[]
+  tasks: CropOcrTask[]
+}
+
+export interface CropOcrExecution {
+  status: 'idle' | 'completed' | 'skipped' | 'failed'
+  sentCropCount: number
+  returnedTokenCount: number
+  note: string
 }
 
 export interface VisualExtractionResult {

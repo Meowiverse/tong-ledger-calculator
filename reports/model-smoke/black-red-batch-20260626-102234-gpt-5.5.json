@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-06-26T10:19:19.200Z",
+  "model": "gpt-5.5",
+  "baseUrl": "http://127.0.0.1:12455/v1",
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": false,
+      "elapsedMs": 193664,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/209da0c831338ad89b2225589b8509c2.jpg",
+      "file": "209da0c831338ad89b2225589b8509c2.jpg",
+      "ok": false,
+      "elapsedMs": 137,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/265d8c382dbff5d038ee586058d05487.jpg",
+      "file": "265d8c382dbff5d038ee586058d05487.jpg",
+      "ok": false,
+      "elapsedMs": 118,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "file": "28db2a49bf5a33076ff3a5dff15c01e5.jpg",
+      "ok": false,
+      "elapsedMs": 107,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "file": "2e0f3c7f440a7b3e12bf659e0956b0f4.jpg",
+      "ok": false,
+      "elapsedMs": 110,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/41968dfef3ad304fec11cd541c322a42.jpg",
+      "file": "41968dfef3ad304fec11cd541c322a42.jpg",
+      "ok": false,
+      "elapsedMs": 111,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4692731ea3e39a6002303e488bf3f6da.jpg",
+      "file": "4692731ea3e39a6002303e488bf3f6da.jpg",
+      "ok": false,
+      "elapsedMs": 122,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "file": "4dfd4360c1cd1b2180dcce57d811ad97.jpg",
+      "ok": false,
+      "elapsedMs": 186,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/4eaf23ad8455a5179773dc967e163aeb.jpg",
+      "file": "4eaf23ad8455a5179773dc967e163aeb.jpg",
+      "ok": false,
+      "elapsedMs": 109,
+      "error": "fetch failed"
+    },
+    {
+      "imagePath": "/Users/kongjing/Downloads/60a37979fe54349f8d4eba53765d3527.jpg",
+      "file": "60a37979fe54349f8d4eba53765d3527.jpg",
+      "ok": false,
+      "elapsedMs": 110,
+      "error": "fetch failed"
+    }
+  ],
+  "aggregate": {
+    "total": 10,
+    "successful": 0,
+    "failed": 10,
+    "matched": 0,
+    "matchRate": 0,
+    "averageAbsDifference": null,
+    "maxAbsDifference": null,
+    "totalTokens": 0
+  }
+}

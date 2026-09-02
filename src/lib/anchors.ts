@@ -94,7 +94,7 @@ export async function annotateImageWithAnchors(
     context.fillText(anchor.id, x + radius + 8, y)
   }
 
-  return canvas.toDataURL('image/jpeg', options.quality ?? 0.92)
+  return canvas.toDataURL('image/webp', options.quality ?? 0.82)
 }
 
 function loadImage(src: string) {

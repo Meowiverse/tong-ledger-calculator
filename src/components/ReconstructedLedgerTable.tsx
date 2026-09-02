@@ -6,6 +6,7 @@ import {
   columnRuleForCell,
   getCuttingFeasibility,
   getLedgerColumns,
+  riskFlagLabel,
 } from '../lib/ledgerCells'
 import type { LedgerCell, LedgerCellSemanticType, PaperTemplate, RecognitionResult } from '../types'
 
@@ -50,6 +51,13 @@ function formatResidual(value: number | null) {
   return typeof value === 'number' ? `${value.toFixed(1)}%` : '证据不足'
 }
 
+function cuttingMethodLabel(method: string) {
+  if (method === 'projection-lines') return '本地线条切格'
+  if (method === 'cnn-hybrid') return '本地 CNN + 格线融合'
+  if (method === 'hybrid-model') return '本地模型 + 格线融合'
+  return '模型点位拟合'
+}
+
 function amountForCell(cell: LedgerCell, result: RecognitionResult) {
   if (typeof cell.amount === 'number') return cell.amount
   return cell.entryIds.reduce((total, entryId) => {
@@ -72,6 +80,7 @@ function CellButton({
   const amount = amountForCell(cell, result)
   const hasContent = Boolean(cell.rawText || cell.entryIds.length)
   const isRisky = cell.riskFlags.length > 0
+  const hasCutRisk = cell.riskFlags.includes('cutLowConfidence')
 
   if (cell.columnKind === 'date') {
     return <th>{cell.row}日</th>
@@ -88,7 +97,15 @@ function CellButton({
       >
         <span>{hasContent ? cell.rawText : '空白'}</span>
         {amount ? <small>{formatAmount(amount, result.currency)}</small> : null}
-        {isRisky ? <em>{cell.riskFlags.includes('possibleMissedDigit') ? '需核' : '风险'}</em> : null}
+        {isRisky ? (
+          <em>
+            {hasCutRisk
+              ? '切格'
+              : cell.riskFlags.includes('possibleMissedDigit')
+                ? '需核'
+                : '风险'}
+          </em>
+        ) : null}
       </button>
     </td>
   )
@@ -159,7 +176,8 @@ function CellInspector({
         <div>
           <strong>{cell.row}日 · {cell.columnLabel}</strong>
           <span>
-            {semanticLabel(cell.semanticType)} · 空白置信度 {(cell.blankConfidence * 100).toFixed(0)}%
+            {semanticLabel(cell.semanticType)} · 空白置信度 {(cell.blankConfidence * 100).toFixed(0)}% ·
+            切格置信度 {(cell.cutEvidence.confidence * 100).toFixed(0)}%
           </span>
         </div>
         <b>{typeof cell.amount === 'number' ? formatAmount(cell.amount, currency) : '未计入'}</b>
@@ -270,12 +288,22 @@ function CellInspector({
           </code>
           <span>裁剪证据</span>
           <code>{cell.cropRef}</code>
+          <span>切格置信度</span>
+          <code>{(cell.cutEvidence.confidence * 100).toFixed(0)}% · {cell.cutEvidence.level}</code>
+          <span>边线偏差</span>
+          <code>
+            L {formatResidual(cell.cutEvidence.lineDeltas.left)} ·
+            R {formatResidual(cell.cutEvidence.lineDeltas.right)} ·
+            T {formatResidual(cell.cutEvidence.lineDeltas.top)} ·
+            B {formatResidual(cell.cutEvidence.lineDeltas.bottom)}
+          </code>
         </div>
       </details>
+      <div className="cell-cut-summary">{cell.cutEvidence.reasons.join('；')}</div>
       {cell.riskFlags.length ? (
         <div className="cell-risk-list">
           {cell.riskFlags.map((risk) => (
-            <span key={risk}>{risk}</span>
+            <span key={risk}>{riskFlagLabel(risk)}</span>
           ))}
         </div>
       ) : null}
@@ -437,6 +465,10 @@ export function ReconstructedLedgerTable({
           偏差 {cutting.maxDelta.toFixed(1)}% · 证据 {cutting.support.distinctRows} 行/
           {cutting.support.distinctColumns} 列 · 残差 {formatResidual(cutting.residuals.max)}
           {cutting.fallback.x || cutting.fallback.y ? ' · 已回退模板' : ''}
+        </em>
+        <em>
+          {cuttingMethodLabel(cutting.method)} · 置信度 {(cutting.confidence * 100).toFixed(0)}% ·{' '}
+          {cutting.reasons.join('；')}
         </em>
       </div>
 

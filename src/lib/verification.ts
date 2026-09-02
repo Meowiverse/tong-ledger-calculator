@@ -1,4 +1,5 @@
 import { getEntryCalculatedAmount } from './calculation'
+import { riskFlagLabel } from './ledgerCells'
 import type { RecognitionResult, VerificationItem, VerificationStatus } from '../types'
 
 export type VerificationState = Record<string, VerificationStatus>
@@ -13,10 +14,13 @@ export function buildVerificationQueue(result: RecognitionResult): VerificationI
       })
       .map((cell): VerificationItem => {
         const hasMissedDigitRisk = cell.riskFlags.includes('possibleMissedDigit')
+        const hasCutRisk = cell.riskFlags.includes('cutLowConfidence')
         const amountImpact = Math.abs(cell.amount ?? 0)
         const risk =
           Math.min(1, cell.riskFlags.length * 0.18) +
           (hasMissedDigitRisk ? 0.35 : 0) +
+          (hasCutRisk ? 0.3 : 0) +
+          (1 - cell.cutEvidence.confidence) * 0.28 +
           Math.min(amountImpact / 200, 0.3)
 
         return {
@@ -24,10 +28,12 @@ export function buildVerificationQueue(result: RecognitionResult): VerificationI
           targetId: cell.id,
           kind: 'cell',
           title: `${cell.row}日 ${cell.columnLabel}${cell.rawText ? `：${cell.rawText}` : '：空白格'}`,
-          detail: cell.riskFlags.length ? `风险：${cell.riskFlags.join(' / ')}` : cell.note,
+          detail: cell.riskFlags.length
+            ? `风险：${cell.riskFlags.map((flag) => riskFlagLabel(flag)).join(' / ')}`
+            : cell.note,
           risk,
           amountImpact,
-          confidence: cell.confidence,
+          confidence: Math.min(cell.confidence, cell.cutEvidence.confidence),
           region: cell.bboxOriginal,
         }
       }) ?? []

@@ -1,8 +1,19 @@
 import { annotateImageWithAnchors } from './anchors'
+import { cropImageRegion } from './image'
+import {
+  buildMockCalculationProgram,
+  buildMockCropReadings,
+  buildMockRecognition,
+  buildMockVisualExtraction,
+} from './mockOcr'
 import { executeCalculationProgram, normalizeRecognitionResult } from './program'
 import type {
+  ApiSelfCheckReport,
   ApiMode,
+  CropOcrReading,
+  CropOcrTask,
   CalculationProgram,
+  ExternalOcrToken,
   QualityMode,
   RecognitionResult,
   SmartPrompt,
@@ -212,6 +223,34 @@ const visualExtractionSchema = {
   $defs: recognitionSchema.$defs,
 } as const
 
+const cropOcrSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['readings', 'auditNotes'],
+  properties: {
+    readings: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['cropRef', 'text', 'confidence'],
+        properties: {
+          cropRef: { type: 'string' },
+          text: { type: 'string' },
+          confidence: { type: 'number', minimum: 0, maximum: 1 },
+          kind: { enum: ['number', 'multiplier', 'mark', 'text'] },
+        },
+      },
+    },
+    auditNotes: { type: 'array', items: { type: 'string' } },
+  },
+} as const
+
+interface CropOcrReviewResponse {
+  readings: CropOcrReading[]
+  auditNotes: string[]
+}
+
 const calculationProgramSchema = {
   type: 'object',
   additionalProperties: false,
@@ -342,9 +381,138 @@ function buildApiUrl(baseUrl: string, path: string) {
   return `${base}${path}`
 }
 
+export async function runApiSelfCheck({
+  apiBaseUrl,
+  apiKey,
+  apiMode,
+  model,
+}: {
+  apiBaseUrl: string
+  apiKey: string
+  apiMode: ApiMode
+  model: string
+}): Promise<ApiSelfCheckReport> {
+  const checkedAt = new Date().toISOString()
+  const resolvedBaseUrl = (apiBaseUrl.trim() || DEFAULT_OPENAI_BASE_URL).replace(/\/+$/g, '')
+  const resolvedModel = model.trim() || '未填写模型名'
+
+  if (apiMode === 'mockLocal') {
+    return {
+      status: 'passed',
+      checkedAt,
+      mode: apiMode,
+      baseUrl: 'local://mock',
+      model: resolvedModel,
+      note: '本地 mock 模式可直接演练整页识别、小图 OCR 和审核流程，不会发真实网络请求。',
+    }
+  }
+
+  const prompt = 'Return exactly the single word pong.'
+
+  try {
+    const text =
+      apiMode === 'chatCompletions'
+        ? await fetchChatCompletionText({
+            apiBaseUrl: resolvedBaseUrl,
+            apiKey,
+            body: {
+              model: resolvedModel,
+              messages: [{ role: 'user', content: prompt }],
+              max_tokens: 8,
+              temperature: 0,
+            },
+            outputLabel: 'self-check output',
+          })
+        : await (async () => {
+            const response = await fetchWithTimeout(buildApiUrl(resolvedBaseUrl, '/v1/responses'), {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                model: resolvedModel,
+                input: [
+                  {
+                    role: 'user',
+                    content: [{ type: 'input_text', text: prompt }],
+                  },
+                ],
+                max_output_tokens: 8,
+              }),
+            })
+
+            if (!response.ok) {
+              const errorText = await response.text()
+              throw new Error(compactUpstreamError(errorText || `Responses request failed: ${response.status}`, response.status))
+            }
+
+            const payload = (await response.json()) as unknown
+            const responseText = readResponseText(payload)
+            if (!responseText) throw new Error('Responses self-check did not return text output.')
+            return responseText
+          })()
+
+    const compactText = text.trim().replace(/\s+/g, ' ').slice(0, 40) || 'empty'
+    return {
+      status: 'passed',
+      checkedAt,
+      mode: apiMode,
+      baseUrl: resolvedBaseUrl,
+      model: resolvedModel,
+      note:
+        apiMode === 'chatCompletions'
+          ? `兼容接口已返回短响应：${compactText}`
+          : `Responses 接口已返回短响应：${compactText}`,
+    }
+  } catch (error) {
+    return {
+      status: 'failed',
+      checkedAt,
+      mode: apiMode,
+      baseUrl: resolvedBaseUrl,
+      model: resolvedModel,
+      note: error instanceof Error ? error.message : '接口自检失败。',
+    }
+  }
+}
+
 function shouldRetryChatCompletionWithoutResponseFormat(status: number, errorText: string) {
   if (status !== 400 && status !== 422) return false
   return /response_format|json_object|unsupported|not supported|invalid/i.test(errorText)
+}
+
+const MODEL_REQUEST_TIMEOUT_MS = 180_000
+
+function compactUpstreamError(errorText: string, status: number) {
+  const trimmed = errorText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (/524|timeout|timed out/i.test(trimmed)) {
+    return '服务器识别超时了。这张整页账本仍可重新提交，或先按当前核查界面对照。'
+  }
+  if (/502|503|504|bad gateway|service unavailable|gateway/i.test(trimmed)) {
+    return '服务器临时繁忙或上游模型断开了，请稍后重试。'
+  }
+  if (/401|unauthorized|forbidden|invalid api key/i.test(trimmed)) {
+    return '服务器模型鉴权失败，请检查后台接口配置。'
+  }
+  return trimmed.slice(0, 240) || `模型接口请求失败：${status}`
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = MODEL_REQUEST_TIMEOUT_MS) {
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(url, { ...init, signal: controller.signal })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('服务器识别超过 3 分钟仍未返回，请稍后重试或先人工核查当前照片。', {
+        cause: error,
+      })
+    }
+    throw error
+  } finally {
+    window.clearTimeout(timeout)
+  }
 }
 
 async function fetchChatCompletionText({
@@ -359,7 +527,7 @@ async function fetchChatCompletionText({
   outputLabel: string
 }) {
   const request = async (requestBody: Record<string, unknown>) =>
-    fetch(buildApiUrl(apiBaseUrl, '/v1/chat/completions'), {
+    fetchWithTimeout(buildApiUrl(apiBaseUrl, '/v1/chat/completions'), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -393,11 +561,14 @@ async function fetchChatCompletionText({
 
     const fallbackErrorText = await fallbackResponse.text()
     throw new Error(
-      fallbackErrorText || errorText || `Chat Completions request failed: ${fallbackResponse.status}`,
+      compactUpstreamError(
+        fallbackErrorText || errorText || `Chat Completions request failed: ${fallbackResponse.status}`,
+        fallbackResponse.status,
+      ),
     )
   }
 
-  throw new Error(errorText || `Chat Completions request failed: ${response.status}`)
+  throw new Error(compactUpstreamError(errorText || `Chat Completions request failed: ${response.status}`, response.status))
 }
 
 function buildRecognitionInstruction(prompt: SmartPrompt, includeSchema: boolean) {
@@ -405,6 +576,8 @@ function buildRecognitionInstruction(prompt: SmartPrompt, includeSchema: boolean
     '你是 tong账本计算器 的票据识别引擎。',
     '请严格基于图片内容输出 JSON，不要编造看不见的内容。',
     '本产品当前只处理一张完整单页账本照片，不做多页拼接，也不接受半页/局部图作为最终结果。',
+    '当前只有一种固定 31 日账本模板；不要把它当成多种票据或多种纸张模板分类问题。',
+    '第一阶段识别以简单去红压缩图为准：黑/蓝原始手写数字才是每日格子数据，红色内容暂时不要参与原始格子读取。',
     '识别前先检查整页条件：表格四角、表头单价行、日期列、1日至31日应在同一张图片中可见。若不完整，在 auditNotes 写 pageIncomplete/cuttingRisk，overallConfidence 不得高于 0.55，并说明缺失区域。',
     '在计算前，必须先识别表头/列头/第一行单价/倍率/单位。手写账本里写在列上方的小数通常是该列纸类的单价或倍率，具体按用户纸张模板解释。',
     'entries.amount 保留原始可读数值；entries.rawValue 同样保留原始数值；entries.multiplier 写该列单价或倍率；entries.calculatedAmount 写 rawValue * multiplier 后的入账金额。',
@@ -417,9 +590,10 @@ function buildRecognitionInstruction(prompt: SmartPrompt, includeSchema: boolean
     '程序会根据固定网格重新切格；你负责给数字 token 的位置、语义和格子归属，不要用整行大框代替单个数字或格子。',
     '表格账本必须先找日期/行号列和横线网格，按每个日期行的上下边界分配数字；不要因为手写数字靠近上一行或下一行就把它错配到相邻日期。',
     'X、空白、划掉的非金额标记不要作为 entries 里的金额条目；可以写入 extractedText 或 auditNotes。',
+    '图片中的红色手写内容通常是用户已经算好的验算/合计/乘法结构，例如 0.088 x 4900 = 431.2。红字不能当作普通格子原始金额重复入账，但必须作为 auditNotes、extractedText 或校验依据保留；如果红字合计与格子重算不一致，降低 confidence 并写明冲突。',
     'confidence 由你根据图片清晰度、字符歧义、遮挡和计算影响综合判断。',
     '低置信字符必须放入 uncertainMarks。',
-    '你会收到三张图片：第一张是原图；第二张是 OCR 预处理增强图，请优先用它识别文字和数字；第三张是带蓝色锚点的预处理图，只用于定位 anchor，不要把蓝色覆盖物当内容。',
+    '你会收到两张图片：第一张是简单去红压缩图，用于读取原始格子；第二张是带蓝色锚点的去红压缩图，只用于定位 anchor，不要把蓝色覆盖物当内容。',
     `用户选择的智能 prompt：${prompt.name}`,
     prompt.prompt,
   ]
@@ -438,18 +612,20 @@ function buildVisualExtractionInstruction(prompt: SmartPrompt, includeSchema: bo
   const lines = [
     '你是 tong账本计算器 的视觉定位引擎。',
     '这一阶段只做一件事：从图片中抽取“位置 + 可见字符/数字候选”的组合，不要做最终账单计算。',
+    '当前只有一种固定 31 日账本模板；第一阶段只读取黑/蓝原始手写格子内容，红色人工验算不进入普通 number token。',
     '输入应是一张完整单页账本照片；如果图中缺四角、表头或 1日至31日中的任何连续区域，仍输出可见 token，但必须在 auditNotes 写 pageIncomplete/cuttingRisk。',
     '使用深度复读流程：先识别整张表格结构和行列，再从上到下逐行读数，最后反向从下到上检查是否漏项。只输出最终结构化结果，不输出思考过程。',
     '必须输出所有可见的手写数字、表头倍率、小数、X/划线/非金额标记，以及对理解账本有帮助的打印文字。',
+    '如果第一阶段输入已经去红，通常看不到红字；不要因为缺少红字就猜红色合计。红色人工验算只在后续审计阶段使用。',
     '每个目标输出为 token：kind、rowLabel、columnLabel、rawText、normalizedText、numericValue、candidates、confidence、region、anchor。',
     '固定账本默认列为：日期、上班、纸类1、纸类2、纸类3、纸类4、上下货、扣款、日合计；rowLabel 必须尽量写成“16日”这种日期行，columnLabel 必须写成固定列名之一。',
     'number 表示普通手写数字；multiplier 表示表头倍率/小数；mark 表示 X、划掉、空白标记；text 表示标题、日期、行号等辅助文字。',
     '对每个手写数字，候选值至少给出最可能值；如果存在 7/1、5/8、0/6、3/8、连笔等歧义，candidates 必须列出备选和置信度。',
     'region 坐标使用原图相对百分比 x/y/width/height，0-100。定位到字符或数字所在区域，不要用覆盖整行的大框。',
     '图片上已经覆盖蓝色定位锚点，锚点编号形如 A1、B7、F10。anchor 只用于定位，不能当成账本内容。',
-    '你会收到三张图片：第一张是原图，用于判断真实场景和遮挡；第二张是 OCR 预处理增强图，请优先用它读取手写/打印文字；第三张是在预处理图上覆盖蓝色锚点的定位参考图。',
+    '你会收到两张图片：第一张是简单去红压缩图，用于读取手写/打印文字；第二张是在去红压缩图上覆盖蓝色锚点的定位参考图。',
     '不要把倍率应用到数字，不要输出 computedTotal，不要删除低置信目标；看不清也要输出候选 token。',
-    '同一位置至少对照原图和增强图两次；二者读数不一致时保留多个 candidates，并降低 confidence，不要强行确定。',
+    '同一位置至少对照普通去红图和锚点图两次；二者定位不一致时保留多个 candidates，并降低 confidence，不要强行确定。',
     `用户选择的智能 prompt：${prompt.name}`,
     prompt.prompt,
   ]
@@ -475,6 +651,7 @@ function buildCalculationProgramInstruction(
     '你的任务是判断哪些 visual tokens 是金额、哪些是倍率/列规则/非金额标记，并把每个应计入金额写成一个 term。',
     '先建立列规则，再逐行生成 term，最后检查每个 number token 是否已被引用或明确排除。只输出 DSL，不输出思考过程。',
     '不要输出最终 computedTotal。最终数学计算由前端执行。',
+    '红色人工验算结构只能作为校验线索：可以帮助识别列倍率、发现漏项或发现总额冲突，但不要直接生成 include=true 的 term，除非它明确位于固定账本格子内且不是验算式。',
     'terms 中每一项必须引用 sourceTokenIds；rawValue 是原始数字，multiplier 是该列倍率，include 表示是否计入。',
     'formula 写成人类可读的单项公式，例如 570 x 0.088。不要写可执行 JavaScript。',
     'X、空白、划掉且非金额的标记 include=false 或不放入 terms；有风险的数字放入 uncertainMarks。',
@@ -498,14 +675,48 @@ function buildCalculationProgramInstruction(
   return lines.join('\n')
 }
 
+function buildCropOcrInstruction(
+  prompt: SmartPrompt,
+  tasks: CropOcrTask[],
+  isChatCompletions: boolean,
+) {
+  const lines = [
+    prompt.prompt,
+    '你将收到若干单格裁剪图。每张图只做单格 OCR 读取，不做整页理解，不做金额计算，不根据总额反推数字。',
+    '如果格子为空白，text 返回空字符串，confidence 降低；如果看到 X、0.5、负号、小数点或被划掉的内容，也照实返回。',
+    '如果裁剪图里主要是红色验算字或红色合计，照实返回文本并把 kind 设为 text；不要把红色验算结果当成本格原始金额。',
+    '每个 reading 必须对应一个 cropRef。kind 只在你比较确定时填写；普通数字用 number，X/符号可用 mark，其他文本用 text。',
+    '不要跨图合并，不要把相邻格内容读进来。',
+    '以下 cropRef 是本轮建议送 OCR 的重点格子：',
+    ...tasks.map(
+      (task) =>
+        `- ${task.cropRef}: ${task.row}日${task.columnLabel}，切格 ${(task.cutConfidence * 100).toFixed(
+          0,
+        )}% ，整页读取 ${(task.readConfidence * 100).toFixed(0)}%，原因：${task.reasons.join(' / ')}`,
+    ),
+  ]
+
+  if (!isChatCompletions) {
+    lines.push(
+      '只返回最终 JSON 对象，不要 Markdown，不要解释文字。JSON 必须匹配下面的结构；缺失字段用空字符串、空数组或 null 补齐。',
+      JSON.stringify(cropOcrSchema),
+    )
+  }
+
+  return lines.join('\n')
+}
+
 function buildAuditInstruction(prompt: SmartPrompt, firstResult: RecognitionResult, includeSchema: boolean) {
   const lines = [
     '你是 tong账本计算器 的第二阶段审计引擎。',
     '你会看到同一张账本图片，以及第一阶段模型输出的 JSON。',
+    '审计阶段默认看到的是去红压缩图：红色人工计算结果不参与黑字格子读取，后续如需红字对比应走单独红字审计图。',
     '先审查这是否是一张完整单页账本：四角、表头、日期列和 1日至31日是否可见；不完整时必须保留 pageIncomplete/cuttingRisk 审计说明，不能把局部识别包装成完整总额。',
     '任务不是重新随意发挥，而是逐项审查第一阶段结果：表头倍率、每行日期、每列数字、X/空白、computedTotal、region 和 anchor。',
     '先暂时忽略第一阶段具体读数，独立从图片逐行复读；完成后再与第一阶段逐项比较，只修改有图像证据支持的差异。',
     '请特别关注这些高风险错误：行号错位、把右列数字读成中列数字、漏读同一行的第二个数字、把 7/1/9/0 连笔误读、把划线或 X 当金额。',
+    '红色手工计算结构是审计证据：逐条对照它和格子重算值，若红字显示的乘法、合计或下划线说明前序漏读，必须在 auditNotes 标出 redCalculationConflict 或 redCalculationSupport。',
+    '如果黑字逐格合计和红字人工计算结果不一致，不要用红字倒推改格子；应输出冲突列、差值、疑似错读日期格，并降低置信度。',
     '审计时先建立日期行网格：找到打印的日期/行号，按行带重新检查每个手写数字属于哪一天；上半部分如果数字密集，优先相信横线网格而不是第一阶段的行号。',
     '如果同一日期附近有两个金额，分别属于不同倍率列；不要把同一行的右列金额错挪到下一天。',
     'X、空白、划掉的非金额标记不要作为 entries；只保留真正参与计算或需要人工核验的金额数字。',
@@ -513,7 +724,7 @@ function buildAuditInstruction(prompt: SmartPrompt, firstResult: RecognitionResu
     'computedTotal 必须重新根据修正后的 entries.calculatedAmount 计算，不要沿用第一阶段总额。',
     '审计结束前执行三项检查：可见金额数量是否完整、每项是否属于正确行列、前端可重算金额之和是否一致。',
     '保留完整 entries，不要为了省略而删除可见金额。每个可见金额都要有 region；能判断最近蓝色锚点时也要有 anchor。',
-    '你会收到三张图片：第一张是原图；第二张是 OCR 预处理增强图，请优先用它复核文字和数字；第三张是带蓝色锚点的预处理图，只用于定位 anchor。',
+    '你会收到两张图片：第一张是简单去红压缩图，请优先用它复核文字和数字；第二张是带蓝色锚点的去红压缩图，只用于定位 anchor。',
     `用户选择的智能 prompt：${prompt.name}`,
     prompt.prompt,
     '第一阶段 JSON：',
@@ -538,17 +749,19 @@ function buildReconcileInstruction(
   const lines = [
     '你是 tong账本计算器 的最终一致性复核引擎。',
     '你会看到同一张账本图片，以及上一阶段已经审计过的 JSON。',
+    '最终复核必须同时看黑字格子结果和红字人工计算结果；目标是让 AI 逐步替代人工验算，但红字在训练/过渡期只作为校验答案。',
     '最终结果必须仍然满足单页整扫：如果图片缺表头、缺日期行或只拍到局部，保留低置信和 pageIncomplete/cuttingRisk，不要输出静默通过的完整账。',
     '这一步只做最终纠偏：按日期行网格、列倍率和算术一致性复核，不要因为上一阶段给出高置信就放弃检查。',
     '优先复核低置信、候选冲突、相邻行数值相似和会显著影响总额的项目；对这些项目必须重新查看原图笔画。',
     '逐行核对 1日至31日：X/空白不作为金额；每个手写金额必须归入正确日期行和正确倍率列。',
     '不要随意改变已确定的列单价/倍率：同一垂直列必须沿用表头或纸张模板给出的单价；只有当图片中数字明显落在另一列时才改 multiplier。',
+    '红色验算式可作为最终一致性校验，但不得为了匹配红色总额倒推修改看不清的格子数字；看不清时保留候选并降低 confidence。',
     '如果最终复核无法更可靠地纠正某个单元格，保留上一阶段结果并降低 confidence，不要凭规律猜大改。',
     '如果数字与行列规律冲突，优先回看原图；如果仍不清楚，保留最可能值并把候选写入 uncertainMarks。',
     '最后重算 computedTotal，确保它等于所有 entries.calculatedAmount 的合计。',
     '不得为了得到某个预期总额而改数；如果无法从图片消除歧义，保留候选并降低 confidence。',
     '输出完整最终 JSON，不要输出差异补丁。',
-    '你会收到三张图片：第一张是原图；第二张是 OCR 预处理增强图用于读数；第三张是带蓝色锚点的预处理图。',
+    '你会收到两张图片：第一张是简单去红压缩图用于读数；第二张是带蓝色锚点的去红压缩图。',
     `用户选择的智能 prompt：${prompt.name}`,
     prompt.prompt,
     '上一阶段 JSON：',
@@ -584,11 +797,34 @@ export async function recognizeLedgerImage({
   prompt: SmartPrompt
   qualityMode: QualityMode
 }): Promise<RecognitionResult> {
+  if (apiMode === 'mockLocal') {
+    const extraction = buildMockVisualExtraction()
+    const calculationProgram = buildMockCalculationProgram()
+    const firstResult = executeCalculationProgram(extraction, calculationProgram)
+    if (qualityMode === 'fast') return firstResult
+
+    const audited = buildMockRecognition('audit')
+    const auditedWithPipeline = {
+      ...audited,
+      calculationProgram,
+      visualTokens: extraction.tokens,
+    }
+    if (qualityMode !== 'max') return normalizeRecognitionResult(auditedWithPipeline)
+
+    const reconciled = buildMockRecognition('reconcile')
+    return normalizeRecognitionResult({
+      ...reconciled,
+      calculationProgram,
+      visualTokens: extraction.tokens,
+    })
+  }
+
   const readableImageDataUrl = preprocessedImageDataUrl || imageDataUrl
   const anchoredImageDataUrl = await annotateImageWithAnchors(readableImageDataUrl, undefined, {
     maxSize: 1200,
     quality: 0.72,
   })
+  const firstPassImageDataUrl = readableImageDataUrl
 
   const visualExtraction =
     apiMode === 'chatCompletions'
@@ -596,8 +832,7 @@ export async function recognizeLedgerImage({
           apiBaseUrl,
           apiKey,
           anchoredImageDataUrl,
-          imageDataUrl,
-          preprocessedImageDataUrl: readableImageDataUrl,
+          imageDataUrl: firstPassImageDataUrl,
           model,
           prompt,
         })
@@ -605,8 +840,7 @@ export async function recognizeLedgerImage({
           apiBaseUrl,
           apiKey,
           anchoredImageDataUrl,
-          imageDataUrl,
-          preprocessedImageDataUrl: readableImageDataUrl,
+          imageDataUrl: firstPassImageDataUrl,
           model,
           prompt,
         })
@@ -639,8 +873,7 @@ export async function recognizeLedgerImage({
           apiKey,
           anchoredImageDataUrl,
           firstResult,
-          imageDataUrl,
-          preprocessedImageDataUrl: readableImageDataUrl,
+          imageDataUrl: firstPassImageDataUrl,
           model,
           prompt,
           stage: 'audit',
@@ -650,8 +883,7 @@ export async function recognizeLedgerImage({
           apiKey,
           anchoredImageDataUrl,
           firstResult,
-          imageDataUrl,
-          preprocessedImageDataUrl: readableImageDataUrl,
+          imageDataUrl: firstPassImageDataUrl,
           model,
           prompt,
           stage: 'audit',
@@ -671,8 +903,7 @@ export async function recognizeLedgerImage({
         apiKey,
         anchoredImageDataUrl,
         firstResult: auditedWithPipeline,
-        imageDataUrl,
-        preprocessedImageDataUrl: readableImageDataUrl,
+        imageDataUrl: firstPassImageDataUrl,
         model,
         prompt,
         stage: 'reconcile',
@@ -682,8 +913,7 @@ export async function recognizeLedgerImage({
         apiKey,
         anchoredImageDataUrl,
         firstResult: auditedWithPipeline,
-        imageDataUrl,
-        preprocessedImageDataUrl: readableImageDataUrl,
+        imageDataUrl: firstPassImageDataUrl,
         model,
         prompt,
         stage: 'reconcile',
@@ -697,12 +927,149 @@ export async function recognizeLedgerImage({
   })
 }
 
+function readingsToExternalTokens(
+  tasks: CropOcrTask[],
+  response: CropOcrReviewResponse,
+): { auditNotes: string[]; externalTokens: ExternalOcrToken[] } {
+  const taskByRef = new Map(tasks.map((task) => [task.cropRef, task]))
+  const externalTokens = response.readings.flatMap((reading) => {
+    const task = taskByRef.get(reading.cropRef)
+    if (!task) return []
+    const token: ExternalOcrToken = {
+      id: `crop-ocr:${reading.cropRef}`,
+      text: reading.text,
+      confidence: reading.confidence,
+      kind: reading.kind,
+      provider: 'priority crop OCR',
+      region: task.region,
+    }
+    return [token]
+  })
+
+  return {
+    auditNotes: response.auditNotes,
+    externalTokens,
+  }
+}
+
+export async function reviewPriorityCellCrops({
+  apiBaseUrl,
+  apiKey,
+  apiMode,
+  imageDataUrl,
+  model,
+  prompt,
+  tasks,
+}: {
+  apiBaseUrl: string
+  apiKey: string
+  apiMode: ApiMode
+  imageDataUrl: string
+  model: string
+  prompt: SmartPrompt
+  tasks: CropOcrTask[]
+}): Promise<{ auditNotes: string[]; externalTokens: ExternalOcrToken[] }> {
+  if (!tasks.length) return { auditNotes: [], externalTokens: [] }
+  if (apiMode === 'mockLocal') {
+    return readingsToExternalTokens(tasks, buildMockCropReadings(tasks))
+  }
+  const cropImages = await Promise.all(
+    tasks.map(async (task) => ({
+      cropRef: task.cropRef,
+      dataUrl: await cropImageRegion(imageDataUrl, task.region),
+      label: `${task.row}日${task.columnLabel}`,
+    })),
+  )
+
+  if (apiMode === 'chatCompletions') {
+    const body: Record<string, unknown> = {
+      model,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: buildCropOcrInstruction(prompt, tasks, true) },
+            ...cropImages.flatMap((crop, index) => [
+              {
+                type: 'text',
+                text: `裁剪 ${index + 1}: ${crop.cropRef} / ${crop.label}`,
+              },
+              {
+                type: 'image_url',
+                image_url: { url: crop.dataUrl, detail: 'high' },
+              },
+            ]),
+          ],
+        },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0,
+    }
+
+    const text = await fetchChatCompletionText({
+      apiBaseUrl,
+      apiKey,
+      body,
+      outputLabel: 'crop OCR output',
+    })
+    return readingsToExternalTokens(tasks, parseJson<CropOcrReviewResponse>(text))
+  }
+
+  const response = await fetchWithTimeout(buildApiUrl(apiBaseUrl, '/v1/responses'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model,
+      input: [
+        {
+          role: 'user',
+          content: [
+            { type: 'input_text', text: buildCropOcrInstruction(prompt, tasks, false) },
+            ...cropImages.flatMap((crop, index) => [
+              {
+                type: 'input_text',
+                text: `裁剪 ${index + 1}: ${crop.cropRef} / ${crop.label}`,
+              },
+              {
+                type: 'input_image',
+                image_url: crop.dataUrl,
+                detail: 'high',
+              },
+            ]),
+          ],
+        },
+      ],
+      text: {
+        format: {
+          type: 'json_schema',
+          name: 'tong_ledger_crop_ocr_review',
+          strict: true,
+          schema: cropOcrSchema,
+        },
+      },
+    }),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(compactUpstreamError(errorText || `OpenAI request failed: ${response.status}`, response.status))
+  }
+
+  const payload = (await response.json()) as unknown
+  const text = readResponseText(payload)
+  if (!text) throw new Error('OpenAI response did not include crop OCR output.')
+
+  return readingsToExternalTokens(tasks, parseJson<CropOcrReviewResponse>(text))
+}
+
 async function extractVisualTargetsWithResponses({
   apiBaseUrl,
   apiKey,
   anchoredImageDataUrl,
   imageDataUrl,
-  preprocessedImageDataUrl,
   model,
   prompt,
 }: {
@@ -710,11 +1077,10 @@ async function extractVisualTargetsWithResponses({
   apiKey: string
   anchoredImageDataUrl: string
   imageDataUrl: string
-  preprocessedImageDataUrl: string
   model: string
   prompt: SmartPrompt
 }) {
-  const response = await fetch(buildApiUrl(apiBaseUrl, '/v1/responses'), {
+  const response = await fetchWithTimeout(buildApiUrl(apiBaseUrl, '/v1/responses'), {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -730,12 +1096,7 @@ async function extractVisualTargetsWithResponses({
             { type: 'input_image', image_url: imageDataUrl, detail: 'high' },
             {
               type: 'input_text',
-              text: '第二张图片是 OCR 预处理增强图，请优先用它读文字、数字、小数点和手写笔画。',
-            },
-            { type: 'input_image', image_url: preprocessedImageDataUrl, detail: 'high' },
-            {
-              type: 'input_text',
-              text: '第三张图片是带蓝色锚点的预处理图，只用于 anchor/region 定位。',
+              text: '第二张图片是带蓝色锚点的去红压缩图，只用于 anchor/region 定位。',
             },
             { type: 'input_image', image_url: anchoredImageDataUrl, detail: 'high' },
           ],
@@ -754,7 +1115,7 @@ async function extractVisualTargetsWithResponses({
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(errorText || `OpenAI request failed: ${response.status}`)
+    throw new Error(compactUpstreamError(errorText || `OpenAI request failed: ${response.status}`, response.status))
   }
 
   const payload = (await response.json()) as unknown
@@ -777,7 +1138,7 @@ async function createCalculationProgramWithResponses({
   model: string
   prompt: SmartPrompt
 }) {
-  const response = await fetch(buildApiUrl(apiBaseUrl, '/v1/responses'), {
+  const response = await fetchWithTimeout(buildApiUrl(apiBaseUrl, '/v1/responses'), {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -809,7 +1170,7 @@ async function createCalculationProgramWithResponses({
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(errorText || `OpenAI request failed: ${response.status}`)
+    throw new Error(compactUpstreamError(errorText || `OpenAI request failed: ${response.status}`, response.status))
   }
 
   const payload = (await response.json()) as unknown
@@ -824,7 +1185,6 @@ async function extractVisualTargetsWithChatCompletions({
   apiKey,
   anchoredImageDataUrl,
   imageDataUrl,
-  preprocessedImageDataUrl,
   model,
   prompt,
 }: {
@@ -832,7 +1192,6 @@ async function extractVisualTargetsWithChatCompletions({
   apiKey: string
   anchoredImageDataUrl: string
   imageDataUrl: string
-  preprocessedImageDataUrl: string
   model: string
   prompt: SmartPrompt
 }) {
@@ -846,12 +1205,7 @@ async function extractVisualTargetsWithChatCompletions({
           { type: 'image_url', image_url: { url: imageDataUrl, detail: 'high' } },
           {
             type: 'text',
-            text: '第二张图片是 OCR 预处理增强图，请优先用它读文字、数字、小数点和手写笔画。',
-          },
-          { type: 'image_url', image_url: { url: preprocessedImageDataUrl, detail: 'high' } },
-          {
-            type: 'text',
-            text: '第三张图片是带蓝色锚点的预处理图，只用于 anchor/region 定位。',
+            text: '第二张图片是带蓝色锚点的去红压缩图，只用于 anchor/region 定位。',
           },
           { type: 'image_url', image_url: { url: anchoredImageDataUrl, detail: 'high' } },
         ],
@@ -913,7 +1267,6 @@ async function recognizeWithResponses({
   apiKey,
   anchoredImageDataUrl,
   imageDataUrl,
-  preprocessedImageDataUrl,
   firstResult,
   model,
   prompt,
@@ -923,7 +1276,6 @@ async function recognizeWithResponses({
   apiKey: string
   anchoredImageDataUrl: string
   imageDataUrl: string
-  preprocessedImageDataUrl: string
   firstResult?: RecognitionResult
   model: string
   prompt: SmartPrompt
@@ -936,7 +1288,7 @@ async function recognizeWithResponses({
         ? buildAuditInstruction(prompt, firstResult, false)
         : buildRecognitionInstruction(prompt, false)
 
-  const response = await fetch(buildApiUrl(apiBaseUrl, '/v1/responses'), {
+  const response = await fetchWithTimeout(buildApiUrl(apiBaseUrl, '/v1/responses'), {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -959,16 +1311,7 @@ async function recognizeWithResponses({
             },
             {
               type: 'input_text',
-              text: '第二张图片是 OCR 预处理增强图，请优先用它复核文字、数字、小数点和手写笔画。',
-            },
-            {
-              type: 'input_image',
-              image_url: preprocessedImageDataUrl,
-              detail: 'high',
-            },
-            {
-              type: 'input_text',
-              text: '第三张图片是带蓝色锚点的预处理图，只用于 anchor/region 定位。',
+              text: '第二张图片是带蓝色锚点的去红压缩图，只用于 anchor/region 定位。',
             },
             {
               type: 'input_image',
@@ -991,7 +1334,7 @@ async function recognizeWithResponses({
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(errorText || `OpenAI request failed: ${response.status}`)
+    throw new Error(compactUpstreamError(errorText || `OpenAI request failed: ${response.status}`, response.status))
   }
 
   const payload = (await response.json()) as unknown
@@ -1006,7 +1349,6 @@ async function recognizeWithChatCompletions({
   apiKey,
   anchoredImageDataUrl,
   imageDataUrl,
-  preprocessedImageDataUrl,
   firstResult,
   model,
   prompt,
@@ -1016,7 +1358,6 @@ async function recognizeWithChatCompletions({
   apiKey: string
   anchoredImageDataUrl: string
   imageDataUrl: string
-  preprocessedImageDataUrl: string
   firstResult?: RecognitionResult
   model: string
   prompt: SmartPrompt
@@ -1048,18 +1389,7 @@ async function recognizeWithChatCompletions({
           },
           {
             type: 'text',
-            text: '第二张图片是 OCR 预处理增强图，请优先用它复核文字、数字、小数点和手写笔画。',
-          },
-          {
-            type: 'image_url',
-            image_url: {
-              url: preprocessedImageDataUrl,
-              detail: 'high',
-            },
-          },
-          {
-            type: 'text',
-            text: '第三张图片是带蓝色锚点的预处理图，只用于 anchor/region 定位。',
+            text: '第二张图片是带蓝色锚点的去红压缩图，只用于 anchor/region 定位。',
           },
           {
             type: 'image_url',

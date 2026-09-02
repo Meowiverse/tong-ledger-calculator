@@ -1,9 +1,11 @@
+import { buildCropOcrPlan } from './cropOcrPlan'
 import type { PaperTemplate, RecognitionResult } from '../types'
 import { getCuttingFeasibility } from './ledgerCells'
 import { getTemplateGrid } from './paperTemplates'
 
 export function buildLedgerExportPayload(result: RecognitionResult, template: PaperTemplate) {
   const cutting = getCuttingFeasibility(result, template)
+  const cropOcrPlan = buildCropOcrPlan(result, template)
   const grid = getTemplateGrid(template)
 
   return {
@@ -32,6 +34,8 @@ export function buildLedgerExportPayload(result: RecognitionResult, template: Pa
         residuals: cutting.residuals,
         fallback: cutting.fallback,
       },
+      cropOcrPlan,
+      cropOcrExecution: result.cropOcrExecution,
       cellEvidence: (result.cells ?? []).map((cell) => ({
         cellId: cell.id,
         row: cell.row,
@@ -42,6 +46,7 @@ export function buildLedgerExportPayload(result: RecognitionResult, template: Pa
         cropRef: cell.cropRef,
         rawText: cell.rawText,
         semanticType: cell.semanticType,
+        cutEvidence: cell.cutEvidence,
         amount: cell.amount,
         riskFlags: cell.riskFlags,
         entryIds: cell.entryIds,

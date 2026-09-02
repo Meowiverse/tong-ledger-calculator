@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-06-26T10:19:19.200Z",
+  "model": "gpt-5.5",
+  "baseUrl": "http://127.0.0.1:12455/v1",
+  "manifestPath": "/Volumes/DATA/Codex/tong-ledger-calculator/reports/downloads-ledger-audit/manifest.json",
+  "imageCount": 10,
+  "items": [
+    {
+      "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "file": "1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+      "ok": false,
+      "elapsedMs": 193664,
+      "error": "fetch failed"
+    }
+  ],
+  "aggregate": null
+}

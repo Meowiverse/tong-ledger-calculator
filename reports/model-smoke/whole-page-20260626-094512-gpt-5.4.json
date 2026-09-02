@@ -1,0 +1,411 @@
+{
+  "generatedAt": "2026-06-26T09:45:12.073Z",
+  "imagePath": "/Users/kongjing/Downloads/1e54d27dad3fbca7d52c62b825ef3a71.jpg",
+  "model": "gpt-5.4",
+  "baseUrl": "https://codex.mpas.top/v1",
+  "elapsedMs": 68408,
+  "usage": {
+    "prompt_tokens": 3192,
+    "completion_tokens": 3597,
+    "total_tokens": 6789,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "result": {
+    "entries": [
+      {
+        "day": 4,
+        "column": "纸类1",
+        "rawText": "775",
+        "rawValue": 775,
+        "multiplier": 0.1,
+        "calculatedAmount": 77.5,
+        "confidence": 0.95,
+        "note": "位于纸类1列，表头倍率为0.1"
+      },
+      {
+        "day": 4,
+        "column": "纸类2",
+        "rawText": "440",
+        "rawValue": 440,
+        "multiplier": 0.088,
+        "calculatedAmount": 38.72,
+        "confidence": 0.88,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 5,
+        "column": "纸类2",
+        "rawText": "730",
+        "rawValue": 730,
+        "multiplier": 0.088,
+        "calculatedAmount": 64.24,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 5,
+        "column": "纸类3",
+        "rawText": "2110",
+        "rawValue": 2110,
+        "multiplier": 0.05,
+        "calculatedAmount": 105.5,
+        "confidence": 0.86,
+        "note": "位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 6,
+        "column": "纸类2",
+        "rawText": "740",
+        "rawValue": 740,
+        "multiplier": 0.088,
+        "calculatedAmount": 65.12,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 6,
+        "column": "纸类3",
+        "rawText": "2320",
+        "rawValue": 2320,
+        "multiplier": 0.05,
+        "calculatedAmount": 116,
+        "confidence": 0.8,
+        "note": "该格字形略不清，较可能为2320；位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 7,
+        "column": "纸类2",
+        "rawText": "620",
+        "rawValue": 620,
+        "multiplier": 0.088,
+        "calculatedAmount": 54.56,
+        "confidence": 0.93,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 7,
+        "column": "纸类3",
+        "rawText": "2210",
+        "rawValue": 2210,
+        "multiplier": 0.05,
+        "calculatedAmount": 110.5,
+        "confidence": 0.82,
+        "note": "位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 8,
+        "column": "纸类2",
+        "rawText": "480",
+        "rawValue": 480,
+        "multiplier": 0.088,
+        "calculatedAmount": 42.24,
+        "confidence": 0.94,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 8,
+        "column": "纸类3",
+        "rawText": "2370",
+        "rawValue": 2370,
+        "multiplier": 0.05,
+        "calculatedAmount": 118.5,
+        "confidence": 0.8,
+        "note": "该格字形略不清，较可能为2370；位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 9,
+        "column": "纸类2",
+        "rawText": "710",
+        "rawValue": 710,
+        "multiplier": 0.088,
+        "calculatedAmount": 62.48,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 9,
+        "column": "纸类3",
+        "rawText": "2150",
+        "rawValue": 2150,
+        "multiplier": 0.05,
+        "calculatedAmount": 107.5,
+        "confidence": 0.84,
+        "note": "位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 10,
+        "column": "纸类2",
+        "rawText": "1360",
+        "rawValue": 1360,
+        "multiplier": 0.088,
+        "calculatedAmount": 119.68,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 11,
+        "column": "纸类2",
+        "rawText": "1400",
+        "rawValue": 1400,
+        "multiplier": 0.088,
+        "calculatedAmount": 123.2,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 12,
+        "column": "纸类2",
+        "rawText": "1480",
+        "rawValue": 1480,
+        "multiplier": 0.088,
+        "calculatedAmount": 130.24,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 13,
+        "column": "纸类2",
+        "rawText": "1440",
+        "rawValue": 1440,
+        "multiplier": 0.088,
+        "calculatedAmount": 126.72,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 14,
+        "column": "纸类2",
+        "rawText": "1400",
+        "rawValue": 1400,
+        "multiplier": 0.088,
+        "calculatedAmount": 123.2,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 15,
+        "column": "纸类2",
+        "rawText": "760",
+        "rawValue": 760,
+        "multiplier": 0.088,
+        "calculatedAmount": 66.88,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 15,
+        "column": "纸类3",
+        "rawText": "2220",
+        "rawValue": 2220,
+        "multiplier": 0.05,
+        "calculatedAmount": 111,
+        "confidence": 0.83,
+        "note": "位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 16,
+        "column": "纸类2",
+        "rawText": "760",
+        "rawValue": 760,
+        "multiplier": 0.088,
+        "calculatedAmount": 66.88,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 16,
+        "column": "纸类3",
+        "rawText": "2300",
+        "rawValue": 2300,
+        "multiplier": 0.05,
+        "calculatedAmount": 115,
+        "confidence": 0.8,
+        "note": "位于纸类3列，表头倍率为0.05"
+      },
+      {
+        "day": 17,
+        "column": "纸类2",
+        "rawText": "1420",
+        "rawValue": 1420,
+        "multiplier": 0.088,
+        "calculatedAmount": 124.96,
+        "confidence": 0.9,
+        "note": "该格首位略有连笔，较可能为1420；位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 18,
+        "column": "纸类2",
+        "rawText": "1280",
+        "rawValue": 1280,
+        "multiplier": 0.088,
+        "calculatedAmount": 112.64,
+        "confidence": 0.94,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 19,
+        "column": "纸类2",
+        "rawText": "1370",
+        "rawValue": 1370,
+        "multiplier": 0.088,
+        "calculatedAmount": 120.56,
+        "confidence": 0.94,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 20,
+        "column": "纸类2",
+        "rawText": "1360",
+        "rawValue": 1360,
+        "multiplier": 0.088,
+        "calculatedAmount": 119.68,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 21,
+        "column": "纸类2",
+        "rawText": "1380",
+        "rawValue": 1380,
+        "multiplier": 0.088,
+        "calculatedAmount": 121.44,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 22,
+        "column": "纸类2",
+        "rawText": "1370",
+        "rawValue": 1370,
+        "multiplier": 0.088,
+        "calculatedAmount": 120.56,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 23,
+        "column": "纸类2",
+        "rawText": "1270",
+        "rawValue": 1270,
+        "multiplier": 0.088,
+        "calculatedAmount": 111.76,
+        "confidence": 0.94,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 24,
+        "column": "纸类2",
+        "rawText": "1340",
+        "rawValue": 1340,
+        "multiplier": 0.088,
+        "calculatedAmount": 117.92,
+        "confidence": 0.95,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 25,
+        "column": "纸类2",
+        "rawText": "960",
+        "rawValue": 960,
+        "multiplier": 0.088,
+        "calculatedAmount": 84.48,
+        "confidence": 0.92,
+        "note": "该格字形较像960；位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 28,
+        "column": "纸类2",
+        "rawText": "1090",
+        "rawValue": 1090,
+        "multiplier": 0.088,
+        "calculatedAmount": 95.92,
+        "confidence": 0.92,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 29,
+        "column": "纸类2",
+        "rawText": "1360",
+        "rawValue": 1360,
+        "multiplier": 0.088,
+        "calculatedAmount": 119.68,
+        "confidence": 0.94,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 30,
+        "column": "纸类2",
+        "rawText": "1350",
+        "rawValue": 1350,
+        "multiplier": 0.088,
+        "calculatedAmount": 118.8,
+        "confidence": 0.92,
+        "note": "位于纸类2列，表头倍率为0.088"
+      },
+      {
+        "day": 31,
+        "column": "纸类2",
+        "rawText": "1250",
+        "rawValue": 1250,
+        "multiplier": 0.088,
+        "calculatedAmount": 110,
+        "confidence": 0.9,
+        "note": "该格末位清晰，整体较可能为1250；位于纸类2列，表头倍率为0.088"
+      }
+    ],
+    "computedTotal": 3408.36,
+    "overallConfidence": 0.88,
+    "isCompletePage": true,
+    "dateCount": 31,
+    "redCalculationNotes": [
+      "红字审计式可辨认为：0.1×775=77.5",
+      "红字审计式可辨认为：0.088×28730=2545.84",
+      "红字审计式可辨认为：0.05×15700=785",
+      "红字下划线后写有合计：3408元（与逐项精算3408.34/3408.36接近，红字仅作审计证据未重复入账）"
+    ],
+    "uncertain": [
+      {
+        "day": 6,
+        "column": "纸类3",
+        "issue": "数字略模糊，识别为2320"
+      },
+      {
+        "day": 8,
+        "column": "纸类3",
+        "issue": "数字略模糊，识别为2370"
+      },
+      {
+        "day": 17,
+        "column": "纸类2",
+        "issue": "首位连笔，识别为1420"
+      },
+      {
+        "day": 25,
+        "column": "纸类2",
+        "issue": "数字字形不够稳定，识别为960"
+      },
+      {
+        "day": 30,
+        "column": "纸类2",
+        "issue": "末两位笔画略连，识别为1350"
+      },
+      {
+        "day": 31,
+        "column": "纸类2",
+        "issue": "整体较模糊，识别为1250"
+      }
+    ],
+    "auditNotes": [
+      "页面包含表头、日期列以及1日至31日，判定为完整页。",
+      "固定列中，仅识别到上班列有若干“X”标记，以及纸类1、纸类2、纸类3存在数据；纸类4、上下货、扣款、日合计未见可计金额。",
+      "上班列的“X”未见对应金额规则，未计入computedTotal。",
+      "红色手写计算和红色合计仅作为审计证据，不作为普通单元格重复入账。",
+      "computedTotal按逐条蓝字原始记录与表头倍率直接计算得到，未按红字整数合计倒推。"
+    ]
+  }
+}

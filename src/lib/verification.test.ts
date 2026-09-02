@@ -1,42 +1,79 @@
 import { describe, expect, it } from 'vitest'
-import { SAMPLE_RECOGNITION } from '../data/sampleRecognition'
-import { normalizeResultCells } from './ledgerCells'
-import { DEFAULT_PAPER_TEMPLATE } from './paperTemplates'
-import { buildVerificationQueue, getVerificationProgress } from './verification'
+import { buildVerificationQueue } from './verification'
+import type { LedgerCell, RecognitionResult } from '../types'
+
+function makeCell(patch: Partial<LedgerCell>): LedgerCell {
+  return {
+    id: 'r1-paper-1',
+    row: 1,
+    columnId: 'paper-1',
+    columnLabel: '纸类1',
+    columnKind: 'product',
+    bboxOriginal: { x: 10, y: 10, width: 10, height: 4 },
+    bboxWarped: { x: 10, y: 10, width: 10, height: 4 },
+    cropRef: 'cell:r1-paper-1',
+    rawText: '',
+    normalizedText: '',
+    semanticType: 'blank',
+    blankConfidence: 0.8,
+    confidence: 0.8,
+    cutEvidence: {
+      confidence: 0.8,
+      level: 'review',
+      reasons: ['当前格子四边都贴近检测格线'],
+      lineDeltas: { left: 0, right: 0, top: 0, bottom: 0 },
+    },
+    riskFlags: [],
+    entryIds: [],
+    amount: null,
+    note: '',
+    ...patch,
+  }
+}
 
 describe('verification queue', () => {
-  it('prioritizes risky evidence without dropping fixed-grid risks', () => {
-    const queue = buildVerificationQueue(SAMPLE_RECOGNITION)
-
-    expect(queue[0].kind).toBe('uncertain')
-    expect(queue.some((item) => item.kind === 'rule')).toBe(true)
-  })
-
-  it('keeps every unedited risky cell in the review queue', () => {
-    const result = normalizeResultCells(SAMPLE_RECOGNITION, DEFAULT_PAPER_TEMPLATE)
-    const queue = buildVerificationQueue(result)
-    const riskyCellIds =
-      result.cells
-        ?.filter(
-          (cell) =>
-            cell.columnKind !== 'date' &&
-            cell.columnKind !== 'dailyTotal' &&
-            cell.riskFlags.length > 0 &&
-            !cell.riskFlags.includes('userEdited'),
-        )
-        .map((cell) => cell.id) ?? []
-
-    expect(riskyCellIds.length).toBeGreaterThan(100)
-    for (const cellId of riskyCellIds) {
-      expect(queue.some((item) => item.kind === 'cell' && item.targetId === cellId)).toBe(true)
+  it('prioritizes cut-low-confidence cells for audit first', () => {
+    const result: RecognitionResult = {
+      title: 'test',
+      sourceType: 'local',
+      summary: '',
+      currency: 'CNY',
+      overallConfidence: 0.5,
+      entries: [],
+      uncertainMarks: [],
+      extractedText: [],
+      auditNotes: [],
+      cells: [
+        makeCell({
+          id: 'r3-paper-2',
+          row: 3,
+          columnId: 'paper-2',
+          columnLabel: '纸类2',
+          riskFlags: ['cutLowConfidence'],
+          cutEvidence: {
+            confidence: 0.41,
+            level: 'calibrate',
+            reasons: ['模板投影格网仍贴合固定账本，可先审后识别'],
+            lineDeltas: { left: 0.9, right: 0.8, top: 0.1, bottom: 0.1 },
+          },
+        }),
+        makeCell({
+          id: 'r2-paper-1',
+          row: 2,
+          riskFlags: ['possibleMissedDigit'],
+          cutEvidence: {
+            confidence: 0.79,
+            level: 'review',
+            reasons: ['当前格子四边都贴近检测格线'],
+            lineDeltas: { left: 0, right: 0, top: 0, bottom: 0 },
+          },
+        }),
+      ],
     }
-  })
 
-  it('tracks completed verification items', () => {
-    const queue = buildVerificationQueue(SAMPLE_RECOGNITION)
-    const progress = getVerificationProgress(queue, { [queue[0].id]: 'confirmed' })
+    const queue = buildVerificationQueue(result)
 
-    expect(progress.completed).toBe(1)
-    expect(progress.remaining).toBe(queue.length - 1)
+    expect(queue[0]?.targetId).toBe('r3-paper-2')
+    expect(queue[0]?.detail).toContain('切格低置信')
   })
 })

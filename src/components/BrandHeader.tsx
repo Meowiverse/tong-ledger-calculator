@@ -2,7 +2,7 @@ import { Settings } from 'lucide-react'
 import { FluentEmoji } from '../lib/emoji'
 
 interface BrandHeaderProps {
-  onToggleSettings: () => void
+  onToggleSettings?: () => void
 }
 
 export function BrandHeader({ onToggleSettings }: BrandHeaderProps) {
@@ -15,9 +15,11 @@ export function BrandHeader({ onToggleSettings }: BrandHeaderProps) {
           <p className="brand-subtitle">拍照计算</p>
         </div>
       </div>
-      <button className="icon-button" type="button" onClick={onToggleSettings} aria-label="打开设置">
-        <Settings size={20} />
-      </button>
+      {onToggleSettings ? (
+        <button className="icon-button" type="button" onClick={onToggleSettings} aria-label="打开设置">
+          <Settings size={20} />
+        </button>
+      ) : null}
     </header>
   )
 }

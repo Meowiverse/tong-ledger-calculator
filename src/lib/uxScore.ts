@@ -32,6 +32,7 @@ export function evaluateMobileAuditUx(
   const isLocalPreview = result?.sourceType.includes('本地预览') ?? false
   const cutting = result ? getCuttingFeasibility(result, template) : null
   const localPreviewCuttingReady = isLocalPreview && cutting?.level === 'good'
+  const localPreviewReviewOnly = isLocalPreview && cutting?.level === 'review'
   const reviewableCells = cells.filter(
     (cell) => cell.columnKind !== 'date' && cell.columnKind !== 'dailyTotal',
   )
@@ -73,7 +74,9 @@ export function evaluateMobileAuditUx(
       detail: isLocalPreview
         ? localPreviewCuttingReady
           ? '本地预览未产生金额；所有格子已带 cellId/bbox/cropRef，切割可直接通过'
-          : `本地预览已带格子证据；切割状态：${cutting?.label ?? '待判断'}，必须先校准`
+          : localPreviewReviewOnly
+            ? `本地预览已带格子证据；切割状态：${cutting?.label ?? '待判断'}，重点抽查低置信格`
+            : `本地预览已带格子证据；切割状态：${cutting?.label ?? '待判断'}，必须先校准`
         : `${amountCells.length} 个金额格带 cellId/bbox/cropRef`,
     },
     {

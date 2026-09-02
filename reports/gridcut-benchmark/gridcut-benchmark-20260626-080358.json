@@ -1,0 +1,127 @@
+{
+  "aggregate": {
+    "generatedAt": "2026-06-26T00:03:58.897Z",
+    "sourceDir": "/Volumes/DATA/Codex/tong-ledger-calculator/public/samples",
+    "imageCount": 3,
+    "meanScore": 52,
+    "meanConfidence": 0.52,
+    "lowCutRatio": 0.065,
+    "levelCounts": {
+      "good": 0,
+      "review": 3,
+      "calibrate": 0
+    },
+    "methodCounts": {
+      "cnn-hybrid": 3
+    },
+    "worstImages": [
+      {
+        "image": "handwritten-ledger-phone.png",
+        "score": 52,
+        "level": "review",
+        "lowCutRatio": 0.065
+      },
+      {
+        "image": "handwritten-ledger-rescan.png",
+        "score": 52,
+        "level": "review",
+        "lowCutRatio": 0.065
+      },
+      {
+        "image": "handwritten-ledger.png",
+        "score": 52,
+        "level": "review",
+        "lowCutRatio": 0.065
+      }
+    ]
+  },
+  "items": [
+    {
+      "image": "handwritten-ledger-phone.png",
+      "imagePath": "/Volumes/DATA/Codex/tong-ledger-calculator/public/samples/handwritten-ledger-phone.png",
+      "method": "cnn-hybrid",
+      "level": "review",
+      "score": 52,
+      "confidence": 0.52,
+      "fallbackX": true,
+      "fallbackY": false,
+      "detectedHorizontal": 12,
+      "expectedHorizontal": 33,
+      "detectedVertical": 2,
+      "expectedVertical": 10,
+      "lowCutCellCount": 14,
+      "reviewableCellCount": 217,
+      "lowCutRatio": 0.065,
+      "meanCutConfidence": 0.63,
+      "cutLevels": {
+        "good": 0,
+        "review": 203,
+        "calibrate": 14
+      },
+      "reasons": [
+        "竖线证据不足，列边界回退模板",
+        "横向格线覆盖不足",
+        "纵向格线覆盖不足",
+        "1D CNN 检出 1 横 / 1 竖，阈值 0.65 / 0.65"
+      ]
+    },
+    {
+      "image": "handwritten-ledger-rescan.png",
+      "imagePath": "/Volumes/DATA/Codex/tong-ledger-calculator/public/samples/handwritten-ledger-rescan.png",
+      "method": "cnn-hybrid",
+      "level": "review",
+      "score": 52,
+      "confidence": 0.52,
+      "fallbackX": true,
+      "fallbackY": false,
+      "detectedHorizontal": 12,
+      "expectedHorizontal": 33,
+      "detectedVertical": 2,
+      "expectedVertical": 10,
+      "lowCutCellCount": 14,
+      "reviewableCellCount": 217,
+      "lowCutRatio": 0.065,
+      "meanCutConfidence": 0.63,
+      "cutLevels": {
+        "good": 0,
+        "review": 203,
+        "calibrate": 14
+      },
+      "reasons": [
+        "竖线证据不足，列边界回退模板",
+        "横向格线覆盖不足",
+        "纵向格线覆盖不足",
+        "1D CNN 检出 1 横 / 1 竖，阈值 0.65 / 0.65"
+      ]
+    },
+    {
+      "image": "handwritten-ledger.png",
+      "imagePath": "/Volumes/DATA/Codex/tong-ledger-calculator/public/samples/handwritten-ledger.png",
+      "method": "cnn-hybrid",
+      "level": "review",
+      "score": 52,
+      "confidence": 0.52,
+      "fallbackX": true,
+      "fallbackY": false,
+      "detectedHorizontal": 12,
+      "expectedHorizontal": 33,
+      "detectedVertical": 2,
+      "expectedVertical": 10,
+      "lowCutCellCount": 14,
+      "reviewableCellCount": 217,
+      "lowCutRatio": 0.065,
+      "meanCutConfidence": 0.63,
+      "cutLevels": {
+        "good": 0,
+        "review": 203,
+        "calibrate": 14
+      },
+      "reasons": [
+        "竖线证据不足，列边界回退模板",
+        "横向格线覆盖不足",
+        "纵向格线覆盖不足",
+        "1D CNN 检出 1 横 / 1 竖，阈值 0.65 / 0.65"
+      ]
+    }
+  ]
+}

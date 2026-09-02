@@ -59,6 +59,10 @@
   line-height: 1.35;
 }
 
+.cutting-feasibility .cutting-reasons {
+  color: #385248;
+}
+
 .cutting-feasibility.is-review b {
   color: #8a5700;
   background: #fff1cf;
@@ -69,12 +73,50 @@
   background: #fff0f3;
 }
 
+.selected-cut-evidence {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid #d4e0da;
+  border-radius: 7px;
+  background: #f9fcfb;
+  color: #385248;
+  font-size: 12px;
+}
+
+.selected-cut-evidence strong {
+  color: #17362b;
+  font-size: 13px;
+}
+
+.selected-cut-evidence span,
+.selected-cut-evidence em {
+  line-height: 1.4;
+  font-style: normal;
+}
+
+.selected-cut-evidence.is-calibrate {
+  border-color: #efc7d0;
+  background: #fff7f8;
+}
+
+.selected-cut-evidence.is-review {
+  border-color: #ead9b5;
+  background: #fffaf0;
+}
+
 .source-grid-stage {
   overflow: auto;
   max-height: 360px;
   border: 1px solid #a9bbb4;
   border-radius: 7px;
   background: #e9eeeb;
+}
+
+.source-grid-stage.is-one-tap {
+  max-height: 430px;
+  border-color: #b8c7c1;
+  background: #eef2f0;
 }
 
 .source-image-frame {
@@ -93,7 +135,10 @@
 .source-template-frame,
 .source-table-frame,
 .source-cell-frame,
-.source-token-frame {
+.source-token-frame,
+.source-grid-line,
+.source-row-band,
+.source-column-band {
   position: absolute;
   box-sizing: border-box;
   pointer-events: none;
@@ -109,13 +154,44 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.66);
 }
 
+.source-grid-line {
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.source-grid-line.is-horizontal {
+  border-top: 1.5px solid rgba(38, 132, 95, 0.62);
+}
+
+.source-grid-line.is-vertical {
+  border-left: 1.5px solid rgba(38, 132, 95, 0.62);
+}
+
+.source-row-band {
+  z-index: 1;
+  background: rgba(32, 137, 97, 0.08);
+}
+
+.source-column-band {
+  z-index: 1;
+  background: rgba(240, 162, 2, 0.08);
+}
+
 .source-cell-frame {
+  z-index: 2;
   border: 2px solid #139568;
   background: rgba(30, 166, 114, 0.12);
   box-shadow: 0 0 0 999px rgba(23, 54, 43, 0.08);
 }
 
+.source-grid-stage.is-one-tap .source-cell-frame {
+  border-color: #f0a202;
+  background: rgba(240, 162, 2, 0.16);
+  box-shadow: 0 0 0 999px rgba(23, 54, 43, 0.1);
+}
+
 .source-token-frame {
+  z-index: 3;
   border: 2px solid #f0a202;
   border-radius: 3px;
   background: rgba(240, 162, 2, 0.14);

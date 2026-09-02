@@ -29,7 +29,7 @@ describe('mobile audit UX scoring', () => {
     expect(evaluation.grade).not.toBe('S')
     expect(evaluation.criteria.find((criterion) => criterion.id === 'traceable-money')?.passed).toBe(false)
     expect(evaluation.criteria.find((criterion) => criterion.id === 'traceable-money')?.detail).toContain(
-      '需先校准',
+      '必须先校准',
     )
   })
 })

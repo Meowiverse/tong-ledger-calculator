@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "total": 3,
+    "scored": 0,
+    "matched": 0,
+    "mismatched": 0,
+    "unscored": 3,
+    "byBucket": {
+      "unknown": {
+        "total": 3,
+        "matched": 3
+      }
+    }
+  },
+  "results": [
+    {
+      "image": "handwritten-ledger-phone.png",
+      "bucket": "unknown",
+      "localOcrDateCount": null,
+      "localOcrDateRange": null,
+      "localOcrDatesMissing": [],
+      "expectedRoute": null,
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "gridCutLevel": "calibrate",
+      "gridCutScore": 48,
+      "gridCutConfidence": 0.48,
+      "ok": true
+    },
+    {
+      "image": "handwritten-ledger-rescan.png",
+      "bucket": "unknown",
+      "localOcrDateCount": null,
+      "localOcrDateRange": null,
+      "localOcrDatesMissing": [],
+      "expectedRoute": null,
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "gridCutLevel": "calibrate",
+      "gridCutScore": 49,
+      "gridCutConfidence": 0.49,
+      "ok": true
+    },
+    {
+      "image": "handwritten-ledger.png",
+      "bucket": "unknown",
+      "localOcrDateCount": null,
+      "localOcrDateRange": null,
+      "localOcrDatesMissing": [],
+      "expectedRoute": null,
+      "actualRoute": "model",
+      "sourceType": "手写账本表格",
+      "cropStatus": "completed",
+      "sentCropCount": 8,
+      "gridCutLevel": "calibrate",
+      "gridCutScore": 49,
+      "gridCutConfidence": 0.49,
+      "ok": true
+    }
+  ]
+}

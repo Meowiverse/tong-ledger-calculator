@@ -1,6 +1,8 @@
 import type {
+  GridCutEvidence,
   ImageRegion,
   LedgerCell,
+  LedgerCellCutEvidence,
   LedgerCellRiskFlag,
   LedgerCellSemanticType,
   PaperGridColumn,
@@ -9,6 +11,7 @@ import type {
   RecognizedEntry,
 } from '../types'
 import { getEntryCalculatedAmount } from './calculation'
+import { predictPageCompleteness } from './pageCompletenessModel'
 import { getTemplateGrid } from './paperTemplates'
 
 function roundMoney(value: number) {
@@ -122,6 +125,15 @@ function mean(values: number[]) {
   return values.length ? values.reduce((total, value) => total + value, 0) / values.length : null
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function round(value: number, digits = 2) {
+  const factor = 10 ** digits
+  return Math.round(value * factor) / factor
+}
+
 function clampRegion(region: ImageRegion): ImageRegion {
   const x = Math.max(0, Math.min(99, region.x))
   const y = Math.max(0, Math.min(99, region.y))
@@ -153,7 +165,41 @@ export interface LedgerTableFit {
   }
 }
 
+export interface GridCutPreviewReadiness {
+  reviewableCellCount: number
+  lowCutCellCount: number
+  lowCutRatio: number
+  ocrCriticalCellCount: number
+  ocrCriticalLowCutCellCount: number
+  ocrCriticalLowCutRatio: number
+  reviewCellCount: number
+  calibrateCellCount: number
+  meanCutConfidence: number
+  modelGate: 'hold' | 'send-with-review' | 'send'
+  reviewIntensity: 'manual-first' | 'strong' | 'normal' | 'light'
+  reason: string
+  pageCompleteProbability?: number
+}
+
+function fitFromGridCut(gridCut: GridCutEvidence, template: PaperTemplate): LedgerTableFit {
+  const grid = getTemplateGrid(template)
+  return {
+    region: gridCut.tableRegion,
+    fixedRegion: gridCut.fixedRegion,
+    support: {
+      rowPoints: gridCut.support.detectedHorizontal,
+      columnPoints: gridCut.support.detectedVertical,
+      distinctRows: Math.min(grid.rows, Math.max(0, gridCut.support.detectedHorizontal - grid.headerRows - 1)),
+      distinctColumns: Math.min(grid.columns.length, Math.max(0, gridCut.support.detectedVertical - 1)),
+    },
+    residuals: gridCut.residuals,
+    fallback: gridCut.fallback,
+  }
+}
+
 export function getLedgerTableFit(result: RecognitionResult, template: PaperTemplate): LedgerTableFit {
+  if (result.gridCut) return fitFromGridCut(result.gridCut, template)
+
   const grid = getTemplateGrid(template)
   const fallback = grid.tableRegion
   const columnIndexById = new Map(grid.columns.map((column, index) => [column.id, index]))
@@ -268,6 +314,35 @@ export function getFixedTemplateTableRegion(template: PaperTemplate): ImageRegio
 
 export function getCuttingFeasibility(result: RecognitionResult, template: PaperTemplate) {
   const fixedRegion = getFixedTemplateTableRegion(template)
+  if (result.gridCut) {
+    const gridCut = result.gridCut
+    const calibratedRegion = gridCut.tableRegion
+    const deltas = {
+      x: Math.abs(calibratedRegion.x - fixedRegion.x),
+      y: Math.abs(calibratedRegion.y - fixedRegion.y),
+      width: Math.abs(calibratedRegion.width - fixedRegion.width),
+      height: Math.abs(calibratedRegion.height - fixedRegion.height),
+    }
+    const maxDelta = Math.max(deltas.x, deltas.y, deltas.width, deltas.height)
+
+    return {
+      fixedRegion,
+      calibratedRegion,
+      deltas,
+      maxDelta,
+      support: fitFromGridCut(gridCut, template).support,
+      residuals: gridCut.residuals,
+      fallback: gridCut.fallback,
+      score: gridCut.score,
+      level: gridCut.level,
+      label: gridCut.label,
+      method: gridCut.method,
+      reasons: gridCut.reasons,
+      lineSupport: gridCut.support,
+      confidence: gridCut.confidence,
+    }
+  }
+
   const fit = getLedgerTableFit(result, template)
   const calibratedRegion = fit.region
   const deltas = {
@@ -310,6 +385,12 @@ export function getCuttingFeasibility(result: RecognitionResult, template: Paper
       : level === 'review'
         ? '建议抽查'
         : '需先校准'
+  const reasons = [
+    fallbackUsed ? '位置点证据不足，部分方向回退固定模板' : '',
+    !supportOk ? '日期行或列证据不足' : '',
+    !residualOk ? '行列拟合残差偏高' : '',
+    maxDelta > 2.5 ? '校准框和固定模板偏差偏大' : '',
+  ].filter(Boolean)
 
   return {
     fixedRegion,
@@ -322,6 +403,9 @@ export function getCuttingFeasibility(result: RecognitionResult, template: Paper
     score,
     level,
     label,
+    method: 'model-point-fit',
+    reasons: reasons.length ? reasons : ['模型位置点拟合稳定，适合本地切格'],
+    confidence: score / 100,
   }
 }
 
@@ -364,6 +448,257 @@ function uniqueRisks(risks: LedgerCellRiskFlag[]) {
   return Array.from(new Set(risks))
 }
 
+function fallbackCutEvidence(): LedgerCellCutEvidence {
+  return {
+    confidence: 0.72,
+    level: 'review',
+    reasons: ['当前格子按固定模板生成，尚未拿到局部格线证据。'],
+    lineDeltas: {
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
+    },
+  }
+}
+
+function nearestLineDelta(lines: { position: number }[], target: number) {
+  if (!lines.length) return null
+  return lines.reduce<number | null>((best, line) => {
+    const delta = Math.abs(line.position - target)
+    return best === null || delta < best ? delta : best
+  }, null)
+}
+
+function supportFromDelta(delta: number | null, threshold: number) {
+  if (delta === null) return 0.18
+  if (threshold <= 0) return 0.18
+  return clamp(1 - delta / threshold, 0, 1)
+}
+
+function cutEvidenceForCell(
+  cell: LedgerCell,
+  result: RecognitionResult,
+  template: PaperTemplate,
+): LedgerCellCutEvidence {
+  const gridCut = result.gridCut
+  if (!gridCut) return fallbackCutEvidence()
+
+  const grid = getTemplateGrid(template)
+  if (!grid.columns.some((column) => column.id === cell.columnId)) return fallbackCutEvidence()
+
+  const deltas = {
+    left: nearestLineDelta(gridCut.lines.vertical, cell.bboxOriginal.x),
+    right: nearestLineDelta(gridCut.lines.vertical, cell.bboxOriginal.x + cell.bboxOriginal.width),
+    top: nearestLineDelta(gridCut.lines.horizontal, cell.bboxOriginal.y),
+    bottom: nearestLineDelta(gridCut.lines.horizontal, cell.bboxOriginal.y + cell.bboxOriginal.height),
+  }
+  const xThreshold = clamp(cell.bboxOriginal.width * 0.38, 0.8, 2.4)
+  const yThreshold = clamp(cell.bboxOriginal.height * 0.8, 0.6, 1.8)
+  const xSupport =
+    (supportFromDelta(deltas.left, xThreshold) + supportFromDelta(deltas.right, xThreshold)) / 2
+  const ySupport =
+    (supportFromDelta(deltas.top, yThreshold) + supportFromDelta(deltas.bottom, yThreshold)) / 2
+  const regionDeltaMax = Math.max(
+    Math.abs(gridCut.tableRegion.x - gridCut.fixedRegion.x),
+    Math.abs(gridCut.tableRegion.y - gridCut.fixedRegion.y),
+    Math.abs(gridCut.tableRegion.width - gridCut.fixedRegion.width),
+    Math.abs(gridCut.tableRegion.height - gridCut.fixedRegion.height),
+  )
+  const residualMax = gridCut.residuals.max ?? Number.POSITIVE_INFINITY
+  const xProjectionResidual = gridCut.residuals.x ?? residualMax
+  const yProjectionResidual = gridCut.residuals.y ?? residualMax
+  const templateCompletedX =
+    gridCut.lines.vertical.length >= gridCut.support.expectedVertical &&
+    gridCut.support.detectedVertical >= 2
+  const templateCompletedY =
+    gridCut.lines.horizontal.length >= gridCut.support.expectedHorizontal &&
+    gridCut.support.detectedHorizontal >= Math.max(8, Math.round(gridCut.support.expectedHorizontal * 0.45))
+  const templateProjectedX =
+    gridCut.lines.vertical.length >= gridCut.support.expectedVertical &&
+    xSupport >= 0.98 &&
+    xProjectionResidual <= 1.05 &&
+    regionDeltaMax <= 3.2 &&
+    gridCut.support.detectedVertical >= 2
+  const templateProjectedSingleVertical =
+    gridCut.lines.vertical.length >= gridCut.support.expectedVertical &&
+    gridCut.support.detectedVertical === 1 &&
+    (gridCut.support.alignedVerticalSynthetic ?? 0) >= gridCut.support.expectedVertical - 1 &&
+    (gridCut.support.detectedHorizontal >= Math.max(16, Math.round(gridCut.support.expectedHorizontal * 0.55)) ||
+      (gridCut.support.detectedHorizontal >= Math.max(8, Math.round(gridCut.support.expectedHorizontal * 0.24)) &&
+        yProjectionResidual <= 0.12 &&
+        residualMax <= 0.2)) &&
+    xSupport >= 0.98 &&
+    ySupport >= 0.82 &&
+    yProjectionResidual <= 0.55 &&
+    regionDeltaMax <= 3.2
+  const templateProjectedXSafe = templateProjectedX || templateProjectedSingleVertical
+  const templateProjectedY =
+    gridCut.lines.horizontal.length >= gridCut.support.expectedHorizontal &&
+    ySupport >= 0.98 &&
+    yProjectionResidual <= 0.45 &&
+    regionDeltaMax <= 3.2 &&
+    gridCut.support.detectedHorizontal >= 5
+  const templateProjectedSingleHorizontal =
+    gridCut.lines.horizontal.length >= gridCut.support.expectedHorizontal &&
+    gridCut.support.detectedHorizontal <= 3 &&
+    (gridCut.support.alignedHorizontalSynthetic ?? 0) >= gridCut.support.expectedHorizontal - 3 &&
+    gridCut.support.detectedVertical >= Math.max(3, Math.round(gridCut.support.expectedVertical * 0.3)) &&
+    xSupport >= 0.92 &&
+    ySupport >= 0.98 &&
+    xProjectionResidual <= 1.05 &&
+    regionDeltaMax <= 3.2
+  const templateProjectedYSafe = templateProjectedY || templateProjectedSingleHorizontal
+  const rowCoverage = clamp(
+    Math.max(
+      gridCut.support.detectedHorizontal / Math.max(gridCut.support.expectedHorizontal, 1),
+      templateCompletedY
+        ? 0.82
+        : templateProjectedYSafe
+          ? 0.76
+          : gridCut.lines.horizontal.length >= gridCut.support.expectedHorizontal
+            ? 0.72
+            : 0,
+    ),
+    0.45,
+    1,
+  )
+  const columnCoverage = clamp(
+    Math.max(
+      gridCut.support.detectedVertical / Math.max(gridCut.support.expectedVertical, 1),
+      templateCompletedX
+        ? 0.84
+        : templateProjectedXSafe
+          ? 0.8
+          : gridCut.lines.vertical.length >= gridCut.support.expectedVertical
+            ? 0.78
+            : 0,
+    ),
+    0.45,
+    1,
+  )
+  const axisX =
+    xSupport *
+    columnCoverage *
+    (gridCut.fallback.x
+      ? templateCompletedX
+        ? 0.96
+        : templateProjectedXSafe
+          ? 0.9
+          : gridCut.lines.vertical.length >= gridCut.support.expectedVertical
+          ? 0.88
+          : 0.72
+      : 1)
+  const axisY =
+    ySupport *
+    rowCoverage *
+    (gridCut.fallback.y
+      ? templateCompletedY
+        ? 0.94
+        : templateProjectedYSafe
+          ? 0.9
+          : gridCut.lines.horizontal.length >= gridCut.support.expectedHorizontal
+          ? 0.86
+          : 0.72
+      : 1)
+  const boundarySupport = axisX * 0.46 + axisY * 0.54
+  const templateStableCell =
+    templateCompletedX &&
+    templateCompletedY &&
+    residualMax <= 0.8 &&
+    xSupport >= 0.92 &&
+    ySupport >= 0.92
+  const templateStability = templateStableCell
+    ? clamp(0.62 + (0.8 - residualMax) * 0.14, 0.62, 0.76)
+    : 0
+  const templateProjectedCell = templateProjectedXSafe && templateProjectedYSafe
+  const templateProjectionFloor = templateProjectedCell
+    ? clamp(0.59 + (0.45 - residualMax) * 0.08 + (3.2 - regionDeltaMax) * 0.015, 0.59, 0.66)
+    : 0
+  const templateSingleAxisFloor =
+    ((templateProjectedXSafe &&
+      templateCompletedY &&
+      xSupport >= 0.98 &&
+      ySupport >= 0.82) ||
+      (templateProjectedYSafe &&
+        templateCompletedX &&
+        xSupport >= 0.82 &&
+        ySupport >= 0.98)) &&
+    residualMax <= 0.55 &&
+    regionDeltaMax <= 3.2
+      ? clamp(0.58 + (0.55 - residualMax) * 0.05 + (3.2 - regionDeltaMax) * 0.012, 0.58, 0.62)
+      : 0
+  const confidence = clamp(
+    Math.max(
+      gridCut.confidence * 0.28 + boundarySupport * 0.72,
+      templateStableCell ? boundarySupport * 0.82 + templateStability * 0.18 : 0,
+      templateProjectionFloor,
+      templateSingleAxisFloor,
+    ),
+    0.12,
+    0.99,
+  )
+  const reasons: string[] = []
+
+  if ((deltas.left ?? xThreshold + 1) > xThreshold || (deltas.right ?? xThreshold + 1) > xThreshold) {
+    reasons.push('左右边界离检测到的竖线偏远')
+  }
+  if ((deltas.top ?? yThreshold + 1) > yThreshold || (deltas.bottom ?? yThreshold + 1) > yThreshold) {
+    reasons.push('上下边界离检测到的横线偏远')
+  }
+  if (gridCut.fallback.x) reasons.push('当前页列边界有模板回退')
+  if (gridCut.fallback.y) reasons.push('当前页行边界有模板回退')
+  if (residualMax > 1.8) reasons.push('整页格线间距残差偏高')
+  if (templateStableCell) reasons.push('模板补线后当前格四边仍稳定贴线')
+  if (templateProjectedCell) reasons.push('模板投影格网仍贴合固定账本，可先审后识别')
+  if (!reasons.length) reasons.push('当前格子四边都贴近检测格线')
+
+  const level: LedgerCellCutEvidence['level'] =
+    confidence >= 0.82 && !gridCut.fallback.x && !gridCut.fallback.y
+      ? 'good'
+      : confidence >= 0.58
+        ? 'review'
+        : 'calibrate'
+
+  return {
+    confidence: round(confidence, 2),
+    level,
+    reasons,
+    lineDeltas: {
+      left: deltas.left === null ? null : round(deltas.left, 2),
+      right: deltas.right === null ? null : round(deltas.right, 2),
+      top: deltas.top === null ? null : round(deltas.top, 2),
+      bottom: deltas.bottom === null ? null : round(deltas.bottom, 2),
+    },
+  }
+}
+
+function applyCutEvidence(cell: LedgerCell, result: RecognitionResult, template: PaperTemplate): LedgerCell {
+  const cutEvidence = cutEvidenceForCell(cell, result, template)
+  const nextRisks = [...cell.riskFlags]
+
+  if (
+    cell.columnKind !== 'date' &&
+    cell.columnKind !== 'dailyTotal' &&
+    cutEvidence.level === 'calibrate' &&
+    !nextRisks.includes('cutLowConfidence')
+  ) {
+    nextRisks.push('cutLowConfidence')
+  }
+
+  const note =
+    cutEvidence.level === 'calibrate' && !cell.note.includes('切格')
+      ? `${cell.note} 当前格切格证据偏弱，请优先对照原图裁剪。`
+      : cell.note
+
+  return {
+    ...cell,
+    cutEvidence,
+    riskFlags: uniqueRisks(nextRisks),
+    note,
+  }
+}
+
 function baseCell(
   day: number,
   column: PaperGridColumn,
@@ -386,6 +721,7 @@ function baseCell(
     semanticType: 'blank',
     blankConfidence: column.kind === 'date' || column.kind === 'dailyTotal' ? 1 : 0.9,
     confidence: 0.9,
+    cutEvidence: fallbackCutEvidence(),
     riskFlags: [],
     entryIds: [],
     amount: null,
@@ -486,7 +822,23 @@ export function buildLedgerCells(result: RecognitionResult, template: PaperTempl
         ? '空白格仍需可核对；若裁剪图中有数字，请直接补录。'
         : cell.note,
     }
-  })
+  }).map((cell) => applyCutEvidence(cell, result, template))
+}
+
+export function riskFlagLabel(flag: LedgerCellRiskFlag) {
+  const labels: Record<LedgerCellRiskFlag, string> = {
+    lowConfidence: '识别低置信',
+    cutLowConfidence: '切格低置信',
+    nearBorder: '贴近页边',
+    crossCell: '可能跨格',
+    possibleMissedDigit: '空白格疑似漏字',
+    ambiguousHalfDay: '半天写法歧义',
+    moneyUnit: '含金额单位',
+    calculationMismatch: '计算不一致',
+    userEdited: '已人工修正',
+  }
+
+  return labels[flag]
 }
 
 function entryFromEditedCell(
@@ -542,6 +894,152 @@ export function normalizeResultCells(
 ): RecognitionResult {
   const cells = buildLedgerCells(result, template)
   return { ...result, cells }
+}
+
+export function summarizeGridCutPreviewReadiness(
+  gridCut: GridCutEvidence,
+  template: PaperTemplate,
+): GridCutPreviewReadiness {
+  const previewResult: RecognitionResult = {
+    title: '本地切格预检',
+    sourceType: '固定账本本地预检',
+    summary: '未调用 OCR，仅用于判断切格后有多少格已经可审查。',
+    currency: 'CNY',
+    overallConfidence: gridCut.confidence,
+    computedTotal: null,
+    calculationFormula: '',
+    columnRules: [],
+    entries: [],
+    uncertainMarks: [],
+    extractedText: [],
+    auditNotes: [],
+    gridCut,
+  }
+  const reviewableCells = buildLedgerCells(previewResult, template).filter(
+    (cell) => cell.columnKind !== 'date' && cell.columnKind !== 'dailyTotal',
+  )
+  const lowCutCellCount = reviewableCells.filter((cell) => cell.riskFlags.includes('cutLowConfidence')).length
+  const reviewCellCount = reviewableCells.filter((cell) => cell.cutEvidence.level === 'review').length
+  const calibrateCellCount = reviewableCells.filter((cell) => cell.cutEvidence.level === 'calibrate').length
+  const meanCutConfidence = reviewableCells.length
+    ? round(reviewableCells.reduce((total, cell) => total + cell.cutEvidence.confidence, 0) / reviewableCells.length, 2)
+    : 0
+  const lowCutRatio = reviewableCells.length ? round(lowCutCellCount / reviewableCells.length, 3) : 0
+  const ocrCriticalCells = reviewableCells.filter((cell) => cell.columnKind !== 'attendance')
+  const ocrCriticalLowCutCellCount = ocrCriticalCells.filter((cell) =>
+    cell.riskFlags.includes('cutLowConfidence'),
+  ).length
+  const ocrCriticalReviewCellCount = ocrCriticalCells.filter((cell) => cell.cutEvidence.level === 'review').length
+  const ocrCriticalMeanCutConfidence = ocrCriticalCells.length
+    ? round(
+        ocrCriticalCells.reduce((total, cell) => total + cell.cutEvidence.confidence, 0) /
+          ocrCriticalCells.length,
+        2,
+      )
+    : meanCutConfidence
+  const ocrCriticalLowCutRatio = ocrCriticalCells.length
+    ? round(ocrCriticalLowCutCellCount / ocrCriticalCells.length, 3)
+    : lowCutRatio
+  const reviewRatio = reviewableCells.length ? reviewCellCount / reviewableCells.length : 0
+  const ocrCriticalReviewRatio = ocrCriticalCells.length
+    ? ocrCriticalReviewCellCount / ocrCriticalCells.length
+    : reviewRatio
+  const calibrateRatio = reviewableCells.length ? calibrateCellCount / reviewableCells.length : 0
+  const pageCompleteness = predictPageCompleteness({
+    gridCut,
+    meanCutConfidence,
+    lowCutRatio,
+    ocrCriticalLowCutRatio,
+    reviewRatio,
+    calibrateRatio,
+  })
+  const hardIncompleteModelHold =
+    pageCompleteness.completeProbability < 0.36 ||
+    (pageCompleteness.completeProbability < 0.45 &&
+      gridCut.fallback.x &&
+      gridCut.fallback.y &&
+      gridCut.support.detectedVertical === 3 &&
+      gridCut.support.detectedHorizontal <= 17 &&
+      ocrCriticalLowCutRatio === 0)
+
+  if (gridCut.level === 'good' && lowCutRatio <= 0.03 && meanCutConfidence >= 0.72) {
+    return {
+      reviewableCellCount: reviewableCells.length,
+      lowCutCellCount,
+      lowCutRatio,
+      ocrCriticalCellCount: ocrCriticalCells.length,
+      ocrCriticalLowCutCellCount,
+      ocrCriticalLowCutRatio,
+      reviewCellCount,
+      calibrateCellCount,
+      meanCutConfidence,
+      modelGate: 'send',
+      reviewIntensity: 'light',
+      reason: '大多数格子已经稳定，可直接进 OCR。',
+      pageCompleteProbability: pageCompleteness.completeProbability,
+    }
+  }
+
+  if (
+    hardIncompleteModelHold &&
+    ocrCriticalLowCutRatio <= 0.26 &&
+    ocrCriticalReviewRatio >= 0.7 &&
+    ocrCriticalMeanCutConfidence >= 0.58
+  ) {
+    return {
+      reviewableCellCount: reviewableCells.length,
+      lowCutCellCount,
+      lowCutRatio,
+      ocrCriticalCellCount: ocrCriticalCells.length,
+      ocrCriticalLowCutCellCount,
+      ocrCriticalLowCutRatio,
+      reviewCellCount,
+      calibrateCellCount,
+      meanCutConfidence,
+      modelGate: 'hold',
+      reviewIntensity: 'manual-first',
+      reason: `整页完整性模型判断这页更像缺页或裁切页（完整概率 ${Math.round(pageCompleteness.completeProbability * 100)}%），先别消耗 OCR token。`,
+      pageCompleteProbability: pageCompleteness.completeProbability,
+    }
+  }
+
+  if (
+    ocrCriticalLowCutRatio <= 0.26 &&
+    ocrCriticalReviewRatio >= 0.7 &&
+    ocrCriticalMeanCutConfidence >= 0.58
+  ) {
+    return {
+      reviewableCellCount: reviewableCells.length,
+      lowCutCellCount,
+      lowCutRatio,
+      ocrCriticalCellCount: ocrCriticalCells.length,
+      ocrCriticalLowCutCellCount,
+      ocrCriticalLowCutRatio,
+      reviewCellCount,
+      calibrateCellCount,
+      meanCutConfidence,
+      modelGate: 'send-with-review',
+      reviewIntensity: ocrCriticalLowCutRatio > 0.12 ? 'strong' : 'normal',
+      reason: '关键数字列大多已稳定，可先进 OCR，再重点抽查低置信格。',
+      pageCompleteProbability: pageCompleteness.completeProbability,
+    }
+  }
+
+  return {
+    reviewableCellCount: reviewableCells.length,
+    lowCutCellCount,
+    lowCutRatio,
+    ocrCriticalCellCount: ocrCriticalCells.length,
+    ocrCriticalLowCutCellCount,
+    ocrCriticalLowCutRatio,
+    reviewCellCount,
+    calibrateCellCount,
+    meanCutConfidence,
+    modelGate: 'hold',
+    reviewIntensity: 'manual-first',
+    reason: '本地切格后仍有太多不稳格子，先别消耗 OCR token。',
+    pageCompleteProbability: pageCompleteness.completeProbability,
+  }
 }
 
 export function updateLedgerCell(
